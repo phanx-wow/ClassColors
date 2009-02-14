@@ -3,14 +3,14 @@
 	Class Colors
 	Change class colors without breaking the Blizzard UI.
 	by Phanx < addons@phanx.net >
-	http://www.wowinterface.com/downloads/info-ClassColors.html
+	http://www.wowinterface.com/downloads/info12513-ClassColors.html
 	http://wow.curse.com/downloads/wow-addons/details/classcolors.aspx
 
 	Alyssa S. Kinley hereby grants anyone the right to use this work
 	for any purpose, without any conditions, unless such conditions
 	are required by law.
 
-	Please see the README file for API and other details!
+	See the included README file for API and other details!
 
 ----------------------------------------------------------------------]]
 
@@ -256,12 +256,12 @@ ClassColors:SetScript("OnEvent", function(self, event, addon)
 	end
 
 	-------------------------------------------------------------------
-	
+
 	setmetatable(CUSTOM_CLASS_COLORS, { __index = function(t, k)
 		if k == "IterateClasses" then return IterateClasses end
 		if k == "RegisterCallback" then return RegisterCallback end
 		if k == "UnregisterCallback" then return UnregisterCallback end
-	end)
+	end })
 
 	-------------------------------------------------------------------
 
@@ -299,14 +299,18 @@ ClassColors:SetScript("OnEvent", function(self, event, addon)
 		end
 
 		pickers[i].SetValue = function(self, r, g, b)
+			self.label:SetTextColor(r, g, b)
+
 			color.r = r
 			color.g = g
 			color.b = b
 
-			self.label:SetTextColor(r, g, b)
+			CUSTOM_CLASS_COLORS[class].r = r
+			CUSTOM_CLASS_COLORS[class].g = g
+			CUSTOM_CLASS_COLORS[class].b = b
 
 			if cache[i].r ~= r or cache[i].g ~= g or cache[i].b ~= b then
-				fire = true
+				DispatchCallbacks()
 			end
 		end
 
@@ -334,69 +338,117 @@ ClassColors:SetScript("OnEvent", function(self, event, addon)
 			cache[i].b = b
 		end
 
-		fire = false
 		shown = true
 	end)
 
 	self.okay = function()
+		if not shown then return end
 		-- print("ClassColors: okay")
 
-		for class, color in pairs(db) do
-			CUSTOM_CLASS_COLORS[class].r = color.r
-			CUSTOM_CLASS_COLORS[class].g = color.g
-			CUSTOM_CLASS_COLORS[class].b = color.b
-		end
 		for i, t in ipairs(cache) do
 			wipe(t)
 		end
-		if fire and shown then
-			DispatchCallbacks()
-			fire = false
-			shown = false
-		end
+
+		shown = false
 	end
 
 	self.cancel = function()
+		if not shown then return end
 		-- print("ClassColors: cancel")
 
-		for k, v in pairs(db) do
-			CUSTOM_CLASS_COLORS[k].r = v.r
-			CUSTOM_CLASS_COLORS[k].g = v.g
-			CUSTOM_CLASS_COLORS[k].b = v.b
-		end
+		local changed
+
 		for i, picker in ipairs(pickers) do
 			local class = picker.class
 
-			picker:SetColor(db[class].r, db[class].g, db[class].b)
+			if db[class].r ~= cache[i].r or db[class].r ~= cache[i].r or db[class].r ~= cache[i].r then
+				changed = true
+
+				picker:SetColor(cache[class].r, cache[class].g, cache[class].b)
+
+				db[class].r = cache[i].r
+				db[class].g = cache[i].g
+				db[class].b = cache[i].b
+
+				CUSTOM_CLASS_COLORS[class].r = cache[i].r
+				CUSTOM_CLASS_COLORS[class].g = cache[i].g
+				CUSTOM_CLASS_COLORS[class].b = cache[i].b
+			end
 
 			wipe(cache[i])
 		end
+
+		if changed then
+			DispatchCallbacks()
+		end
+
+		shown = false
 	end
 
 	self.defaults = function()
 		-- print("ClassColors: defaults")
 
-		for k, v in pairs(defaults) do
-			db[k].r = v.r
-			db[k].g = v.g
-			db[k].b = v.b
+		local changed
 
-			CUSTOM_CLASS_COLORS[k].r = v.r
-			CUSTOM_CLASS_COLORS[k].g = v.g
-			CUSTOM_CLASS_COLORS[k].b = v.b
-		end
 		for i, picker in ipairs(pickers) do
-			local color = db[picker[class]]
+			local class = picker.class
+			local color = RAID_CLASS_COLORS[class]
 
-			picker:SetColor(color.r, color.g, color.b)
+			if db[class].r ~= color.r or db[class].r ~= color.r or db[class].r ~= color.r then
+				changed = true
 
-			cache[i].r = color.r
-			cache[i].g = color.g
-			cache[i].b = color.b
+				picker:SetColor(color.r, color.g, color.b)
+
+				cache[i].r = color.r
+				cache[i].g = color.g
+				cache[i].b = color.b
+
+				db[class].r = color.r
+				db[class].g = color.g
+				db[class].b = color.b
+
+				CUSTOM_CLASS_COLORS[class].r = color.r
+				CUSTOM_CLASS_COLORS[class].g = color.g
+				CUSTOM_CLASS_COLORS[class].b = color.b
+			end
 		end
-		DispatchCallbacks()
-		fire = false
+
+		if changed then
+			DispatchCallbacks()
+		end
 	end
+
+	-------------------------------------------------------------------
+
+	local reset = CreateFrame("Button", nil, self)
+	reset:SetPoint("BOTTOMRIGHT", self, -16, 16)
+	reset:SetWidth(80)
+	reset:SetHeight(24)
+	reset:SetNormalFontObject(GameFontNormalSmall)
+	reset:SetDisabledFontObject(GameFontDisable)
+	reset:SetHighlightFontObject(GameFontHighlightSmall)
+	reset:SetNormalTexture("Interface\\Buttons\\UI-Panel-Button-Up")
+	reset:SetPushedTexture("Interface\\Buttons\\UI-Panel-Button-Down")
+	reset:SetHighlightTexture("Interface\\Buttons\\UI-Panel-Button-Highlight")
+	reset:SetDisabledTexture("Interface\\Buttons\\UI-Panel-Button-Disabled")
+	reset:GetNormalTexture():SetTexCoord(0, 0.625, 0, 0.6875)
+	reset:GetPushedTexture():SetTexCoord(0, 0.625, 0, 0.6875)
+	reset:GetHighlightTexture():SetTexCoord(0, 0.625, 0, 0.6875)
+	reset:GetDisabledTexture():SetTexCoord(0, 0.625, 0, 0.6875)
+	reset:GetHighlightTexture():SetBlendMode("ADD")
+	reset:SetScript("OnEnter", function(self)
+		if self.hint then
+			GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+			GameTooltip:SetText(self.hint, nil, nil, nil, nil, true)
+		end
+	end)
+	reset:SetScript("OnLeave", function()
+		GameTooltip:Hide()
+	end)
+
+	reset:SetText(L["Reset"])
+	reset.hint = L["Reset all class colors to their Blizzard defaults."]
+	reset:SetScript("OnClick", self.defaults)
 
 	-------------------------------------------------------------------
 

@@ -8,11 +8,16 @@ http://www.wowinterface.com/downloads/info12513-ClassColors.html
 http://wow.curse.com/downloads/wow-addons/details/classcolors.aspx
 
 ------------------------------------------------------------------------
+--	Information For Users
+------------------------------------------------------------------------
 
-Alyssa S. Kinley hereby grants anyone the right to use this work for any
-purpose, without any conditions, unless such conditions are required by
-law.
+Class Colors currently provides a GUI for changing class colors, and 
+applies custom class colors to the Blizzard UI. Type "/classcolors" or 
+open the Blizzard Interface Options window, click the AddOns tab, and 
+click the Class Colors entry in the left-hand column.
 
+------------------------------------------------------------------------
+--	Bug Reports & Feature Requests
 ------------------------------------------------------------------------
 
 Please file bug reports and feature requests here:
@@ -23,6 +28,8 @@ or here:
 - http://www.wowinterface.com/portal.php?id=224&a=listfeatures
 
 ------------------------------------------------------------------------
+--	General Feedback
+------------------------------------------------------------------------
 
 Please post general comments, questions, and suggestions here:
 - http://www.wowinterface.com/downloads/info12513-ClassColors.html#comments
@@ -31,16 +38,7 @@ or here:
 - http://forums.wowace.com/showthread.php?p=265975
 
 ------------------------------------------------------------------------
---	For Users
-------------------------------------------------------------------------
-
-Class Colors currently provides a GUI for changing class colors, and 
-applies custom class colors to the Blizzard UI. Type "/classcolors" or 
-open the Blizzard Interface Options window, click the AddOns tab, and 
-click the Class Colors entry in the left-hand column.
-
-------------------------------------------------------------------------
---	For Addon Authors
+--	Information For Addon Authors
 ------------------------------------------------------------------------
 
 Supporting this system is as easy as checking for the existence of a 
@@ -93,7 +91,8 @@ following:
 	 metatable __index so that people can still iterate over the table 
 	 using pairs() without having to work around function values
 
-The following are highly recommended, and generally expected, but won't technically break anything if they aren't provided:
+The following are highly recommended, and generally expected, but won't 
+technically break anything if they aren't provided:
 
 	* Provide a facility by which users may change class colors
 	* Store changed class colors between sessions
@@ -103,7 +102,7 @@ The following are highly recommended, and generally expected, but won't technica
 	* Apply user-defined class colors to the Blizzard UI
 
 ------------------------------------------------------------------------
---	Example of addon support
+--	Example #1
 ------------------------------------------------------------------------
 
 Before:
@@ -114,8 +113,13 @@ After:
 
 	local color = CUSTOM_CLASS_COLORS and CUSTOM_CLASS_COLORS[class] or RAID_CLASS_COLORS[class]
 
+Or:
+
+	local RAID_CLASS_COLORS = CUSTOM_CLASS_COLORS or RAID_CLASS_COLORS
+	local color = RAID_CLASS_COLORS[class]
+
 ------------------------------------------------------------------------
---	Example of addon support with local caching
+--	Example #2
 ------------------------------------------------------------------------
 
 Before:
@@ -139,5 +143,13 @@ After:
 			-- update visible addon parts with new colors here!
 		end)
 	end
+
+------------------------------------------------------------------------
+--	License
+------------------------------------------------------------------------
+
+Alyssa S. Kinley hereby grants anyone the right to use this work for any
+purpose, without any conditions, unless such conditions are required by
+law.
 
 ------------------------------------------------------------------------
