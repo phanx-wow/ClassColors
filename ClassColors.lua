@@ -247,11 +247,7 @@ ClassColors:SetScript("OnEvent", function(self, event, addon)
 		-- print("CUSTOM_CLASS_COLORS, DispatchCallbacks")
 
 		for method, handler in pairs(callbacks) do
-			if type(handler) == "table" then
-				handler[method](handler)
-			else
-				method()
-			end
+			method(handler ~= true and handler)
 		end
 	end
 
@@ -280,7 +276,7 @@ ClassColors:SetScript("OnEvent", function(self, event, addon)
 	local notes = self:CreateFontString(nil, "ARTWORK", "GameFontHighlightSmall")
 	notes:SetPoint("TOPLEFT", title, "BOTTOMLEFT", 0, -8)
 	notes:SetPoint("RIGHT", self, -32, 0)
-	notes:SetHeight(32)
+	notes:SetHeight(48)
 	notes:SetJustifyH("LEFT")
 	notes:SetJustifyV("TOP")
 	notes:SetNonSpaceWrap(true)
