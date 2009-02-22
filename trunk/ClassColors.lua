@@ -23,7 +23,7 @@ L["Class Colors"] = GetAddOnMetadata("!ClassColors", "Title")
 L["Change class colors without breaking the Blizzard UI."] = GetAddOnMetadata("!ClassColors", "Notes")
 
 if GetLocale() == "deDE" then
-	L.DEATHKNIGHT = "Todestritter"
+	L.DEATHKNIGHT = "Todesritter"
 	L.DRUID = "Druide"
 	L.HUNTER = "Jäger"
 	L.MAGE = "Magier"
