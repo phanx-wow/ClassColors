@@ -1,4 +1,6 @@
 ------------------------------------------------------------------------
+--	Description
+------------------------------------------------------------------------
 
 Class Colors
 Change class colors without breaking the Blizzard UI.
@@ -62,9 +64,8 @@ CUSTOM_CLASS_COLORS:RegisterCallback(method[, handler])
 	* Registers a function to be called when class colors are changed.
 	* If 'method' is a function, that function will be called with no
 	  arguments.
-	* If 'method' is a string, 'handler' is a table, and
-	  'handler[method]' is a function, 'handler[method]' will be called 
-	  with 'handler' as the first argument.
+	* If 'method' is a string, 'handler[method]' will be called with
+	  'handler' as the first argument.
 
 CUSTOM_CLASS_COLORS:UnregisterCallback(method[, handler])
 	- method - function or string
@@ -85,11 +86,11 @@ implementation of this standard. Any implementation must provide the
 following:
 
 	* Create and populate a global table CUSTOM_CLASS_COLORS with the 
-	 same keys and value structure as RAID_CLASS_COLORS
+	  same keys and value structure as RAID_CLASS_COLORS
 	* Define methods :RegisterCallback, and :UnregisterCallback on the 
-	 CUSTOM_CLASS_COLORS table (see API documentation above), using a 
-	 metatable __index so that people can still iterate over the table 
-	 using pairs() without having to work around function values
+	  CUSTOM_CLASS_COLORS table (see API documentation above), using a 
+	  metatable __index so that people can still iterate over the table 
+	  using pairs() without having to work around function values
 
 The following are highly recommended, and generally expected, but won't 
 technically break anything if they aren't provided:
@@ -97,8 +98,8 @@ technically break anything if they aren't provided:
 	* Provide a facility by which users may change class colors
 	* Store changed class colors between sessions
 	* Maintain a registry of functions requesting callbacks when class 
-	 colors are changed, and call those functions when appropriate (see 
-	 API documentation above)
+	  colors are changed, and call those functions when appropriate (see 
+	  API documentation above)
 	* Apply user-defined class colors to the Blizzard UI
 
 ------------------------------------------------------------------------
