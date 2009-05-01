@@ -253,7 +253,19 @@ ClassColors:SetScript("OnEvent", function(self, event, addon)
 
 	-------------------------------------------------------------------
 
+	local classTokens = { }
+	for i, class in ipairs(classes) do
+		classTokens[L[class]] = class
+	end
+
+	local function GetClassToken(self, className)
+		return className and classTokens[className]
+	end
+
+	-------------------------------------------------------------------
+
 	setmetatable(CUSTOM_CLASS_COLORS, { __index = function(t, k)
+		if k == "GetClassToken" then return GetClassToken end
 		if k == "IterateClasses" then return IterateClasses end
 		if k == "RegisterCallback" then return RegisterCallback end
 		if k == "UnregisterCallback" then return UnregisterCallback end
@@ -454,6 +466,10 @@ ClassColors:SetScript("OnEvent", function(self, event, addon)
 	SlashCmdList.CLASSCOLORS = function()
 		InterfaceOptionsFrame_OpenToCategory(self)
 	end
+
+	-------------------------------------------------------------------
+
+	if self.Extras then self.Extras:Load() end
 
 	-------------------------------------------------------------------
 

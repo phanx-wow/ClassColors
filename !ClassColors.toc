@@ -1,13 +1,14 @@
-## Interface: 30000
-## Version: 3.0.9.wowi:revision-beta
+## Interface: 30100
+## Version: 3.1.1.wowi:revision
 
 ## Title: Class Colors
 ## Notes: Change class colors without breaking the Blizzard UI.
 
 ## Author: Phanx
-## X-Email: addons AT phanx DOT net
+## X-Email: addons@phanx.net
 
 ## SavedVariables: ClassColorsDB
 
 ClassColors.lua
 ClassColorsBlizz.lua
+ClassColorsExtra.lua

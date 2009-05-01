@@ -175,29 +175,32 @@ eventFrame:SetScript("OnEvent", function(self, event, ...)
 
 		-- LFGFrame.lua
 
-		local GetLFGResults = GetLFGResults
-		local LFGS_TO_DISPLAY = LFGS_TO_DISPLAY
+		local GetLFGResultsProxy = GetLFGResultsProxy
 
 		hooksecurefunc("LFMFrame_Update", function()
-			-- ChatFrame7:AddMessage("LFMFrame_Update")
-			local type = UIDropDownMenu_GetSelectedID(LFMFrameTypeDropDown)
-			local name = UIDropDownMenu_GetSelectedID(LFMFrameNameDropDown)
-			local n = GetNumLFGResults(type, name)
+			-- print("LFMFrame_Update")
+			local button, class, color, _
+
+			local n = GetNumLFGResultsProxy()
 			local offset = FauxScrollFrame_GetOffset(LFMListScrollFrame)
-			local index, class, color, _
-			for i = 1, LFGS_TO_DISPLAY, 1 do
-				index = i + offset
-				if index <= n then
-					_, _, _, _, _, _, _, _, _, _, class = GetLFGResults(type, name, index)
-					if class then
-						color = CUSTOM_CLASS_COLORS[class]
+
+			for i = 1, LFGS_TO_DISPLAY do
+				if offset <= n then
+					button = _G["LFMFrameButton"..i]
+					if button:IsShown() then
+						name, _, _, _, _, _, _, _, _, _, class = GetLFGResultsProxy(offset + i)
 						if class then
-							_G["LFMFrameButton" .. i .. "Class"]:SetTextColor(color.r, color.g, color.b)
+							color = CUSTOM_CLASS_COLORS[class]
+							if color then
+								_G["LFMFrameButton"..i.."Class"]:SetTextColor(color.r, color.g, color.b)
+							end
 						end
 					end
 				end
 			end
 		end)
+
+		-- See if we need to watch ADDON_LOADED
 
 		for addon, func in pairs(addonFuncs) do
 			if IsAddOnLoaded(addon) then
