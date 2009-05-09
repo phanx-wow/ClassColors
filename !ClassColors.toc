@@ -11,4 +11,3 @@
 
 ClassColors.lua
 ClassColorsBlizz.lua
-ClassColorsExtra.lua
