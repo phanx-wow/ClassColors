@@ -34,7 +34,7 @@ if GetLocale() == "deDE" then
 	L.WARLOCK = "Hexenmeister"
 	L.WARRIOR = "Krieger"
 
-	L["Note that not all addons support this, and you may need to reload the UI before your changes are recognized."] = "Note that not all addons support this, and you may need to reload the UI before your changes are recognized."
+--	L["Note that not all addons support this, and you may need to reload the UI before your changes are recognized."] = ""
 
 elseif GetLocale() == "esES" or GetLocale() == "esMX" then
 	L.DEATHKNIGHT = "Caballero de la muerte"
@@ -48,7 +48,7 @@ elseif GetLocale() == "esES" or GetLocale() == "esMX" then
 	L.WARLOCK = "Brujo"
 	L.WARRIOR = "Guerrero"
 
-	L["Note that not all addons support this, and you may need to reload the UI before your changes are recognized."] = "Note that not all addons support this, and you may need to reload the UI before your changes are recognized."
+--	L["Note that not all addons support this, and you may need to reload the UI before your changes are recognized."] = ""
 
 elseif GetLocale() == "frFR" then
 	L.DEATHKNIGHT = "Chevalier de la mort"
@@ -62,7 +62,7 @@ elseif GetLocale() == "frFR" then
 	L.WARLOCK = "Démoniste"
 	L.WARRIOR = "Guerrier"
 
-	L["Note that not all addons support this, and you may need to reload the UI before your changes are recognized."] = "Note that not all addons support this, and you may need to reload the UI before your changes are recognized."
+--	L["Note that not all addons support this, and you may need to reload the UI before your changes are recognized."] = ""
 
 elseif GetLocale() == "koKR" then
 	L.DEATHKNIGHT = "죽음의 기사"
@@ -76,7 +76,7 @@ elseif GetLocale() == "koKR" then
 	L.WARLOCK = "흑마법사"
 	L.WARRIOR = "전사"
 
-	L["Note that not all addons support this, and you may need to reload the UI before your changes are recognized."] = "Note that not all addons support this, and you may need to reload the UI before your changes are recognized."
+--	L["Note that not all addons support this, and you may need to reload the UI before your changes are recognized."] = ""
 
 elseif GetLocale() == "ruRU" then
 	L.DEATHKNIGHT = "Рыцарь смерти"
@@ -90,7 +90,7 @@ elseif GetLocale() == "ruRU" then
 	L.WARLOCK = "Чернокнижник"
 	L.WARRIOR = "Воин"
 
-	L["Note that not all addons support this, and you may need to reload the UI before your changes are recognized."] = "Note that not all addons support this, and you may need to reload the UI before your changes are recognized."
+--	L["Note that not all addons support this, and you may need to reload the UI before your changes are recognized."] = ""
 
 elseif GetLocale() == "zhCN" then
 	L.DEATHKNIGHT = "死亡骑士"
@@ -104,7 +104,7 @@ elseif GetLocale() == "zhCN" then
 	L.WARLOCK = "术士"
 	L.WARRIOR = "战士"
 
-	L["Note that not all addons support this, and you may need to reload the UI before your changes are recognized."] = "Note that not all addons support this, and you may need to reload the UI before your changes are recognized."
+--	L["Note that not all addons support this, and you may need to reload the UI before your changes are recognized."] = ""
 
 elseif GetLocale() == "zhTW" then
 	L.DEATHKNIGHT = "死亡騎士"
@@ -118,7 +118,7 @@ elseif GetLocale() == "zhTW" then
 	L.WARLOCK = "術士"
 	L.WARRIOR = "戰士"
 
-	L["Note that not all addons support this, and you may need to reload the UI before your changes are recognized."] = "Note that not all addons support this, and you may need to reload the UI before your changes are recognized."
+--	L["Note that not all addons support this, and you may need to reload the UI before your changes are recognized."] = ""
 
 else
 	L.DEATHKNIGHT = "Death Knight"
