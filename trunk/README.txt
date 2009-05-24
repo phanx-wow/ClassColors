@@ -1,26 +1,19 @@
 ------------------------------------------------------------------------
---	Description
-------------------------------------------------------------------------
+Description:
 
-Class Colors
-Change class colors without breaking the Blizzard UI.
-by Phanx < addons@phanx.net >
-
-http://www.wowinterface.com/downloads/info12513-ClassColors.html
-http://wow.curse.com/downloads/wow-addons/details/classcolors.aspx
+!ClassColors is a World of Warcraft user interface addon to provide a
+method for changing class colors without breaking the default UI.
 
 ------------------------------------------------------------------------
---	Information For Users
-------------------------------------------------------------------------
+Information For Users:
 
-Class Colors currently provides a GUI for changing class colors, and 
+!ClassColors currently provides a GUI for changing class colors, and 
 applies custom class colors to the Blizzard UI. Type "/classcolors" or 
 open the Blizzard Interface Options window, click the AddOns tab, and 
-click the Class Colors entry in the left-hand column.
+click the "Class Colors" entry in the left-hand column.
 
 ------------------------------------------------------------------------
---	Bug Reports & Feature Requests
-------------------------------------------------------------------------
+Bug Reports and Feature Requests:
 
 Please file bug reports and feature requests here:
 - http://wow.curseforge.com/projects/classcolors/tickets/?filter_status=+
@@ -30,8 +23,7 @@ or here:
 - http://www.wowinterface.com/portal.php?id=224&a=listfeatures
 
 ------------------------------------------------------------------------
---	General Feedback
-------------------------------------------------------------------------
+General Feedback:
 
 Please post general comments, questions, and suggestions here:
 - http://www.wowinterface.com/downloads/info12513-ClassColors.html#comments
@@ -40,8 +32,7 @@ or here:
 - http://forums.wowace.com/showthread.php?p=265975
 
 ------------------------------------------------------------------------
---	Information For Addon Authors
-------------------------------------------------------------------------
+Information For Addon Authors:
 
 Supporting this system is as easy as checking for the existence of a 
 global table CUSTOM_CLASS_COLORS and reading from it instead of 
@@ -53,8 +44,7 @@ the user (see API documentation below) and update your color cache when
 the callback is fired.
 
 ------------------------------------------------------------------------
---	API Documentation
-------------------------------------------------------------------------
+API Documentation:
 
 CUSTOM_CLASS_COLORS:RegisterCallback(method[, handler])
 	- method - function or string
@@ -75,13 +65,12 @@ CUSTOM_CLASS_COLORS:UnregisterCallback(method[, handler])
 	* Removes a function from the callback registry.
 
 ------------------------------------------------------------------------
---	Implementation Details
-------------------------------------------------------------------------
+Implementation Details:
 
-Class Colors is built on a proposed community standard for a global 
+!ClassColors is built on a proposed community standard for a global 
 table of alternate class colors that can be freely modified without 
 tainting anything. This means that addons must explicitly support this 
-standard (see below for details). Class Colors is only one possible 
+standard (see below for details). !ClassColors is only one possible 
 implementation of this standard. Any implementation must provide the 
 following:
 
@@ -103,8 +92,7 @@ technically break anything if they aren't provided:
 	* Apply user-defined class colors to the Blizzard UI
 
 ------------------------------------------------------------------------
---	Example #1
-------------------------------------------------------------------------
+Example #1:
 
 Before:
 
@@ -120,8 +108,7 @@ Or:
 	local color = RAID_CLASS_COLORS[class]
 
 ------------------------------------------------------------------------
---	Example #2
-------------------------------------------------------------------------
+Example #2:
 
 Before:
 
@@ -146,10 +133,9 @@ After:
 	end
 
 ------------------------------------------------------------------------
---	License
-------------------------------------------------------------------------
+License:
 
-Copyright ©2008–2009 Alyssa "Phanx" Kinley
+Copyright ©2009 Alyssa "Phanx" Kinley
 
 The contents of this addon, excluding third-party resources, are copyrighted
 to its author with all rights reserved under United States copyright law and

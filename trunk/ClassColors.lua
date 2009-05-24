@@ -3,14 +3,10 @@
 	Class Colors
 	Change class colors without breaking the Blizzard UI.
 	by Phanx < addons@phanx.net >
+	Copyright ©2009 Alyssa "Phanx" Kinley
+	See accompanying README for license terms and API details.
 	http://www.wowinterface.com/downloads/info12513-ClassColors.html
 	http://wow.curse.com/downloads/wow-addons/details/classcolors.aspx
-
-	Alyssa S. Kinley hereby grants anyone the right to use this work
-	for any purpose, without any conditions, unless such conditions
-	are required by law.
-
-	See the included README file for API and other details!
 
 ----------------------------------------------------------------------]]
 
@@ -136,7 +132,7 @@ end
 ------------------------------------------------------------------------
 
 local ClassColors = CreateFrame("Frame", nil, InterfaceOptionsFramePanelContainer)
-
+ClassColors.L = L
 ClassColors:RegisterEvent("ADDON_LOADED")
 ClassColors:SetScript("OnEvent", function(self, event, addon)
 	if addon ~= "!ClassColors" then return end
