@@ -116,7 +116,7 @@ eventFrame:SetScript("OnEvent", function(self, event, ...)
 
 			for i = 1, MAX_ARENA_TEAM_MEMBERS do
 				if _G["PVPTeamDetailsButton"..i]:IsShown() then
-					name, _, _, classLocal, online = GetArenaTeamRosterInfo(id, i)
+					name, _, level, classLocal, online = GetArenaTeamRosterInfo(id, i)
 					local class = classLocal and CUSTOM_CLASS_COLORS:GetClassToken(classLocal)
 					if class then
 						local color = CUSTOM_CLASS_COLORS[class]
