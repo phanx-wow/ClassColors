@@ -1,5 +1,21 @@
+--[[--------------------------------------------------------------------
+
+	Class Colors
+	Change class colors without breaking the Blizzard UI.
+	by Phanx < addons@phanx.net >
+	Copyright ©2009 Alyssa "Phanx" Kinley
+	See accompanying README for license terms and API details.
+	http://www.wowinterface.com/downloads/info12513-ClassColors.html
+	http://wow.curse.com/downloads/wow-addons/details/classcolors.aspx
+
+----------------------------------------------------------------------]]
+
 local numAddons = 0
 local addonFuncs = { }
+
+--
+--	Blizzard_Calendar
+--
 
 addonFuncs["Blizzard_Calendar"] = function()
 	local CalendarEventGetInvite = CalendarEventGetInvite
@@ -40,6 +56,10 @@ addonFuncs["Blizzard_Calendar"] = function()
 		end
 	end)
 end
+
+--
+--	Blizzard_RaidUI
+--
 
 addonFuncs["Blizzard_RaidUI"] = function()
 	local GetNumRaidMembers = GetNumRaidMembers
@@ -117,11 +137,13 @@ addonFuncs["Blizzard_RaidUI"] = function()
 end
 
 local eventFrame = CreateFrame("Frame")
-eventFrame:RegisterEvent("PLAYER_LOGIN")
+eventFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
 eventFrame:SetScript("OnEvent", function(self, event, ...)
-	if event == "PLAYER_LOGIN" then
+	if event == "PLAYER_ENTERING_WORLD" then
 
+		--
 		-- FriendsFrame.lua
+		--
 
 		local GetGuildRosterInfo = GetGuildRosterInfo
 		local GetWhoInfo = GetWhoInfo
@@ -173,7 +195,9 @@ eventFrame:SetScript("OnEvent", function(self, event, ...)
 			end
 		end)
 
-		-- LFGFrame.lua
+		--
+		--	LFGFrame.lua
+		--
 
 		local GetLFGResultsProxy = GetLFGResultsProxy
 
@@ -200,7 +224,9 @@ eventFrame:SetScript("OnEvent", function(self, event, ...)
 			end
 		end)
 
-		-- See if we need to watch ADDON_LOADED
+		--
+		--	See if we need to watch ADDON_LOADED
+		--
 
 		for addon, func in pairs(addonFuncs) do
 			if IsAddOnLoaded(addon) then
@@ -216,7 +242,9 @@ eventFrame:SetScript("OnEvent", function(self, event, ...)
 
 	else
 
-		-- ADDON_LOADED
+		--
+		--	ADDON_LOADED
+		--
 
 		local addon = ...
 
@@ -231,4 +259,5 @@ eventFrame:SetScript("OnEvent", function(self, event, ...)
 		end
 
 	end
+
 end)
