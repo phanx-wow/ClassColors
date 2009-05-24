@@ -1,5 +1,5 @@
 ## Interface: 30100
-## Version: 3.1.1.wowi:revision
+## Version: 3.1.2.wowi:revision
 
 ## Title: Class Colors
 ## Notes: Change class colors without breaking the Blizzard UI.
