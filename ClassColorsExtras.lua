@@ -26,7 +26,7 @@ addonFuncs["Blizzard_InspectUI"] = function()
 		if not db.InspectFrame then return end
 
 		if event == "UNIT_NAME_UPDATE" and self:IsShow() and unit == self.unit then
-			print("InspectFrame_OnEvent")
+			-- print("InspectFrame_OnEvent")
 			local _, class = UnitClass(unit)
 			local color = CUSTOM_CLASS_COLORS[class]
 			InspectNameText:SetTextColor(color.r, color.g, color.b)
@@ -35,7 +35,7 @@ addonFuncs["Blizzard_InspectUI"] = function()
 
 	hooksecurefunc("InspectFrame_UnitChanged", function(self)
 		if not db.InspectFrame then return end
-		print("InspectFrame_UnitChanged")
+		-- print("InspectFrame_UnitChanged")
 
 		local _, class = UnitClass(unit)
 		local color = CUSTOM_CLASS_COLORS[class]
@@ -46,7 +46,7 @@ addonFuncs["Blizzard_InspectUI"] = function()
 		if not db.InspectFrame then return end
 
 		if not self.unit then return end
-		print("InspectFrame_OnShow")
+		-- print("InspectFrame_OnShow")
 
 		local _, class = UnitClass(unit)
 		local color = CUSTOM_CLASS_COLORS[class]
@@ -87,7 +87,7 @@ eventFrame:SetScript("OnEvent", function(self, event, ...)
 		local GetFriendInfo = GetFriendInfo
 		hooksecurefunc("FriendsList_Update", function()
 			if not db.FriendsFrame then return end
-			print("FriendsList_Update")
+			-- print("FriendsList_Update")
 
 			local n = GetNumFriends()
 			local offset = FauxScrollFrame_GetOffset(FriendsFrameFriendsScrollFrame)
@@ -112,7 +112,7 @@ eventFrame:SetScript("OnEvent", function(self, event, ...)
 		local GetArenaTeamRosterInfo = GetArenaTeamRosterInfo
 		hooksecurefunc("PVPTeamDetails_Update", function(id)
 			if not db.PvPFrame then return end
-			print("PVPTeamDetails_Update")
+			-- print("PVPTeamDetails_Update")
 
 			for i = 1, MAX_ARENA_TEAM_MEMBERS do
 				if _G["PVPTeamDetailsButton"..i]:IsShown() then
@@ -143,7 +143,7 @@ eventFrame:SetScript("OnEvent", function(self, event, ...)
 
 		hooksecurefunc("TradeFrame_Update", function()
 			if not db.TradeFrame then return end
-			print("TradeFrame_Update")
+			-- print("TradeFrame_Update")
 
 			local _, class = UnitClass("player")
 			local color = CUSTOM_CLASS_COLORS[class]
@@ -164,7 +164,7 @@ eventFrame:SetScript("OnEvent", function(self, event, ...)
 			if not db.UnitFrame then return end
 
 			if UnitIsPlayer(self.unit) then
-				print("UnitFrame_Update")
+				-- print("UnitFrame_Update")
 				local _, class = UnitClass(self.unit)
 				local color = CUSTOM_CLASS_COLORS[class]
 				self.name:SetTextColor(color.r, color.g, color.b)
@@ -175,7 +175,7 @@ eventFrame:SetScript("OnEvent", function(self, event, ...)
 			if not db.UnitFrame then return end
 
 			if event == "UNIT_PORTRAIT_UPDATE" and UnitIsPlayer(self.unit) then
-				print("UnitFrame_OnEvent")
+				-- print("UnitFrame_OnEvent")
 				local _, class = UnitClass(self.unit)
 				local color = CUSTOM_CLASS_COLORS[class]
 				self.name:SetTextColor(color.r, color.g, color.b)
