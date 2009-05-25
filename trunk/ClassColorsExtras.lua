@@ -29,7 +29,9 @@ addonFuncs["Blizzard_InspectUI"] = function()
 			-- print("InspectFrame_OnEvent")
 			local _, class = UnitClass(unit)
 			local color = CUSTOM_CLASS_COLORS[class]
-			InspectNameText:SetTextColor(color.r, color.g, color.b)
+			if color then
+				InspectNameText:SetTextColor(color.r, color.g, color.b)
+			end
 		end
 	end)
 
@@ -39,7 +41,9 @@ addonFuncs["Blizzard_InspectUI"] = function()
 
 		local _, class = UnitClass(unit)
 		local color = CUSTOM_CLASS_COLORS[class]
-		InspectNameText:SetTextColor(color.r, color.g, color.b)
+		if color then
+			InspectNameText:SetTextColor(color.r, color.g, color.b)
+		end
 	end)
 
 	hooksecurefunc("InspectFrame_OnShow", function(self)
@@ -50,7 +54,9 @@ addonFuncs["Blizzard_InspectUI"] = function()
 
 		local _, class = UnitClass(unit)
 		local color = CUSTOM_CLASS_COLORS[class]
-		InspectNameText:SetTextColor(color.r, color.g, color.b)
+		if color then
+			InspectNameText:SetTextColor(color.r, color.g, color.b)
+		end
 	end)
 end
 
@@ -115,23 +121,25 @@ eventFrame:SetScript("OnEvent", function(self, event, ...)
 			-- print("PVPTeamDetails_Update")
 
 			for i = 1, MAX_ARENA_TEAM_MEMBERS do
-				if _G["PVPTeamDetailsButton"..i]:IsShown() then
+				local button = _G["PVPTeamDetailsButton"..i]
+				if button:IsShown() then
 					name, _, level, classLocal, online = GetArenaTeamRosterInfo(id, i)
 					local class = classLocal and CUSTOM_CLASS_COLORS:GetClassToken(classLocal)
 					if class then
 						local color = CUSTOM_CLASS_COLORS[class]
+						if color then
+							local r, g, b = color.r, color.g, color.b
+							if not online then
+								r = r / 2
+								g = g / 2
+								b = g / 2
+							end
 
-						local r, g, b = color.r, color.g, color.b
-						if not online then
-							r = r / 2
-							g = g / 2
-							b = g / 2
+							button.tooltip = format("%s %s |cff%02x%02x%02x%s|r", LEVEL, level, r * 255, g * 255, b * 255, classLocal)
+
+							_G["PVPTeamDetailsButton"..i.."NameText"]:SetTextColor(r, g, b)
+							_G["PVPTeamDetailsButton"..i.."ClassText"]:SetTextColor(r, g, b)
 						end
-
-						button.tooltip = format("%s %s |cff%02x%02x%02x%s|r", LEVEL, level, r * 255, g * 255, b * 255, classLocal)
-
-						_G["PVPTeamDetailsButton"..i.."NameText"]:SetTextColor(r, g, b)
-						_G["PVPTeamDetailsButton"..i.."ClassText"]:SetTextColor(r, g, b)
 					end
 				end
 			end
@@ -152,7 +160,9 @@ eventFrame:SetScript("OnEvent", function(self, event, ...)
 			if UnitIsPlayer("NPC") then
 				_, class = UnitClass("NPC")
 				color = CUSTOM_CLASS_COLORS[class]
-				TradeFrameRecipientNameText:SetTextColor(color.r, color.g, color.b)
+				if color then
+					TradeFrameRecipientNameText:SetTextColor(color.r, color.g, color.b)
+				end
 			end
 		end)
 
@@ -167,7 +177,9 @@ eventFrame:SetScript("OnEvent", function(self, event, ...)
 				-- print("UnitFrame_Update")
 				local _, class = UnitClass(self.unit)
 				local color = CUSTOM_CLASS_COLORS[class]
-				self.name:SetTextColor(color.r, color.g, color.b)
+				if color then
+					self.name:SetTextColor(color.r, color.g, color.b)
+				end
 			end
 		end)
 
@@ -178,7 +190,9 @@ eventFrame:SetScript("OnEvent", function(self, event, ...)
 				-- print("UnitFrame_OnEvent")
 				local _, class = UnitClass(self.unit)
 				local color = CUSTOM_CLASS_COLORS[class]
-				self.name:SetTextColor(color.r, color.g, color.b)
+				if color then
+					self.name:SetTextColor(color.r, color.g, color.b)
+				end
 			end
 		end)
 
