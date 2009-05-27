@@ -398,7 +398,7 @@ ClassColors:SetScript("OnEvent", function(self, event, addon)
 			local class = picker.class
 			local color = RAID_CLASS_COLORS[class]
 
-			if db[class].r ~= color.r or db[class].r ~= color.r or db[class].r ~= color.r then
+			if db[class].r ~= color.r or db[class].g ~= color.g or db[class].b ~= color.b then
 				changed = true
 
 				picker:SetColor(color.r, color.g, color.b)
