@@ -179,6 +179,8 @@ eventFrame:SetScript("OnEvent", function(self, event, ...)
 				local color = CUSTOM_CLASS_COLORS[class]
 				if color then
 					self.name:SetTextColor(color.r, color.g, color.b)
+				else
+					self.name:SetTextColor(GameTooltip_UnitColor(self.unit))
 				end
 			end
 		end)
