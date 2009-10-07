@@ -144,15 +144,25 @@ local eventFrame = CreateFrame("Frame")
 eventFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
 eventFrame:SetScript("OnEvent", function(self, event, ...)
 	if event == "CVAR_UPDATE" then
-		local colorNameplates = GetCVarBool("ShowClassColorInNameplate")
-		if colorNameplates then
-			self:SetScript("OnUpdate", self.OnUpdate)
-		else
-			self:SetScript("OnUpdate", nil)
-		end
+--		local colorNameplates = GetCVarBool("ShowClassColorInNameplate")
+--		if colorNameplates then
+--			self:SetScript("OnUpdate", self.OnUpdate)
+--		else
+--			self:SetScript("OnUpdate", nil)
+--		end
 
 	elseif event == "PLAYER_ENTERING_WORLD" then
-		self:GetScript("OnEvent")(self, "CVAR_UPDATE")
+--		self:GetScript("OnEvent")(self, "CVAR_UPDATE")
+
+		--
+		--	ChatConfigFrame.lua
+		--
+
+		for i, class in ipairs(CLASS_SORT_ORDER) do
+			local fontString = ClassColorLegendTemplate.classStrings[i]
+			local classColor = CUSTOM_CLASS_COLORS[class]
+			fontString:SetFormattedText("|cff%02x%02x%02x%s|r\n", classColor.r * 255, classColor.g * 255, classColor.b * 255, LOCALIZED_CLASS_NAMES_MALE[class])
+		end
 
 		--
 		--	ChatFrame.lua

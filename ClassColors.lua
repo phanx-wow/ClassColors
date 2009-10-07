@@ -18,115 +18,22 @@ end })
 L["Class Colors"] = GetAddOnMetadata("!ClassColors", "Title")
 L["Change class colors without breaking the Blizzard UI."] = GetAddOnMetadata("!ClassColors", "Notes")
 
+FillLocalizedClassList(L, false)
+
 if GetLocale() == "deDE" then
-	L.DEATHKNIGHT = "Todesritter"
-	L.DRUID = "Druide"
-	L.HUNTER = "Jäger"
-	L.MAGE = "Magier"
-	L.PALADIN = "Paladin"
-	L.PRIEST = "Priester"
-	L.ROGUE = "Schurke"
-	L.SHAMAN = "Schamane"
-	L.WARLOCK = "Hexenmeister"
-	L.WARRIOR = "Krieger"
-
 --	L["Note that not all addons support this, and you may need to reload the UI before your changes are recognized."] = ""
-
 elseif GetLocale() == "esES" or GetLocale() == "esMX" then
-	L.DEATHKNIGHT = "Caballero de la muerte"
-	L.DRUID = "Druida"
-	L.HUNTER = "Cazador"
-	L.MAGE = "Mago"
-	L.PALADIN = "Paladín"
-	L.PRIEST = "Sacerdote"
-	L.ROGUE = "Pícaro"
-	L.SHAMAN = "Chamán"
-	L.WARLOCK = "Brujo"
-	L.WARRIOR = "Guerrero"
-
 --	L["Note that not all addons support this, and you may need to reload the UI before your changes are recognized."] = ""
-
 elseif GetLocale() == "frFR" then
-	L.DEATHKNIGHT = "Chevalier de la mort"
-	L.DRUID = "Druide"
-	L.HUNTER = "Chasseur"
-	L.MAGE = "Mage"
-	L.PALADIN = "Paladin"
-	L.PRIEST = "Prêtre"
-	L.ROGUE = "Voleur"
-	L.SHAMAN = "Chaman"
-	L.WARLOCK = "Démoniste"
-	L.WARRIOR = "Guerrier"
-
 --	L["Note that not all addons support this, and you may need to reload the UI before your changes are recognized."] = ""
-
 elseif GetLocale() == "koKR" then
-	L.DEATHKNIGHT = "죽음의 기사"
-	L.DRUID = "드루이드"
-	L.HUNTER = "사냥꾼"
-	L.MAGE = "마법사"
-	L.PALADIN = "성기사"
-	L.PRIEST = "사제"
-	L.ROGUE = "도적"
-	L.SHAMAN = "주술사"
-	L.WARLOCK = "흑마법사"
-	L.WARRIOR = "전사"
-
 --	L["Note that not all addons support this, and you may need to reload the UI before your changes are recognized."] = ""
-
 elseif GetLocale() == "ruRU" then
-	L.DEATHKNIGHT = "Рыцарь смерти"
-	L.DRUID = "Друид"
-	L.HUNTER = "Охотник"
-	L.MAGE = "Маг"
-	L.PALADIN = "Паладин"
-	L.PRIEST = "Жрец"
-	L.ROGUE = "Разбойник"
-	L.SHAMAN = "Шаман"
-	L.WARLOCK = "Чернокнижник"
-	L.WARRIOR = "Воин"
-
 --	L["Note that not all addons support this, and you may need to reload the UI before your changes are recognized."] = ""
-
 elseif GetLocale() == "zhCN" then
-	L.DEATHKNIGHT = "死亡骑士"
-	L.DRUID = "德鲁伊"
-	L.HUNTER = "猎人"
-	L.MAGE = "法师"
-	L.PALADIN = "法师"
-	L.PRIEST = "牧师"
-	L.ROGUE = "潜行者"
-	L.SHAMAN = "萨满祭司"
-	L.WARLOCK = "术士"
-	L.WARRIOR = "战士"
-
 --	L["Note that not all addons support this, and you may need to reload the UI before your changes are recognized."] = ""
-
 elseif GetLocale() == "zhTW" then
-	L.DEATHKNIGHT = "死亡騎士"
-	L.DRUID = "德魯伊"
-	L.HUNTER = "獵人"
-	L.MAGE = "法師"
-	L.PALADIN = "聖騎士"
-	L.PRIEST = "牧師"
-	L.ROGUE = "盜賊"
-	L.SHAMAN = "薩滿"
-	L.WARLOCK = "術士"
-	L.WARRIOR = "戰士"
-
 --	L["Note that not all addons support this, and you may need to reload the UI before your changes are recognized."] = ""
-
-else
-	L.DEATHKNIGHT = "Death Knight"
-	L.DRUID = "Druid"
-	L.HUNTER = "Hunter"
-	L.MAGE = "Mage"
-	L.PALADIN = "Paladin"
-	L.PRIEST = "Priest"
-	L.ROGUE = "Rogue"
-	L.SHAMAN = "Shaman"
-	L.WARLOCK = "Warlock"
-	L.WARRIOR = "Warrior"
 end
 
 ------------------------------------------------------------------------
