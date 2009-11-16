@@ -143,26 +143,20 @@ end
 local eventFrame = CreateFrame("Frame")
 eventFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
 eventFrame:SetScript("OnEvent", function(self, event, ...)
-	if event == "CVAR_UPDATE" then
---		local colorNameplates = GetCVarBool("ShowClassColorInNameplate")
---		if colorNameplates then
---			self:SetScript("OnUpdate", self.OnUpdate)
---		else
---			self:SetScript("OnUpdate", nil)
---		end
-
-	elseif event == "PLAYER_ENTERING_WORLD" then
---		self:GetScript("OnEvent")(self, "CVAR_UPDATE")
+	if event == "PLAYER_ENTERING_WORLD" then
 
 		--
 		--	ChatConfigFrame.lua
 		--
 
-		for i, class in ipairs(CLASS_SORT_ORDER) do
-			local fontString = ClassColorLegendTemplate.classStrings[i]
-			local classColor = CUSTOM_CLASS_COLORS[class]
-			fontString:SetFormattedText("|cff%02x%02x%02x%s|r\n", classColor.r * 255, classColor.g * 255, classColor.b * 255, LOCALIZED_CLASS_NAMES_MALE[class])
+		local function ColorizeChatConfigFrame()
+			for i, class in ipairs(CLASS_SORT_ORDER) do
+				local classColor = CUSTOM_CLASS_COLORS[class]
+				ChatConfigChatSettingsClassColorLegend.classStrings[i]:SetFormattedText("|cff%02x%02x%02x%s|r\n", classColor.r * 255, classColor.g * 255, classColor.b * 255, LOCALIZED_CLASS_NAMES_MALE[class])
+			end
 		end
+		CUSTOM_CLASS_COLORS:RegisterCallback(ColorizeChatConfigFrame)
+		ColorizeChatConfigFrame()
 
 		--
 		--	ChatFrame.lua
@@ -251,7 +245,7 @@ eventFrame:SetScript("OnEvent", function(self, event, ...)
 
 		local GetLFGResultsProxy = GetLFGResultsProxy
 
-		hooksecurefunc("LFMFrame_Update", function()
+		if LFMFrame_Update then hooksecurefunc("LFMFrame_Update", function()
 			-- print("LFMFrame_Update")
 			local button, class, color, _
 
@@ -272,7 +266,7 @@ eventFrame:SetScript("OnEvent", function(self, event, ...)
 					end
 				end
 			end
-		end)
+		end) end
 
 		--
 		--	See if we need to watch ADDON_LOADED
@@ -311,65 +305,3 @@ eventFrame:SetScript("OnEvent", function(self, event, ...)
 	end
 
 end)
-
---
---	Nameplates
---
-
-local nameplateFrames = { }
-
-local nameplateClassFromColor = { }
-
-for class, color in pairs(RAID_CLASS_COLORS) do
-	if not nameplateClassFromColor[color.r] then nameplateClassFromColor[color.r] = { } end
-	if not nameplateClassFromColor[color.r][color.g] then nameplateClassFromColor[color.r][color.g] = { } end
-	nameplateClassFromColor[color.r][color.g][color.b] = class
-	
-	local r, g, b = floor(color.r * 256), floor(color.g * 256), floor(color.b * 256)
-	
-	if not nameplateClassFromColor[r] then nameplateClassFromColor[r] = { } end
-	if not nameplateClassFromColor[r][g] then nameplateClassFromColor[r][g] = { } end
-	nameplateClassFromColor[r][g][b] = class
-end
-
-local function ColorNameplate(frame)
-	local healthBar = frame:GetChildren()
-
-	local r, g, b = healthBar:GetStatusBarColor()
-	r = tonumber(format("%.2f", r))
-	g = tonumber(format("%.2f", g))
-	b = tonumber(format("%.2f", b))
-	local class = nameplateClassFromColor[r] and nameplateClassFromColor[r][g] and nameplateClassFromColor[r][g][b]
-	
-	if class then
-		healthBar:SetStatusBarColor(CUSTOM_CLASS_COLORS[class].r, CUSTOM_CLASS_COLORS[class].g, CUSTOM_CLASS_COLORS[class].b)
-	end
-end
-
-local function IsNameplateFrame(frame)
-	if frame:GetName() then
-		return false
-	end
-	if not nameplateFrames[frame] then
-		local overlayRegion = select(2, frame:GetRegions())
-		if overlayRegion and overlayRegion:GetObjectType() == "Texture" and overlayRegion:GetTexture() == "Interface\\Tooltips\\Nameplate-Border" then
-			nameplateFrames[frame] = true
-		end
-	end
-	return nameplateFrames[frame]
-end
-
-local counter = 0
-function eventFrame:OnUpdate(elapsed)
-	counter = counter + elapsed
-	if counter > 0.2 then
-		counter = 0
-		
-		for i = 1, select("#", WorldFrame:GetChildren()) do
-			local frame = select(i, WorldFrame:GetChildren())
-			if IsNameplateFrame(frame) then
-				ColorNameplate(frame)
-			end
-		end
-	end
-end

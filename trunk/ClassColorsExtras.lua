@@ -170,7 +170,7 @@ eventFrame:SetScript("OnEvent", function(self, event, ...)
 		--	UnitFrame.lua
 		--
 
-		hooksecurefunc("UnitFrame_Update", function(self)
+		local function post_UnitFrame_Update(self)
 			if not db.UnitFrame then return end
 
 			if UnitIsPlayer(self.unit) then
@@ -183,7 +183,9 @@ eventFrame:SetScript("OnEvent", function(self, event, ...)
 					self.name:SetTextColor(GameTooltip_UnitColor(self.unit))
 				end
 			end
-		end)
+		end
+		hooksecurefunc("UnitFrame_Update", post_UnitFrame_Update)
+		CUSTOM_CLASS_COLORS:RegisterCallback(post_UnitFrame_Update)
 
 		hooksecurefunc("UnitFrame_OnEvent", function(self, event, unit)
 			if not db.UnitFrame then return end
