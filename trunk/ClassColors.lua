@@ -15,42 +15,128 @@ local L = setmetatable({ }, { __index = function(t, k)
 	return k
 end })
 
+FillLocalizedClassList(L, false)
+
 L["Class Colors"] = GetAddOnMetadata("!ClassColors", "Title")
 L["Change class colors without breaking the Blizzard UI."] = GetAddOnMetadata("!ClassColors", "Notes")
 
-FillLocalizedClassList(L, false)
+--	if GetLocale() == "xxXX" then
+--		L["Note that not all addons support this, and you may need to reload the UI before your changes are recognized."] = ""
+--	end
 
-if GetLocale() == "deDE" then
---	L["Note that not all addons support this, and you may need to reload the UI before your changes are recognized."] = ""
-elseif GetLocale() == "esES" or GetLocale() == "esMX" then
---	L["Note that not all addons support this, and you may need to reload the UI before your changes are recognized."] = ""
-elseif GetLocale() == "frFR" then
---	L["Note that not all addons support this, and you may need to reload the UI before your changes are recognized."] = ""
-elseif GetLocale() == "koKR" then
---	L["Note that not all addons support this, and you may need to reload the UI before your changes are recognized."] = ""
-elseif GetLocale() == "ruRU" then
---	L["Note that not all addons support this, and you may need to reload the UI before your changes are recognized."] = ""
-elseif GetLocale() == "zhCN" then
---	L["Note that not all addons support this, and you may need to reload the UI before your changes are recognized."] = ""
-elseif GetLocale() == "zhTW" then
---	L["Note that not all addons support this, and you may need to reload the UI before your changes are recognized."] = ""
+------------------------------------------------------------------------
+
+CUSTOM_CLASS_COLORS = { }
+
+------------------------------------------------------------------------
+
+local function iter(t, key)
+	local nextkey = next(RAID_CLASS_COLORS, key)
+	return nextkey, t[nextkey]
+end
+
+local function IterateClasses(self)
+	return iter, self
 end
 
 ------------------------------------------------------------------------
 
-local ClassColors = CreateFrame("Frame", nil, InterfaceOptionsFramePanelContainer)
-ClassColors.L = L
-ClassColors:RegisterEvent("ADDON_LOADED")
-ClassColors:SetScript("OnEvent", function(self, event, addon)
+local callbacks = { }
+local numCallbacks = 0
+
+local function RegisterCallback(self, method, handler)
+	if type(method) ~= "string" and type(method) ~= "function" then
+		error("Bad argument #1 to RegisterCallback (string or function expected)")
+	end
+
+	if type(method) == "string" then
+		if type(handler) ~= "table" then
+			error("Bad argument #2 to RegisterCallback (table expected)")
+		elseif type(handler[method]) ~= "function" then
+			error("Bad argument #1 to RegisterCallback (method \"" .. method .. "\" not found)")
+		end
+
+		method = handler[method]
+	end
+
+	if callbacks[method] then
+	--	Nobody cares. Shut up and play along.
+	--	error("Callback already registered!")
+		return
+	end
+
+	callbacks[method] = handler or true
+	numCallbacks = numCallbacks + 1
+end
+
+local function UnregisterCallback(self, method, handler)
+	if type(method) ~= "string" and type(method) ~= "function" then
+		error("Bad argument #1 to RegisterCallback (string or function expected)")
+	end
+
+	if type(method) == "string" then
+		if type(handler) ~= "table" then
+			error("Bad argument #2 to RegisterCallback (table expected)")
+		elseif type(handler[method]) ~= "function" then
+			error("Bad argument #1 to RegisterCallback (method \"" .. method .. "\" not found)")
+		end
+
+		method = handler[method]
+	end
+
+	if not callbacks[method] then
+	--	Nobody cares. Shut up and play along.
+	--	error("Callback not registered!")
+		return
+	end
+
+	callbacks[method] = nil
+	numCallbacks = numCallbacks - 1
+end
+
+local function DispatchCallbacks()
+	if numCallbacks < 1 then return end
+	-- print("CUSTOM_CLASS_COLORS, DispatchCallbacks")
+
+	for method, handler in pairs(callbacks) do
+		method(handler ~= true and handler)
+	end
+end
+
+------------------------------------------------------------------------
+
+local classTokens = { }
+for i, class in ipairs(classes) do
+	classTokens[L[class]] = class
+end
+
+local function GetClassToken(self, className)
+	return className and classTokens[className]
+end
+
+------------------------------------------------------------------------
+
+setmetatable(CUSTOM_CLASS_COLORS, { __index = function(t, k)
+	if k == "GetClassToken" then return GetClassToken end
+	if k == "IterateClasses" then return IterateClasses end
+	if k == "RegisterCallback" then return RegisterCallback end
+	if k == "UnregisterCallback" then return UnregisterCallback end
+end })
+
+------------------------------------------------------------------------
+
+local f = CreateFrame("Frame", nil, InterfaceOptionsFramePanelContainer)
+f:RegisterEvent("ADDON_LOADED")
+f:SetScript("OnEvent", function(self, event, addon)
 	if addon ~= "!ClassColors" then return end
 	-- print("ClassColors: ADDON_LOADED")
 
-	-------------------------------------------------------------------
+	--------------------------------------------------------------------
 
 	local db
 	local defaults = { }
 
-	-------------------------------------------------------------------
+	--------------------------------------------------------------------
 
 	local classes = { }
 	for class in pairs(RAID_CLASS_COLORS) do
@@ -58,11 +144,7 @@ ClassColors:SetScript("OnEvent", function(self, event, addon)
 	end
 	table.sort(classes)
 
-	-------------------------------------------------------------------
-
-	CUSTOM_CLASS_COLORS = { }
-
-	-------------------------------------------------------------------
+	--------------------------------------------------------------------
 
 	if not ClassColorsDB then ClassColorsDB = { } end
 	db = ClassColorsDB
@@ -79,102 +161,7 @@ ClassColors:SetScript("OnEvent", function(self, event, addon)
 		CUSTOM_CLASS_COLORS[class] = { r = db[class].r, g = db[class].g, b = db[class].b }
 	end
 
-	-------------------------------------------------------------------
-
-	local function iter(t, key)
-	    local nextkey = next(RAID_CLASS_COLORS, key)
-	    return nextkey, t[nextkey]
-	end
-
-	local function IterateClasses(self)
-	    return iter, self
-	end
-
-	-------------------------------------------------------------------
-
-	local callbacks = { }
-	local numCallbacks = 0
-
-	local function RegisterCallback(self, method, handler)
-		if type(method) ~= "string" and type(method) ~= "function" then
-			error("Bad argument #1 to RegisterCallback (string or function expected)")
-		end
-
-		if type(method) == "string" then
-			if type(handler) ~= "table" then
-				error("Bad argument #2 to RegisterCallback (table expected)")
-			elseif type(handler[method]) ~= "function" then
-				error("Bad argument #1 to RegisterCallback (method \"" .. method .. "\" not found)")
-			end
-
-			method = handler[method]
-		end
-
-		if callbacks[method] then
-		--	Nobody cares. Shut up and play along.
-		--	error("Callback already registered!")
-			return
-		end
-
-		callbacks[method] = handler or true
-		numCallbacks = numCallbacks + 1
-	end
-
-	local function UnregisterCallback(self, method, handler)
-		if type(method) ~= "string" and type(method) ~= "function" then
-			error("Bad argument #1 to RegisterCallback (string or function expected)")
-		end
-
-		if type(method) == "string" then
-			if type(handler) ~= "table" then
-				error("Bad argument #2 to RegisterCallback (table expected)")
-			elseif type(handler[method]) ~= "function" then
-				error("Bad argument #1 to RegisterCallback (method \"" .. method .. "\" not found)")
-			end
-
-			method = handler[method]
-		end
-
-		if not callbacks[method] then
-		--	Nobody cares. Shut up and play along.
-		--	error("Callback not registered!")
-			return
-		end
-
-		callbacks[method] = nil
-		numCallbacks = numCallbacks - 1
-	end
-
-	local function DispatchCallbacks()
-		if numCallbacks < 1 then return end
-		-- print("CUSTOM_CLASS_COLORS, DispatchCallbacks")
-
-		for method, handler in pairs(callbacks) do
-			method(handler ~= true and handler)
-		end
-	end
-
-	-------------------------------------------------------------------
-
-	local classTokens = { }
-	for i, class in ipairs(classes) do
-		classTokens[L[class]] = class
-	end
-
-	local function GetClassToken(self, className)
-		return className and classTokens[className]
-	end
-
-	-------------------------------------------------------------------
-
-	setmetatable(CUSTOM_CLASS_COLORS, { __index = function(t, k)
-		if k == "GetClassToken" then return GetClassToken end
-		if k == "IterateClasses" then return IterateClasses end
-		if k == "RegisterCallback" then return RegisterCallback end
-		if k == "UnregisterCallback" then return UnregisterCallback end
-	end })
-
-	-------------------------------------------------------------------
+	--------------------------------------------------------------------
 
 	local fire
 	local shown
@@ -237,7 +224,7 @@ ClassColors:SetScript("OnEvent", function(self, event, addon)
 		end
 	end
 
-	-------------------------------------------------------------------
+	--------------------------------------------------------------------
 
 	self:SetScript("OnShow", function(self)
 		-- print("ClassColors: OnShow")
@@ -329,7 +316,7 @@ ClassColors:SetScript("OnEvent", function(self, event, addon)
 		end
 	end
 
-	-------------------------------------------------------------------
+	--------------------------------------------------------------------
 
 	local reset = CreateFrame("Button", nil, self)
 	reset:SetPoint("BOTTOMRIGHT", self, -16, 16)
@@ -361,20 +348,18 @@ ClassColors:SetScript("OnEvent", function(self, event, addon)
 	reset.hint = L["Reset all class colors to their Blizzard defaults."]
 	reset:SetScript("OnClick", self.defaults)
 
-	-------------------------------------------------------------------
+	--------------------------------------------------------------------
 
 	InterfaceOptions_AddCategory(self)
+
+	--------------------------------------------------------------------
 
 	SLASH_CLASSCOLORS1 = "/classcolors"
 	SlashCmdList.CLASSCOLORS = function()
 		InterfaceOptionsFrame_OpenToCategory(self)
 	end
 
-	-------------------------------------------------------------------
-
-	if self.Extras then self.Extras:Load() end
-
-	-------------------------------------------------------------------
+	--------------------------------------------------------------------
 
 	self:UnregisterEvent("ADDON_LOADED")
 	self:SetScript("OnEvent", nil)
@@ -426,7 +411,7 @@ do
 		end
 	end
 
-	function ClassColors:CreateColorPicker(name)
+	function f:CreateColorPicker(name)
 		local frame = CreateFrame("Button", nil, self)
 		frame:SetHeight(19)
 		frame:SetWidth(100)
@@ -470,20 +455,3 @@ do
 end
 
 ------------------------------------------------------------------------
---[[
-
-PowerBarColor.MANA.r = 0
-PowerBarColor.MANA.g = 144/255
-PowerBarColor.MANA.b = 1
-
-RAID_CLASS_COLORS.SHAMAN.r = 0
-RAID_CLASS_COLORS.SHAMAN.g = 0.86
-RAID_CLASS_COLORS.SHAMAN.b = 0.73
-
-local o = RAID_CLASS_COLORS.DEATHKNIGHT
-local x = 1 / o.r
-RAID_CLASS_COLORS.DEATHKNIGHT.r = o.r * x
-RAID_CLASS_COLORS.DEATHKNIGHT.g = o.g * x
-RAID_CLASS_COLORS.DEATHKNIGHT.b = o.b * x
-
-]]
