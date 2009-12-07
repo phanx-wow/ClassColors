@@ -10,10 +10,137 @@
 
 ----------------------------------------------------------------------]]
 
+------------------------------------------------------------------------
+--	ChatConfigFrame.lua
+--
+
+local function ColorizeChatConfigFrame()
+	for i, class in ipairs(CLASS_SORT_ORDER) do
+		local classColor = CUSTOM_CLASS_COLORS[class]
+		ChatConfigChatSettingsClassColorLegend.classStrings[i]:SetFormattedText("|cff%02x%02x%02x%s|r\n", classColor.r * 255, classColor.g * 255, classColor.b * 255, LOCALIZED_CLASS_NAMES_MALE[class])
+	end
+end
+CUSTOM_CLASS_COLORS:RegisterCallback(ColorizeChatConfigFrame)
+ColorizeChatConfigFrame()
+
+------------------------------------------------------------------------
+--	ChatFrame.lua
+--
+
+function GetColoredName(event, _, senderName, _, _, _, _, _, channelNumber, _, _, _, senderGUID)
+	local chatType = strsub(event, 10)
+	if strsub(chatType, 1, 7) == "WHISPER" then
+		chatType = "WHISPER"
+	end
+	if strsub(chatType, 1, 7) == "CHANNEL" then
+		chatType = "CHANNEL" .. channelNumber
+	end
+	local info = ChatTypeInfo[chatType]
+	if info and info.colorNameByClass and senderGUID ~= "" then
+		local _, englishClass = GetPlayerInfoByGUID(senderGUID)
+		if englishClass then
+			local classColorTable = CUSTOM_CLASS_COLORS[englishClass]
+			if not classColorTable then
+				return senderName
+			end
+			local coloredName = string.format("|cff%02x%02x%02x%s|r", classColorTable.r * 255, classColorTable.g * 255, classColorTable.b * 255, senderName)
+			return coloredName
+		end
+	end
+	return senderName
+end
+
+------------------------------------------------------------------------
+--	FriendsFrame.lua
+--
+
+local GetGuildRosterInfo = GetGuildRosterInfo
+local GetWhoInfo = GetWhoInfo
+local CUSTOM_CLASS_COLORS = CUSTOM_CLASS_COLORS
+local GUILDMEMBERS_TO_DISPLAY = GUILDMEMBERS_TO_DISPLAY
+local WHOS_TO_DISPLAY = WHOS_TO_DISPLAY
+
+hooksecurefunc("WhoList_Update", function()
+	-- ChatFrame7:AddMessage("WhoList_Update")
+	local class, color, _
+	local offset = FauxScrollFrame_GetOffset(WhoListScrollFrame)
+	for i = 1, WHOS_TO_DISPLAY, 1 do
+		_, _, _, _, _, _, class = GetWhoInfo(i + offset)
+		if class then
+			color = CUSTOM_CLASS_COLORS[class]
+			if color then
+				_G["WhoFrameButton" .. i .. "Class"]:SetTextColor(color.r, color.g, color.b)
+			end
+		end
+	end
+end)
+
+hooksecurefunc("GuildStatus_Update", function()
+	-- ChatFrame7:AddMessage("GuildStatus_Update")
+	if FriendsFrame.playerStatusFrame then
+		local class, color, online, _
+		local offset = FauxScrollFrame_GetOffset(GuildListScrollFrame)
+		for i = 1, GUILDMEMBERS_TO_DISPLAY, 1 do
+			_, _, _, _, _, _, _, _, online, _, class = GetGuildRosterInfo(i + offset)
+			if online and class then
+				color = CUSTOM_CLASS_COLORS[class]
+				if color then
+					_G["GuildFrameButton" .. i .. "Class"]:SetTextColor(color.r, color.g, color.b)
+				end
+			end
+		end
+	else
+		local class, color, online, _
+		local offset = FauxScrollFrame_GetOffset(GuildListScrollFrame)
+		for i = 1, GUILDMEMBERS_TO_DISPLAY, 1 do
+			_, _, _, _, _, _, _, _, online, _, class = GetGuildRosterInfo(i + offset)
+			if online and class then
+				color = CUSTOM_CLASS_COLORS[class]
+				if color then
+					_G["GuildFrameGuildStatusButton" .. i .. "Online"]:SetTextColor(color.r, color.g, color.b)
+				end
+			end
+		end
+	end
+end)
+
+------------------------------------------------------------------------
+--	LFGFrame.lua
+--
+
+local GetLFGResultsProxy = GetLFGResultsProxy
+
+if LFMFrame_Update then
+	hooksecurefunc("LFMFrame_Update", function()
+		-- print("LFMFrame_Update")
+		local button, class, color, _
+
+		local n = GetNumLFGResultsProxy()
+		local offset = FauxScrollFrame_GetOffset(LFMListScrollFrame)
+
+		for i = 1, LFGS_TO_DISPLAY do
+			if offset <= n then
+				button = _G["LFMFrameButton"..i]
+				if button:IsShown() then
+					name, _, _, _, _, _, _, _, _, _, class = GetLFGResultsProxy(offset + i)
+					if class then
+						color = CUSTOM_CLASS_COLORS[class]
+						if color then
+							_G["LFMFrameButton"..i.."Class"]:SetTextColor(color.r, color.g, color.b)
+						end
+					end
+				end
+			end
+		end
+	end)
+end
+
+------------------------------------------------------------------------
+
 local numAddons = 0
 local addonFuncs = { }
 
---
+------------------------------------------------------------------------
 --	Blizzard_Calendar
 --
 
@@ -57,7 +184,7 @@ addonFuncs["Blizzard_Calendar"] = function()
 	end)
 end
 
---
+------------------------------------------------------------------------
 --	Blizzard_RaidUI
 --
 
@@ -136,172 +263,33 @@ addonFuncs["Blizzard_RaidUI"] = function()
 	end)
 end
 
---
+------------------------------------------------------------------------
 --	Event handling
 --
 
-local eventFrame = CreateFrame("Frame")
-eventFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
-eventFrame:SetScript("OnEvent", function(self, event, ...)
-	if event == "PLAYER_ENTERING_WORLD" then
-
-		--
-		--	ChatConfigFrame.lua
-		--
-
-		local function ColorizeChatConfigFrame()
-			for i, class in ipairs(CLASS_SORT_ORDER) do
-				local classColor = CUSTOM_CLASS_COLORS[class]
-				ChatConfigChatSettingsClassColorLegend.classStrings[i]:SetFormattedText("|cff%02x%02x%02x%s|r\n", classColor.r * 255, classColor.g * 255, classColor.b * 255, LOCALIZED_CLASS_NAMES_MALE[class])
-			end
-		end
-		CUSTOM_CLASS_COLORS:RegisterCallback(ColorizeChatConfigFrame)
-		ColorizeChatConfigFrame()
-
-		--
-		--	ChatFrame.lua
-		--
-
-		function GetColoredName(event, _, senderName, _, _, _, _, _, channelNumber, _, _, _, senderGUID)
-			local chatType = strsub(event, 10)
-			if strsub(chatType, 1, 7) == "WHISPER" then
-				chatType = "WHISPER"
-			end
-			if strsub(chatType, 1, 7) == "CHANNEL" then
-				chatType = "CHANNEL" .. channelNumber
-			end
-			local info = ChatTypeInfo[chatType]
-			if info and info.colorNameByClass and senderGUID ~= "" then
-				local _, englishClass = GetPlayerInfoByGUID(senderGUID)
-				if englishClass then
-					local classColorTable = CUSTOM_CLASS_COLORS[englishClass]
-					if not classColorTable then
-						return senderName
-					end
-					local coloredName = string.format("|cff%02x%02x%02x%s|r", classColorTable.r * 255, classColorTable.g * 255, classColorTable.b * 255, senderName)
-					return coloredName
-				end
-			end
-			return senderName
-		end
-
-		--
-		-- FriendsFrame.lua
-		--
-
-		local GetGuildRosterInfo = GetGuildRosterInfo
-		local GetWhoInfo = GetWhoInfo
-		local CUSTOM_CLASS_COLORS = CUSTOM_CLASS_COLORS
-		local GUILDMEMBERS_TO_DISPLAY = GUILDMEMBERS_TO_DISPLAY
-		local WHOS_TO_DISPLAY = WHOS_TO_DISPLAY
-
-		hooksecurefunc("WhoList_Update", function()
-			-- ChatFrame7:AddMessage("WhoList_Update")
-			local class, color, _
-			local offset = FauxScrollFrame_GetOffset(WhoListScrollFrame)
-			for i = 1, WHOS_TO_DISPLAY, 1 do
-				_, _, _, _, _, _, class = GetWhoInfo(i + offset)
-				if class then
-					color = CUSTOM_CLASS_COLORS[class]
-					if color then
-						_G["WhoFrameButton" .. i .. "Class"]:SetTextColor(color.r, color.g, color.b)
-					end
-				end
-			end
-		end)
-
-		hooksecurefunc("GuildStatus_Update", function()
-			-- ChatFrame7:AddMessage("GuildStatus_Update")
-			if FriendsFrame.playerStatusFrame then
-				local class, color, online, _
-				local offset = FauxScrollFrame_GetOffset(GuildListScrollFrame)
-				for i = 1, GUILDMEMBERS_TO_DISPLAY, 1 do
-					_, _, _, _, _, _, _, _, online, _, class = GetGuildRosterInfo(i + offset)
-					if online and class then
-						color = CUSTOM_CLASS_COLORS[class]
-						if color then
-							_G["GuildFrameButton" .. i .. "Class"]:SetTextColor(color.r, color.g, color.b)
-						end
-					end
-				end
-			else
-				local class, color, online, _
-				local offset = FauxScrollFrame_GetOffset(GuildListScrollFrame)
-				for i = 1, GUILDMEMBERS_TO_DISPLAY, 1 do
-					_, _, _, _, _, _, _, _, online, _, class = GetGuildRosterInfo(i + offset)
-					if online and class then
-						color = CUSTOM_CLASS_COLORS[class]
-						if color then
-							_G["GuildFrameGuildStatusButton" .. i .. "Online"]:SetTextColor(color.r, color.g, color.b)
-						end
-					end
-				end
-			end
-		end)
-
-		--
-		--	LFGFrame.lua
-		--
-
-		local GetLFGResultsProxy = GetLFGResultsProxy
-
-		if LFMFrame_Update then hooksecurefunc("LFMFrame_Update", function()
-			-- print("LFMFrame_Update")
-			local button, class, color, _
-
-			local n = GetNumLFGResultsProxy()
-			local offset = FauxScrollFrame_GetOffset(LFMListScrollFrame)
-
-			for i = 1, LFGS_TO_DISPLAY do
-				if offset <= n then
-					button = _G["LFMFrameButton"..i]
-					if button:IsShown() then
-						name, _, _, _, _, _, _, _, _, _, class = GetLFGResultsProxy(offset + i)
-						if class then
-							color = CUSTOM_CLASS_COLORS[class]
-							if color then
-								_G["LFMFrameButton"..i.."Class"]:SetTextColor(color.r, color.g, color.b)
-							end
-						end
-					end
-				end
-			end
-		end) end
-
-		--
-		--	See if we need to watch ADDON_LOADED
-		--
-
-		for addon, func in pairs(addonFuncs) do
-			if IsAddOnLoaded(addon) then
-				func()
-				addonFuncs[addon] = nil
-			else
-				numAddons = numAddons + 1
-			end
-		end
-		if numAddons > 1 then
-			self:RegisterEvent("ADDON_LOADED")
-		end
-
+for addon, func in pairs(addonFuncs) do
+	if IsAddOnLoaded(addon) then
+		func()
+		addonFuncs[addon] = nil
 	else
+		numAddons = numAddons + 1
+	end
+end
 
-		--
-		--	ADDON_LOADED
-		--
-
-		local addon = ...
-
+if numAddons > 0 then
+	local f = CreateFrame("Frame")
+	f:RegisterEvent("ADDON_LOADED")
+	f:SetScript("OnEvent", function(self, event, addon)
 		if addonFuncs[addon] then
 			addonFuncs[addon]()
 			addonFuncs[addon] = nil
 			numAddons = numAddons - 1
 		end
-
 		if numAddons < 1 then
 			self:UnregisterEvent("ADDON_LOADED")
+			self:SetScript("OnEvent", nil)
 		end
+	end)
+end
 
-	end
-
-end)
+------------------------------------------------------------------------
