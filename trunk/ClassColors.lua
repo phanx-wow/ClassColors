@@ -46,14 +46,14 @@ local numCallbacks = 0
 
 local function RegisterCallback(self, method, handler)
 	if type(method) ~= "string" and type(method) ~= "function" then
-		error("Bad argument #1 to RegisterCallback (string or function expected)")
+		error("Bad argument #1 to :RegisterCallback (string or function expected)")
 	end
 
 	if type(method) == "string" then
 		if type(handler) ~= "table" then
-			error("Bad argument #2 to RegisterCallback (table expected)")
+			error("Bad argument #2 to :RegisterCallback (table expected)")
 		elseif type(handler[method]) ~= "function" then
-			error("Bad argument #1 to RegisterCallback (method \"" .. method .. "\" not found)")
+			error("Bad argument #1 to :RegisterCallback (method \"" .. method .. "\" not found)")
 		end
 
 		method = handler[method]
@@ -71,14 +71,14 @@ end
 
 local function UnregisterCallback(self, method, handler)
 	if type(method) ~= "string" and type(method) ~= "function" then
-		error("Bad argument #1 to RegisterCallback (string or function expected)")
+		error("Bad argument #1 to :RegisterCallback (string or function expected)")
 	end
 
 	if type(method) == "string" then
 		if type(handler) ~= "table" then
-			error("Bad argument #2 to RegisterCallback (table expected)")
+			error("Bad argument #2 to :RegisterCallback (table expected)")
 		elseif type(handler[method]) ~= "function" then
-			error("Bad argument #1 to RegisterCallback (method \"" .. method .. "\" not found)")
+			error("Bad argument #1 to :RegisterCallback (method \"" .. method .. "\" not found)")
 		end
 
 		method = handler[method]
