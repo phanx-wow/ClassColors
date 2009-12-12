@@ -105,37 +105,6 @@ hooksecurefunc("GuildStatus_Update", function()
 end)
 
 ------------------------------------------------------------------------
---	LFGFrame.lua
---
-
-local GetLFGResultsProxy = GetLFGResultsProxy
-
-if LFMFrame_Update then
-	hooksecurefunc("LFMFrame_Update", function()
-		-- print("LFMFrame_Update")
-		local button, class, color, _
-
-		local n = GetNumLFGResultsProxy()
-		local offset = FauxScrollFrame_GetOffset(LFMListScrollFrame)
-
-		for i = 1, LFGS_TO_DISPLAY do
-			if offset <= n then
-				button = _G["LFMFrameButton"..i]
-				if button:IsShown() then
-					name, _, _, _, _, _, _, _, _, _, class = GetLFGResultsProxy(offset + i)
-					if class then
-						color = CUSTOM_CLASS_COLORS[class]
-						if color then
-							_G["LFMFrameButton"..i.."Class"]:SetTextColor(color.r, color.g, color.b)
-						end
-					end
-				end
-			end
-		end
-	end)
-end
-
-------------------------------------------------------------------------
 
 local numAddons = 0
 local addonFuncs = { }
