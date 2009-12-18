@@ -1,5 +1,4 @@
 --[[--------------------------------------------------------------------
-
 	Class Colors
 	Change class colors without breaking the Blizzard UI.
 	by Phanx < addons@phanx.net >
@@ -7,8 +6,9 @@
 	See accompanying README for license terms and API details.
 	http://www.wowinterface.com/downloads/info12513-ClassColors.html
 	http://wow.curse.com/downloads/wow-addons/details/classcolors.aspx
-
 ----------------------------------------------------------------------]]
+
+local CUSTOM_CLASS_COLORS = CUSTOM_CLASS_COLORS
 
 ------------------------------------------------------------------------
 --	ChatConfigFrame.lua
@@ -16,8 +16,8 @@
 
 local function ColorizeChatConfigFrame()
 	for i, class in ipairs(CLASS_SORT_ORDER) do
-		local classColor = CUSTOM_CLASS_COLORS[class]
-		ChatConfigChatSettingsClassColorLegend.classStrings[i]:SetFormattedText("|cff%02x%02x%02x%s|r\n", classColor.r * 255, classColor.g * 255, classColor.b * 255, LOCALIZED_CLASS_NAMES_MALE[class])
+		local color = CUSTOM_CLASS_COLORS[class]
+		ChatConfigChatSettingsClassColorLegend.classStrings[i]:SetFormattedText("|cff%02x%02x%02x%s|r\n", color.r * 255, color.g * 255, color.b * 255, LOCALIZED_CLASS_NAMES_MALE[class])
 	end
 end
 CUSTOM_CLASS_COLORS:RegisterCallback(ColorizeChatConfigFrame)
@@ -28,23 +28,21 @@ ColorizeChatConfigFrame()
 --
 
 function GetColoredName(event, _, senderName, _, _, _, _, _, channelNumber, _, _, _, senderGUID)
-	local chatType = strsub(event, 10)
-	if strsub(chatType, 1, 7) == "WHISPER" then
+	local chatType = event:sub(10)
+	if chatType:sub(1, 7) == "WHISPER" then
 		chatType = "WHISPER"
 	end
-	if strsub(chatType, 1, 7) == "CHANNEL" then
+	if chatType:sub(1, 7) == "CHANNEL" then
 		chatType = "CHANNEL" .. channelNumber
 	end
 	local info = ChatTypeInfo[chatType]
 	if info and info.colorNameByClass and senderGUID ~= "" then
-		local _, englishClass = GetPlayerInfoByGUID(senderGUID)
-		if englishClass then
-			local classColorTable = CUSTOM_CLASS_COLORS[englishClass]
-			if not classColorTable then
-				return senderName
+		local _, class = GetPlayerInfoByGUID(senderGUID)
+		if class then
+			local color = CUSTOM_CLASS_COLORS[class]
+			if color
+				return ("|cff%02x%02x%02x%s|r"):format(color.r * 255, color.g * 255, color.b * 255, senderName)
 			end
-			local coloredName = string.format("|cff%02x%02x%02x%s|r", classColorTable.r * 255, classColorTable.g * 255, classColorTable.b * 255, senderName)
-			return coloredName
 		end
 	end
 	return senderName
@@ -56,7 +54,6 @@ end
 
 local GetGuildRosterInfo = GetGuildRosterInfo
 local GetWhoInfo = GetWhoInfo
-local CUSTOM_CLASS_COLORS = CUSTOM_CLASS_COLORS
 local GUILDMEMBERS_TO_DISPLAY = GUILDMEMBERS_TO_DISPLAY
 local WHOS_TO_DISPLAY = WHOS_TO_DISPLAY
 
@@ -100,6 +97,20 @@ hooksecurefunc("GuildStatus_Update", function()
 					_G["GuildFrameGuildStatusButton" .. i .. "Online"]:SetTextColor(color.r, color.g, color.b)
 				end
 			end
+		end
+	end
+end)
+
+------------------------------------------------------------------------
+--	LFRFrame.lua
+--
+
+hooksecurefunc("LFRBrowseFrameListButton_SetData", function(button, i)
+	local _, _, _, _, _, _, _, class = SearchLFGGetResults(i)
+	if class then
+		local color = CUSTOM_CLASS_COLORS[class]
+		if color then
+			button.class:SetTextColor(color.r, color.g, color.b)
 		end
 	end
 end)
@@ -162,7 +173,6 @@ addonFuncs["Blizzard_RaidUI"] = function()
 	local GetRaidRosterInfo = GetRaidRosterInfo
 	local UnitClass = UnitClass
 	local UnitName = UnitName
-	local CUSTOM_CLASS_COLORS = CUSTOM_CLASS_COLORS
 	local MAX_RAID_MEMBERS = MAX_RAID_MEMBERS
 	local MEMBERS_PER_RAID_GROUP = MEMBERS_PER_RAID_GROUP
 	local UNKNOWNOBJECT = UNKNOWNOBJECT
@@ -174,9 +184,6 @@ addonFuncs["Blizzard_RaidUI"] = function()
 		for i = 1, MAX_RAID_MEMBERS do
 			if i <= n then
 				name, _, subgroup, _, _, class, _, online, dead = GetRaidRosterInfo(i)
-				-- if name then
-					-- ChatFrame7:AddMessage(tostring(name) .. " = " .. tostring(class))
-				-- end
 				if online and not dead and _G["RaidGroup" .. subgroup].nextIndex <= MEMBERS_PER_RAID_GROUP then
 					color = CUSTOM_CLASS_COLORS[class]
 					if color then
@@ -222,7 +229,7 @@ addonFuncs["Blizzard_RaidUI"] = function()
 		-- ChatFrame7:AddMessage("RaidPulloutButton_UpdateDead")
 		if not dead then
 			if class == "PETS" then
-				class = UnitClass(string.gsub(button.unit, "raidpet", "raid", 1))
+				class = UnitClass(button.unit:gsub("raidpet", "raid", 1))
 			end
 			local color = CUSTOM_CLASS_COLORS[class]
 			if color then
