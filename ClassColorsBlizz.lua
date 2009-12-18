@@ -11,44 +11,6 @@
 local CUSTOM_CLASS_COLORS = CUSTOM_CLASS_COLORS
 
 ------------------------------------------------------------------------
---	ChatConfigFrame.lua
---
-
-local function ColorizeChatConfigFrame()
-	for i, class in ipairs(CLASS_SORT_ORDER) do
-		local color = CUSTOM_CLASS_COLORS[class]
-		ChatConfigChatSettingsClassColorLegend.classStrings[i]:SetFormattedText("|cff%02x%02x%02x%s|r\n", color.r * 255, color.g * 255, color.b * 255, LOCALIZED_CLASS_NAMES_MALE[class])
-	end
-end
-CUSTOM_CLASS_COLORS:RegisterCallback(ColorizeChatConfigFrame)
-ColorizeChatConfigFrame()
-
-------------------------------------------------------------------------
---	ChatFrame.lua
---
-
-function GetColoredName(event, _, senderName, _, _, _, _, _, channelNumber, _, _, _, senderGUID)
-	local chatType = event:sub(10)
-	if chatType:sub(1, 7) == "WHISPER" then
-		chatType = "WHISPER"
-	end
-	if chatType:sub(1, 7) == "CHANNEL" then
-		chatType = "CHANNEL" .. channelNumber
-	end
-	local info = ChatTypeInfo[chatType]
-	if info and info.colorNameByClass and senderGUID ~= "" then
-		local _, class = GetPlayerInfoByGUID(senderGUID)
-		if class then
-			local color = CUSTOM_CLASS_COLORS[class]
-			if color
-				return ("|cff%02x%02x%02x%s|r"):format(color.r * 255, color.g * 255, color.b * 255, senderName)
-			end
-		end
-	end
-	return senderName
-end
-
-------------------------------------------------------------------------
 --	FriendsFrame.lua
 --
 
@@ -243,29 +205,77 @@ end
 --	Event handling
 --
 
-for addon, func in pairs(addonFuncs) do
-	if IsAddOnLoaded(addon) then
-		func()
-		addonFuncs[addon] = nil
-	else
-		numAddons = numAddons + 1
-	end
-end
+local ADDON_NAME = ...
 
-if numAddons > 0 then
-	local f = CreateFrame("Frame")
-	f:RegisterEvent("ADDON_LOADED")
-	f:SetScript("OnEvent", function(self, event, addon)
-		if addonFuncs[addon] then
-			addonFuncs[addon]()
-			addonFuncs[addon] = nil
-			numAddons = numAddons - 1
+local f = CreateFrame("Frame")
+f:RegisterEvent("ADDON_LOADED")
+f:SetScript("OnEvent", function(self, event, addon)
+	if addon == ADDON_NAME then
+		for addon, func in pairs(addonFuncs) do
+			if IsAddOnLoaded(addon) then
+				func()
+				addonFuncs[addon] = nil
+			else
+				numAddons = numAddons + 1
+			end
 		end
+
 		if numAddons < 1 then
 			self:UnregisterEvent("ADDON_LOADED")
 			self:SetScript("OnEvent", nil)
 		end
-	end)
-end
+
+		------------------------------------------------------------------------
+		--	ChatConfigFrame.lua
+		--
+
+		local function ColorizeChatConfigFrame()
+			for i, class in ipairs(CLASS_SORT_ORDER) do
+				local color = CUSTOM_CLASS_COLORS[class]
+				if color then
+					ChatConfigChatSettingsClassColorLegend.classStrings[i]:SetFormattedText("|cff%02x%02x%02x%s|r\n", color.r * 255, color.g * 255, color.b * 255, LOCALIZED_CLASS_NAMES_MALE[class])
+				end
+			end
+		end
+		CUSTOM_CLASS_COLORS:RegisterCallback(ColorizeChatConfigFrame)
+		ColorizeChatConfigFrame()
+
+		------------------------------------------------------------------------
+		--	ChatFrame.lua
+		--
+
+		function GetColoredName(event, _, senderName, _, _, _, _, _, channelNumber, _, _, _, senderGUID)
+			local chatType = event:sub(10)
+			if chatType:sub(1, 7) == "WHISPER" then
+				chatType = "WHISPER"
+			end
+			if chatType:sub(1, 7) == "CHANNEL" then
+				chatType = "CHANNEL" .. channelNumber
+			end
+			local info = ChatTypeInfo[chatType]
+			if info and info.colorNameByClass and senderGUID ~= "" then
+				local _, class = GetPlayerInfoByGUID(senderGUID)
+				if class then
+					local color = CUSTOM_CLASS_COLORS[class]
+					if color then
+						return ("|cff%02x%02x%02x%s|r"):format(color.r * 255, color.g * 255, color.b * 255, senderName)
+					end
+				end
+			end
+			return senderName
+		end
+
+		------------------------------------------------------------------------
+	elseif addonFuncs[addon] then
+		addonFuncs[addon]()
+		addonFuncs[addon] = nil
+		numAddons = numAddons - 1
+
+		if numAddons < 1 then
+			self:UnregisterEvent("ADDON_LOADED")
+			self:SetScript("OnEvent", nil)
+		end
+	end
+end)
 
 ------------------------------------------------------------------------
