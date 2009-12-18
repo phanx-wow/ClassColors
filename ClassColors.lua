@@ -1,5 +1,4 @@
 --[[--------------------------------------------------------------------
-
 	Class Colors
 	Change class colors without breaking the Blizzard UI.
 	by Phanx < addons@phanx.net >
@@ -7,7 +6,6 @@
 	See accompanying README for license terms and API details.
 	http://www.wowinterface.com/downloads/info12513-ClassColors.html
 	http://wow.curse.com/downloads/wow-addons/details/classcolors.aspx
-
 ----------------------------------------------------------------------]]
 
 local L = setmetatable({ }, { __index = function(t, k)
@@ -105,6 +103,12 @@ end
 
 ------------------------------------------------------------------------
 
+local classes = { }
+for class in pairs(RAID_CLASS_COLORS) do
+	table.insert(classes, class)
+end
+table.sort(classes)
+
 local classTokens = { }
 for i, class in ipairs(classes) do
 	classTokens[L[class]] = class
@@ -135,14 +139,6 @@ f:SetScript("OnEvent", function(self, event, addon)
 
 	local db
 	local defaults = { }
-
-	--------------------------------------------------------------------
-
-	local classes = { }
-	for class in pairs(RAID_CLASS_COLORS) do
-		table.insert(classes, class)
-	end
-	table.sort(classes)
 
 	--------------------------------------------------------------------
 
