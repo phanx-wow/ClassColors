@@ -234,6 +234,7 @@ f:SetScript("OnEvent", function(self, event, addon)
 				local color = CUSTOM_CLASS_COLORS[class]
 				if color then
 					ChatConfigChatSettingsClassColorLegend.classStrings[i]:SetFormattedText("|cff%02x%02x%02x%s|r\n", color.r * 255, color.g * 255, color.b * 255, LOCALIZED_CLASS_NAMES_MALE[class])
+					ChatConfigChannelSettingsClassColorLegend.classStrings[i]:SetFormattedText("|cff%02x%02x%02x%s|r\n", color.r * 255, color.g * 255, color.b * 255, LOCALIZED_CLASS_NAMES_MALE[class])
 				end
 			end
 		end
