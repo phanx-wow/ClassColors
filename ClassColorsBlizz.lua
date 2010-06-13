@@ -139,37 +139,25 @@ addonFuncs["Blizzard_RaidUI"] = function()
 	local MEMBERS_PER_RAID_GROUP = MEMBERS_PER_RAID_GROUP
 	local UNKNOWNOBJECT = UNKNOWNOBJECT
 
-	hooksecurefunc("RaidGroupFrame_Update", function()
-		-- ChatFrame7:AddMessage("RaidGroupFrame_Update")
-		local button, class, color, dead, name, online, subgroup, _
-		local n = GetNumRaidMembers()
-		for i = 1, MAX_RAID_MEMBERS do
-			if i <= n then
-				name, _, subgroup, _, _, class, _, online, dead = GetRaidRosterInfo(i)
-				if online and not dead and _G["RaidGroup" .. subgroup].nextIndex <= MEMBERS_PER_RAID_GROUP then
-					color = CUSTOM_CLASS_COLORS[class]
-					if color then
-						_G["RaidGroupButton"..i.."Name"]:SetTextColor(color.r, color.g, color.b)
-						_G["RaidGroupButton"..i.."Class"]:SetTextColor(color.r, color.g, color.b)
-						_G["RaidGroupButton"..i.."Level"]:SetTextColor(color.r, color.g, color.b)
-					end
-				end
-			end
-		end
-	end)
+	local function hookSetTextColor(obj)
+		if obj.hooking then return end
+		obj.hooking = true
 
-	hooksecurefunc("RaidGroupFrame_UpdateHealth", function(i)
-		-- ChatFrame7:AddMessage("RaidGroupFrame_UpdateHealth")
-		local _, _, _, _, _, class, _, online, dead = GetRaidRosterInfo(i)
-		if online and not dead then
-			local color = CUSTOM_CLASS_COLORS[class]
-			if color then
-				_G["RaidGroupButton" .. i .. "Name"]:SetTextColor(color.r, color.g, color.b)
-				_G["RaidGroupButton" .. i .. "Class"]:SetTextColor(color.r, color.g, color.b)
-				_G["RaidGroupButton" .. i .. "Level"]:SetTextColor(color.r, color.g, color.b)
-			end
+		local id = tonumber(obj:GetName():match("(%d+)"))
+		local _, _, _, _, _, class = GetRaidRosterInfo(id)
+		local color = CUSTOM_CLASS_COLORS[class]
+		if color then
+			obj:SetTextColor(color.r, color.g, color.b)
 		end
-	end)
+
+		obj.hooking = nil
+	end
+
+	for i = 1, MAX_RAID_MEMBERS do
+		hooksecurefunc(_G["RaidGroupButton"..i.."Name"],  "SetTextColor", hookSetTextColor)
+		hooksecurefunc(_G["RaidGroupButton"..i.."Class"], "SetTextColor", hookSetTextColor)
+		hooksecurefunc(_G["RaidGroupButton"..i.."Level"], "SetTextColor", hookSetTextColor)
+	end
 
 	hooksecurefunc("RaidPullout_UpdateTarget", function(frame, button, unit, which)
 		-- ChatFrame7:AddMessage("RaidPullout_UpdateTarget")
@@ -249,12 +237,11 @@ f:SetScript("OnEvent", function(self, event, addon)
 			local chatType = event:sub(10)
 			if chatType:sub(1, 7) == "WHISPER" then
 				chatType = "WHISPER"
-			end
-			if chatType:sub(1, 7) == "CHANNEL" then
+			elseif chatType:sub(1, 7) == "CHANNEL" then
 				chatType = "CHANNEL" .. channelNumber
 			end
 			local info = ChatTypeInfo[chatType]
-			if info and info.colorNameByClass and senderGUID ~= "" then
+			if info and senderGUID and info.colorNameByClass and senderGUID ~= "" then
 				local _, class = GetPlayerInfoByGUID(senderGUID)
 				if class then
 					local color = CUSTOM_CLASS_COLORS[class]
