@@ -5,8 +5,8 @@
 ## Notes: Change class colors without breaking the Blizzard UI.
 ## Author: Phanx
 ## X-Email: addons@phanx.net
-## X-Copyright: Copyright ©2006–2010 Alyssa "Phanx" Kinley
-## X-License: Do not redistribute. See README for full license terms.
+## X-Copyright: Copyright © 2009–2010 Alyssa "Phanx" Kinley
+## X-License: See README for license terms.
 ## X-CompatibleLocales: enUS, deDE, esES, esMX, frFR, koKR, ruRU, zhCN, zhTW
 ## X-Localizations: enUS
 ## X-Website: http://www.wowinterface.com/downloads/info12513-ClassColors.html
