@@ -34,35 +34,6 @@ hooksecurefunc("WhoList_Update", function()
 	end
 end)
 
-hooksecurefunc("GuildStatus_Update", function()
-	-- ChatFrame7:AddMessage("GuildStatus_Update")
-	if FriendsFrame.playerStatusFrame then
-		local class, color, online, _
-		local offset = FauxScrollFrame_GetOffset(GuildListScrollFrame)
-		for i = 1, GUILDMEMBERS_TO_DISPLAY, 1 do
-			_, _, _, _, _, _, _, _, online, _, class = GetGuildRosterInfo(i + offset)
-			if online and class then
-				color = CUSTOM_CLASS_COLORS[class]
-				if color then
-					_G["GuildFrameButton" .. i .. "Class"]:SetTextColor(color.r, color.g, color.b)
-				end
-			end
-		end
-	else
-		local class, color, online, _
-		local offset = FauxScrollFrame_GetOffset(GuildListScrollFrame)
-		for i = 1, GUILDMEMBERS_TO_DISPLAY, 1 do
-			_, _, _, _, _, _, _, _, online, _, class = GetGuildRosterInfo(i + offset)
-			if online and class then
-				color = CUSTOM_CLASS_COLORS[class]
-				if color then
-					_G["GuildFrameGuildStatusButton" .. i .. "Online"]:SetTextColor(color.r, color.g, color.b)
-				end
-			end
-		end
-	end
-end)
-
 ------------------------------------------------------------------------
 --	LFRFrame.lua
 --
