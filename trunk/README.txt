@@ -44,20 +44,20 @@ Information for Addon Authors
 	If your addon keeps a local cache of class colors, you should also
 	register for a callback when class colors are changed, and update
 	your cache when the callback is fired.
-	
-	Also, is you build your cache before the PLAYER_LOGIN event, you
+
+	Also, if you build your cache before the PLAYER_LOGIN event, you
 	should also update it during or after that event. !ClassColors
 	stores custom class colors in saved variables, and may not have been
 	loaded before your addon. Because CUSTOM_CLASS_COLORS is a standard
 	and can be implemented by any addon, you should avoid setting an
 	OptionalDependency on !ClassColors.
-	
+
 	Detailed API documentation can be found here:
 	http://www.wowinterface.com/portal.php?&id=224&pageid=198
 
 License
 
-	Copyright ©2009 Alyssa "Phanx" Kinley.
+	Copyright © 2009–2010 Phanx
 
 	The contents of this addon, excluding third-party resources, are
 	copyrighted to its author with all rights reserved, under United
