@@ -1,76 +1,171 @@
 --[[--------------------------------------------------------------------
-	Class Colors
-	Change class colors without breaking the Blizzard UI.
+	!ClassColors
+	Provides a non-tainting method for changing raid class colors.
 	by Phanx < addons@phanx.net >
-	Copyright ©2009 Alyssa "Phanx" Kinley
+	Copyright © 2009–2010 Phanx.
 	See accompanying README for license terms and API details.
 	http://www.wowinterface.com/downloads/info12513-ClassColors.html
 	http://wow.curse.com/downloads/wow-addons/details/classcolors.aspx
 ----------------------------------------------------------------------]]
 
-local CUSTOM_CLASS_COLORS = CUSTOM_CLASS_COLORS
+local PLAYER_LEVEL = PLAYER_LEVEL:replace("|c%s", "|cff%02x%02x%02x")
+local PLAYER_LEVEL_NO_SPEC = PLAYER_LEVEL_NO_SPEC:replace("|c%s", "|cff%02x%02x%02x")
 
-------------------------------------------------------------------------
---	FriendsFrame.lua
---
+local addonFuncs = { }
+local numAddons = 0
 
-local GetGuildRosterInfo = GetGuildRosterInfo
-local GetWhoInfo = GetWhoInfo
-local GUILDMEMBERS_TO_DISPLAY = GUILDMEMBERS_TO_DISPLAY
-local WHOS_TO_DISPLAY = WHOS_TO_DISPLAY
-
-hooksecurefunc("WhoList_Update", function()
-	-- ChatFrame7:AddMessage("WhoList_Update")
-	local class, color, _
-	local offset = FauxScrollFrame_GetOffset(WhoListScrollFrame)
-	for i = 1, WHOS_TO_DISPLAY, 1 do
-		_, _, _, _, _, _, class = GetWhoInfo(i + offset)
-		if class then
-			color = CUSTOM_CLASS_COLORS[class]
-			if color then
-				_G["WhoFrameButton" .. i .. "Class"]:SetTextColor(color.r, color.g, color.b)
-			end
-		end
+local f = CreateFrame("Frame")
+f:RegisterEvent("ADDON_LOADED")
+f:SetScript("OnEvent", function(self, event, addon)
+	local func = addonFuncs[addon]
+	if func then
+		func()
+		addonFuncs[addon] = nil
+		numAddons = numAddons - 1
+	end
+	if numAddons < 1 then
+		self:UnregisterEvent("ADDON_LOADED")
+		self:SetScript("OnEvent", nil)
 	end
 end)
 
 ------------------------------------------------------------------------
---	LFRFrame.lua
---
 
-hooksecurefunc("LFRBrowseFrameListButton_SetData", function(button, i)
-	local _, _, _, _, _, _, _, class = SearchLFGGetResults(i)
-	if class then
+local callback = function()
+	-- ChatConfigFrame.xml
+	for i, class in ipairs(CLASS_SORT_ORDER) do
 		local color = CUSTOM_CLASS_COLORS[class]
 		if color then
-			button.class:SetTextColor(color.r, color.g, color.b)
+			ChatConfigChatSettingsClassColorLegend.classStrings[i]:SetFormattedText("|cff%02x%02x%02x%s|r\n", color.r * 255, color.g * 255, color.b * 255, LOCALIZED_CLASS_NAMES_MALE[class])
+			ChatConfigChannelSettingsClassColorLegend.classStrings[i]:SetFormattedText("|cff%02x%02x%02x%s|r\n", color.r * 255, color.g * 255, color.b * 255, LOCALIZED_CLASS_NAMES_MALE[class])
 		end
 	end
-end)
+end
+
+addonFuncs["!ClassColors"] = function()
+	numAddons = 0
+	for addon, func in pairs(addonFuncs) do
+		if IsAddOnLoaded(addon) then
+			func()
+			addonFuncs[addon] = nil
+		else
+			numAddons = numAddons + 1
+		end
+	end
+
+	CUSTOM_CLASS_COLORS:RegisterCallback(callback)
+	callback()
+
+	-- ChatFrame.lua
+
+	function GetColoredName(event, arg1, name, arg3, arg4, arg5, arg6, arg7, channelID, arg9, arg10, arg11, guid)
+		local chatType = event:sub(10)
+		if chatType:sub(1, 7) == "WHISPER" then
+			chatType = "WHISPER"
+		elseif chatType:sub(1, 7) == "CHANNEL" then
+			chatType = "CHANNEL" .. channelID
+		end
+
+		local info = ChatTypeInfo[chatType]
+		if info and info.colorNameByClass and guid and guid ~= "" then
+			local className, class, raceName, race, sex = GetPlayerInfoByGUID(guid)
+			if class then
+				local color = CUSTOM_CLASS_COLORS[class] or RAID_CLASS_COLORS[class]
+				if color then
+					return ("\124cff%02x%02x%02x%s\124r"):format(color.r * 255, color.g * 255, color.b * 255, name)
+				end
+				return name
+			end
+		end
+		return name
+	end
+
+	-- CompactUnitFrame.lua
+
+	hooksecurefunc("CompactUnitFrame_UpdateHealthColor", function(frame)
+		if frame.optionTable.useClassColors and UnitIsConnected(frame.unit)
+			local _, class = UnitClass(frame.unit)
+			local color = CUSTOM_CLASS_COLORS[class]
+			if color then
+				frame.healthBar:SetStatusBarColor(color.r, color.g, color.b)
+			end
+		end
+	end)
+
+	-- FriendsFrame.lua
+
+	hooksecurefunc("WhoList_Update", function()
+		local offset = FauxScrollFrame_GetOffset(WhoListScrollFrame)
+		for i = 1, WHOS_TO_DISPLAY do
+			local _, _, _, _, _, _, class = GetWhoInfo(i + offset)
+			if class then
+				local color = CUSTOM_CLASS_COLORS[classFileName]
+				if color then
+					_G["WhoFrameButton" .. i .. "Class"]:SetTextColor(color.r, color.g, color.b)
+				end
+			end
+		end
+	end)
+
+	-- LFDFrame.lua
+
+	hooksecurefunc("LFDQueueFrameRandomCooldownFrame_Update", function()
+		for i = 1, GetNumPartyMembers() do
+			local _, class = UnitClass("party"..i)
+			if class then
+				local color = CUSTOM_CLASS_COLORS[class]
+				if color then
+					_G["LFDQueueFrameCooldownFrameName"..i]:SetFormattedText("|cff%02x%02x%02x%s|r", color.r * 255, color.g * 255, color.b * 255, UnitName("party"..i))
+				end
+			end
+		end
+	end)
+
+	-- LFRFrame.lua
+
+	hooksecurefunc("LFRBrowseFrameListButton_SetData", function(button, i)
+		local _, _, _, _, _, _, _, class = SearchLFGGetResults(i)
+		if class then
+			local color = CURSOR_CLASS_COLORS[class]
+			if color then
+				button.class:SetTextColor(color.r, color.g, color.b)
+			end
+		end
+	end)
+
+	-- PaperDollFrame.lua
+
+	hooksecurefunc("PaperDollFrame_SetLevel", function()
+		local className, class = UnitClass("player")
+		local color = CUSTOM_CLASS_COLORS[class]
+		if color then
+			local specName, _
+			local primaryTalentTree = GetPrimaryTalentTree()
+			if primaryTalentTree then
+				_, specName = GetTalentTabInfo(primaryTalentTree)
+			end
+
+			if specName and specName ~= "" then
+				CharacterLevelText:SetFormattedText(PLAYER_LEVEL, UnitLevel("player"), olor.r * 255, color.g * 255, color.b * 255, specName, className)
+			else
+				CharacterLevelText:SetFormattedText(PLAYER_LEVEL_NO_SPEC, UnitLevel("player"), olor.r * 255, color.g * 255, color.b * 255, className)
+			end
+		end
+	end)
+end
 
 ------------------------------------------------------------------------
-
-local numAddons = 0
-local addonFuncs = { }
-
-------------------------------------------------------------------------
---	Blizzard_Calendar
---
 
 addonFuncs["Blizzard_Calendar"] = function()
-	local CalendarEventGetInvite = CalendarEventGetInvite
-
 	hooksecurefunc("CalendarViewEventInviteListScrollFrame_Update", function()
-		-- ChatFrame7:AddMessage("CalendarViewEventInviteListScrollFrame_Update")
 		local buttons = CalendarViewEventInviteListScrollFrame.buttons
 		local offset = HybridScrollFrame_GetOffset(CalendarViewEventInviteListScrollFrame)
-		local button, class, color, _
 		for i = 1, #buttons do
-			_, _, _, class = CalendarEventGetInvite(i + offset)
-			if class then
-				color = CUSTOM_CLASS_COLORS[class]
+			local name, _, _, class = CalendarEventGetInvite(i + offset)
+			if name and class then
+				local color = CUSTOM_CLASS_COLORS[class]
 				if color then
-					button = buttons[i]:GetName()
+					local button = buttons[i]:GetName()
 					_G[button .. "Name"]:SetTextColor(color.r, color.g, color.b)
 					_G[button .. "Class"]:SetTextColor(color.r, color.g, color.b)
 				end
@@ -79,16 +174,14 @@ addonFuncs["Blizzard_Calendar"] = function()
 	end)
 
 	hooksecurefunc("CalendarCreateEventInviteListScrollFrame_Update", function()
-		-- ChatFrame7:AddMessage("CalendarCreateEventInviteListScrollFrame_Update")
 		local buttons = CalendarCreateEventInviteListScrollFrame.buttons
 		local offset = HybridScrollFrame_GetOffset(CalendarCreateEventInviteListScrollFrame)
-		local button, class, color, _
 		for i = 1, #buttons do
-			_, _, _, class = CalendarEventGetInvite(i + offset)
-			if class then
-				color = CUSTOM_CLASS_COLORS[class]
+			local name, _, _, class = CalendarEventGetInvite(i + offset)
+			if name and class then
+				local color = CUSTOM_CLASS_COLORS[class]
 				if color then
-					button = buttons[i]:GetName()
+					local button = buttons[i]:GetName()
 					_G[button .. "Name"]:SetTextColor(color.r, color.g, color.b)
 					_G[button .. "Class"]:SetTextColor(color.r, color.g, color.b)
 				end
@@ -98,48 +191,94 @@ addonFuncs["Blizzard_Calendar"] = function()
 end
 
 ------------------------------------------------------------------------
---	Blizzard_RaidUI
---
 
-addonFuncs["Blizzard_RaidUI"] = function()
-	local GetNumRaidMembers = GetNumRaidMembers
-	local GetRaidRosterInfo = GetRaidRosterInfo
-	local UnitClass = UnitClass
-	local UnitName = UnitName
-	local MAX_RAID_MEMBERS = MAX_RAID_MEMBERS
-	local MEMBERS_PER_RAID_GROUP = MEMBERS_PER_RAID_GROUP
-	local UNKNOWNOBJECT = UNKNOWNOBJECT
+addonFuncs["Blizzard_GuildUI"] = function()
+	hooksecurefunc("GuildRosterButton_SetStringText", function(buttonString, text, online, class)
+		if online and class then
+			local color = CUSTOM_CLASS_COLORS[class]
+			if color then
+				buttonString:SetTextColor(color.r, color.g, color.b)
+			end
+		end
+	end)
+end
 
-	local function hookSetTextColor(obj)
-		if obj.hooking then return end
-		obj.hooking = true
+------------------------------------------------------------------------
 
-		local id = tonumber(obj:GetName():match("(%d+)"))
-		local _, _, _, _, _, class = GetRaidRosterInfo(id)
-		local color = CUSTOM_CLASS_COLORS[class]
-		if color then
-			obj:SetTextColor(color.r, color.g, color.b)
+addonFuncs["Blizzard_InspectUI"] = function()
+	hooksecurefunc("InspectPaperDollFrame_SetLevel", function()
+		local unit = InspectFrame.unit
+
+		local level = UnitLevel(InspectFrame.unit)
+		if level == -1 then
+			level = "??"
 		end
 
-		obj.hooking = nil
-	end
+		local className, class = UnitClass(InspectFrame.unit)
+		local color = CUSTOM_CLASS_COLORS[class]
 
-	for i = 1, MAX_RAID_MEMBERS do
-		hooksecurefunc(_G["RaidGroupButton"..i.."Name"],  "SetTextColor", hookSetTextColor)
-		hooksecurefunc(_G["RaidGroupButton"..i.."Class"], "SetTextColor", hookSetTextColor)
-		hooksecurefunc(_G["RaidGroupButton"..i.."Level"], "SetTextColor", hookSetTextColor)
-	end
+		local specName, _
+		local primaryTalentTree = GetPrimaryTalentTree(true)
+		if primaryTalentTree then
+			_, specName = GetTalentTabInfo(primaryTalentTree, true)
+		end
 
-	hooksecurefunc("RaidPullout_UpdateTarget", function(frame, button, unit, which)
-		-- ChatFrame7:AddMessage("RaidPullout_UpdateTarget")
-		if _G[frame]["show" .. which] then
+		if specName and specName ~= "" then
+			InspectLevelText:SetFormattedText(PLAYER_LEVEL, level, color.r * 255, color.g * 255, color.b * 255, specName, className)
+		else
+			InspectLevelText:SetFormattedText(PLAYER_LEVEL_NO_SPEC, level, color.r * 255, color.g * 255, color.b * 255, className)
+		end
+	end)
+end
+
+------------------------------------------------------------------------
+
+addonFuncs["Blizzard_RaidUI"] = function()
+	hooksecurefunc("RaidGroupFrame_Update, function()
+		local numRaidMembers = GetNumRaidMembers()
+		for i = 1, MAX_RAID_MEMBERS do
+			if i <= numRaidMembers then
+				local _, _, group, _, _, class, _, online, isDead = GetRaidRosterInfo(i)
+				if _G["RaidGroup" .. group].nextIndex <= MEMBERS_PER_RAID_GROUP then
+					if online and not isDead then
+						local color = RAID_CLASS_COLORS[fileName]
+						if color then
+							local subframes = _G["RaidGroupButton" .. i].subframes
+							subframes.name:SetTextColor(color.r, color.g, color.b)
+							subframes.class:SetTextColor(color.r, color.g, color.b)
+							subframes.level:SetTextColor(color.r, color.g, color.b)
+						end
+					end
+				end
+			end
+		end
+	end)
+
+	hooksecurefunc("RaidGroupFrame_UpdateHealth, function(i)
+		local _, _, _, _, _, class, _, online, isDead = GetRaidRosterInfo(i)
+		if online and not isDead then
+			local color = RAID_CLASS_COLORS[fileName]
+			if color then
+				_G["RaidGroupButton" .. i .. "Name"]:SetTextColor(color.r, color.g, color.b)
+				_G["RaidGroupButton" .. i .. "Class"]:SetTextColor(color.r, color.g, color.b)
+				_G["RaidGroupButton" .. i .. "Level"]:SetTextColor(color.r, color.g, color.b)
+			end
+		end
+	end)
+
+	hooksecurefunc("RaidPullout_UpdateTarget", function(pullOutFrame, pullOutButton, unit, which)
+		local pullOutFrame = _G[pullOutFrame]
+		if not pullOutFrame.showTarget then
+			pullOutFrame.showTargetTarget = nil
+		end
+		if pullOutFrame["show" .. which] then
 			local name = UnitName(unit)
 			if name and name ~= UNKNOWNOBJECT then
 				local _, class = UnitClass(unit)
-				if class then
+				if class and UnitCanCooperate("player", unit) then
 					local color = CUSTOM_CLASS_COLORS[class]
 					if color then
-						_G[button .. which .. "Name"]:SetVertexColor(color.r, color.g, color.b)
+						_G[pullOutButton .. which .. "Name"]:SetVertexColor(color.r, color.g, color.b)
 					end
 				end
 			end
@@ -147,10 +286,9 @@ addonFuncs["Blizzard_RaidUI"] = function()
 	end)
 
 	hooksecurefunc("RaidPulloutButton_UpdateDead", function(button, dead, class)
-		-- ChatFrame7:AddMessage("RaidPulloutButton_UpdateDead")
-		if not dead then
+		if not dead
 			if class == "PETS" then
-				class = UnitClass(button.unit:gsub("raidpet", "raid", 1))
+				class = UnitClass(gsub(button.unit, "raidpet", "raid"))
 			end
 			local color = CUSTOM_CLASS_COLORS[class]
 			if color then
@@ -159,82 +297,5 @@ addonFuncs["Blizzard_RaidUI"] = function()
 		end
 	end)
 end
-
-------------------------------------------------------------------------
---	Event handling
---
-
-local ADDON_NAME = ...
-
-local f = CreateFrame("Frame")
-f:RegisterEvent("ADDON_LOADED")
-f:SetScript("OnEvent", function(self, event, addon)
-	if addon == ADDON_NAME then
-		for addon, func in pairs(addonFuncs) do
-			if IsAddOnLoaded(addon) then
-				func()
-				addonFuncs[addon] = nil
-			else
-				numAddons = numAddons + 1
-			end
-		end
-
-		if numAddons < 1 then
-			self:UnregisterEvent("ADDON_LOADED")
-			self:SetScript("OnEvent", nil)
-		end
-
-		------------------------------------------------------------------------
-		--	ChatConfigFrame.lua
-		--
-
-		local function ColorizeChatConfigFrame()
-			for i, class in ipairs(CLASS_SORT_ORDER) do
-				local color = CUSTOM_CLASS_COLORS[class]
-				if color then
-					ChatConfigChatSettingsClassColorLegend.classStrings[i]:SetFormattedText("|cff%02x%02x%02x%s|r\n", color.r * 255, color.g * 255, color.b * 255, LOCALIZED_CLASS_NAMES_MALE[class])
-					ChatConfigChannelSettingsClassColorLegend.classStrings[i]:SetFormattedText("|cff%02x%02x%02x%s|r\n", color.r * 255, color.g * 255, color.b * 255, LOCALIZED_CLASS_NAMES_MALE[class])
-				end
-			end
-		end
-		CUSTOM_CLASS_COLORS:RegisterCallback(ColorizeChatConfigFrame)
-		ColorizeChatConfigFrame()
-
-		------------------------------------------------------------------------
-		--	ChatFrame.lua
-		--
-
-		function GetColoredName(event, _, senderName, _, _, _, _, _, channelNumber, _, _, _, senderGUID)
-			local chatType = event:sub(10)
-			if chatType:sub(1, 7) == "WHISPER" then
-				chatType = "WHISPER"
-			elseif chatType:sub(1, 7) == "CHANNEL" then
-				chatType = "CHANNEL" .. channelNumber
-			end
-			local info = ChatTypeInfo[chatType]
-			if info and senderGUID and info.colorNameByClass and senderGUID ~= "" then
-				local _, class = GetPlayerInfoByGUID(senderGUID)
-				if class then
-					local color = CUSTOM_CLASS_COLORS[class]
-					if color then
-						return ("|cff%02x%02x%02x%s|r"):format(color.r * 255, color.g * 255, color.b * 255, senderName)
-					end
-				end
-			end
-			return senderName
-		end
-
-		------------------------------------------------------------------------
-	elseif addonFuncs[addon] then
-		addonFuncs[addon]()
-		addonFuncs[addon] = nil
-		numAddons = numAddons - 1
-
-		if numAddons < 1 then
-			self:UnregisterEvent("ADDON_LOADED")
-			self:SetScript("OnEvent", nil)
-		end
-	end
-end)
 
 ------------------------------------------------------------------------

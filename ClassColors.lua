@@ -1,8 +1,8 @@
 --[[--------------------------------------------------------------------
-	Class Colors
-	Change class colors without breaking the Blizzard UI.
+	!ClassColors
+	Provides a non-tainting method for changing raid class colors.
 	by Phanx < addons@phanx.net >
-	Copyright ©2009 Alyssa "Phanx" Kinley
+	Copyright © 2009–2010 Phanx.
 	See accompanying README for license terms and API details.
 	http://www.wowinterface.com/downloads/info12513-ClassColors.html
 	http://wow.curse.com/downloads/wow-addons/details/classcolors.aspx
