@@ -6,7 +6,7 @@
 ## Author: Phanx
 ## X-Email: addons@phanx.net
 ## X-Copyright: Copyright © 2009–2010 Phanx
-## X-License: Do Not Redistribute. See LICENSE for details.
+## X-License: See LICENSE.txt for details.
 ## X-CompatibleLocales: enUS, deDE, esES, esMX, frFR, koKR, ruRU, zhCN, zhTW
 ## X-Localizations: enUS
 ## X-Website: http://www.wowinterface.com/downloads/info12513-ClassColors.html
