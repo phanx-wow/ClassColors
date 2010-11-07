@@ -62,10 +62,10 @@ http://www.wowinterface.com/portal.php?&id=224&pageid=198
 
 ## License
 
-CancelMyBuffs is free as in "free beer", not free as in "free software",
+!ClassColors is free as in "free beer", not free as in "free software",
 and you may not include it in your compilation or redistribute it in any
 other way without first getting permission. The full license text under
-which CancelMyBuffs is released can be found in the LICENSE text file
+which !ClassColors is released can be found in the LICENSE text file
 inside the addon's folder. Show your appreciation for the time and 
 effort addon authors put into writing, updating, and supporting addons
 by respecting our legal rights. Thanks!
