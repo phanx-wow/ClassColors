@@ -10,6 +10,7 @@
 ## X-CompatibleLocales: enUS, deDE, esES, esMX, frFR, koKR, ruRU, zhCN, zhTW
 ## X-Localizations: enUS
 ## X-Website: http://www.wowinterface.com/downloads/info12513-ClassColors.html
+## X-Curse-Project-ID: classcolors
 ## X-WoWI-ID: 12513
 
 ## SavedVariables: ClassColorsDB

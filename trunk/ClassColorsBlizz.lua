@@ -55,7 +55,7 @@ end
 -- CompactUnitFrame.lua
 
 hooksecurefunc("CompactUnitFrame_UpdateHealthColor", function(frame)
-	print("CompactUnitFrame_UpdateHealthColor", frame.unit or "NONE")
+	-- print("CompactUnitFrame_UpdateHealthColor", frame.unit or "NONE")
 	if frame.optionTable.useClassColors and UnitIsConnected(frame.unit) then
 		local _, class = UnitClass(frame.unit)
 		local color = CUSTOM_CLASS_COLORS[class]
@@ -68,7 +68,7 @@ end)
 -- FriendsFrame.lua
 
 hooksecurefunc("WhoList_Update", function()
-	print("WhoListUpdate")
+	-- print("WhoListUpdate")
 	local offset = FauxScrollFrame_GetOffset(WhoListScrollFrame)
 	for i = 1, WHOS_TO_DISPLAY do
 		local _, _, _, _, _, _, class = GetWhoInfo(i + offset)
@@ -84,7 +84,7 @@ end)
 -- LFDFrame.lua
 
 hooksecurefunc("LFDQueueFrameRandomCooldownFrame_Update", function()
-	print("LFDQueueFrameRandomCooldownFrame_Update")
+	-- print("LFDQueueFrameRandomCooldownFrame_Update")
 	for i = 1, GetNumPartyMembers() do
 		local _, class = UnitClass("party"..i)
 		if class then
@@ -99,7 +99,7 @@ end)
 -- LFRFrame.lua
 
 hooksecurefunc("LFRBrowseFrameListButton_SetData", function(button, i)
-	print("LFRBrowseFrameListButton_SetData")
+	-- print("LFRBrowseFrameListButton_SetData")
 	local _, _, _, _, _, _, _, class = SearchLFGGetResults(i)
 	if class then
 		local color = CURSOR_CLASS_COLORS[class]
@@ -112,7 +112,7 @@ end)
 -- PaperDollFrame.lua
 
 hooksecurefunc("PaperDollFrame_SetLevel", function()
-	print("PaperDollFrame_SetLevel")
+	-- print("PaperDollFrame_SetLevel")
 	local className, class = UnitClass("player")
 	local color = CUSTOM_CLASS_COLORS[class]
 	if color then
@@ -133,7 +133,7 @@ end)
 
 addonFuncs["Blizzard_Calendar"] = function()
 	hooksecurefunc("CalendarViewEventInviteListScrollFrame_Update", function()
-		print("CalendarViewEventInviteListScrollFrame_Update")
+		-- print("CalendarViewEventInviteListScrollFrame_Update")
 		local buttons = CalendarViewEventInviteListScrollFrame.buttons
 		local offset = HybridScrollFrame_GetOffset(CalendarViewEventInviteListScrollFrame)
 		for i = 1, #buttons do
@@ -150,7 +150,7 @@ addonFuncs["Blizzard_Calendar"] = function()
 	end)
 
 	hooksecurefunc("CalendarCreateEventInviteListScrollFrame_Update", function()
-		print("CalendarCreateEventInviteListScrollFrame_Update")
+		-- print("CalendarCreateEventInviteListScrollFrame_Update")
 		local buttons = CalendarCreateEventInviteListScrollFrame.buttons
 		local offset = HybridScrollFrame_GetOffset(CalendarCreateEventInviteListScrollFrame)
 		for i = 1, #buttons do
@@ -171,7 +171,7 @@ end
 
 addonFuncs["Blizzard_GuildUI"] = function()
 	hooksecurefunc("GuildRosterButton_SetStringText", function(buttonString, text, online, class)
-		print("GuildRosterButton_SetStringText")
+		-- print("GuildRosterButton_SetStringText")
 		if online and class then
 			local color = CUSTOM_CLASS_COLORS[class]
 			if color then
@@ -185,7 +185,7 @@ end
 
 addonFuncs["Blizzard_InspectUI"] = function()
 	hooksecurefunc("InspectPaperDollFrame_SetLevel", function()
-		print("InspectPaperDollFrame_SetLevel")
+		-- print("InspectPaperDollFrame_SetLevel")
 		local unit = InspectFrame.unit
 
 		local level = UnitLevel(InspectFrame.unit)
@@ -214,7 +214,7 @@ end
 
 addonFuncs["Blizzard_RaidUI"] = function()
 	hooksecurefunc("RaidGroupFrame_Update", function()
-		print("RaidGroupFrame_Update")
+		-- print("RaidGroupFrame_Update")
 		local numRaidMembers = GetNumRaidMembers()
 		for i = 1, MAX_RAID_MEMBERS do
 			if i <= numRaidMembers then
@@ -235,7 +235,7 @@ addonFuncs["Blizzard_RaidUI"] = function()
 	end)
 
 	hooksecurefunc("RaidGroupFrame_UpdateHealth", function(i)
-		print("RaidGroupFrame_UpdateHealth", i)
+		-- print("RaidGroupFrame_UpdateHealth", i)
 		local _, _, _, _, _, class, _, online, isDead = GetRaidRosterInfo(i)
 		if online and not isDead then
 			local color = RAID_CLASS_COLORS[fileName]
@@ -248,7 +248,7 @@ addonFuncs["Blizzard_RaidUI"] = function()
 	end)
 
 	hooksecurefunc("RaidPullout_UpdateTarget", function(pullOutFrame, pullOutButton, unit, which)
-		print("RaidPullout_UpdateTarget", pullOutFrame, unit)
+		-- print("RaidPullout_UpdateTarget", pullOutFrame, unit)
 		local pullOutFrame = _G[pullOutFrame]
 		if not pullOutFrame.showTarget then
 			pullOutFrame.showTargetTarget = nil
@@ -268,7 +268,7 @@ addonFuncs["Blizzard_RaidUI"] = function()
 	end)
 
 	hooksecurefunc("RaidPulloutButton_UpdateDead", function(button, dead, class)
-		print("RaidPulloutButton_UpdateDead", button.unit)
+		-- print("RaidPulloutButton_UpdateDead", button.unit)
 		if not dead then
 			if class == "PETS" then
 				class = UnitClass(gsub(button.unit, "raidpet", "raid"))
