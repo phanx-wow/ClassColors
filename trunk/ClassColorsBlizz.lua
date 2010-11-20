@@ -15,41 +15,64 @@ local PLAYER_LEVEL_NO_SPEC = PLAYER_LEVEL_NO_SPEC:replace("|c%s", "|cff%02x%02x%
 
 -- ChatConfigFrame.xml
 
-local colorChatConfig = function()
-	for i, class in ipairs(CLASS_SORT_ORDER) do
-		local color = CUSTOM_CLASS_COLORS[class]
-		if color then
-			ChatConfigChatSettingsClassColorLegend.classStrings[i]:SetFormattedText("|cff%02x%02x%02x%s|r\n", color.r * 255, color.g * 255, color.b * 255, LOCALIZED_CLASS_NAMES_MALE[class])
-			ChatConfigChannelSettingsClassColorLegend.classStrings[i]:SetFormattedText("|cff%02x%02x%02x%s|r\n", color.r * 255, color.g * 255, color.b * 255, LOCALIZED_CLASS_NAMES_MALE[class])
+do
+	local colorChatConfig = function()
+		for i, class in ipairs(CLASS_SORT_ORDER) do
+			local color = CUSTOM_CLASS_COLORS[class]
+			if color then
+				ChatConfigChatSettingsClassColorLegend.classStrings[i]:SetFormattedText("|cff%02x%02x%02x%s|r\n", color.r * 255, color.g * 255, color.b * 255, LOCALIZED_CLASS_NAMES_MALE[class])
+				ChatConfigChannelSettingsClassColorLegend.classStrings[i]:SetFormattedText("|cff%02x%02x%02x%s|r\n", color.r * 255, color.g * 255, color.b * 255, LOCALIZED_CLASS_NAMES_MALE[class])
+			end
 		end
 	end
-end
 
-CUSTOM_CLASS_COLORS:RegisterCallback(colorChatConfig)
-colorChatConfig()
+	CUSTOM_CLASS_COLORS:RegisterCallback(colorChatConfig)
+	colorChatConfig()
+end
 
 -- ChatFrame.lua
 
-function GetColoredName(event, arg1, name, arg3, arg4, arg5, arg6, arg7, channelID, arg9, arg10, arg11, guid)
-	local chatType = event:sub(10)
-	if chatType:sub(1, 7) == "WHISPER" then
-		chatType = "WHISPER"
-	elseif chatType:sub(1, 7) == "CHANNEL" then
-		chatType = "CHANNEL" .. channelID
-	end
+do
+	local colorMap = { }
 
-	local info = ChatTypeInfo[chatType]
-	if info and info.colorNameByClass and guid and guid ~= "" then
-		local className, class, raceName, race, sex = GetPlayerInfoByGUID(guid)
-		if class then
-			local color = CUSTOM_CLASS_COLORS[class] or RAID_CLASS_COLORS[class]
-			if color then
-				return ("\124cff%02x%02x%02x%s\124r"):format(color.r * 255, color.g * 255, color.b * 255, name)
-			end
-			return name
+	local function populateColorMap()
+		for class, c1 in pairs(RAID_CLASS_COLORS) do
+			local c2 = CUSTOM_CLASS_COLORS[class]
+			colorMap[("|cff%02x%02x%02x"):format(c1.r * 255, c1.g * 255, c1.b * 255)] = ("|cff%02x%02x%02x"):format(c2.r * 255, c2.g * 255, c2.b * 255)
 		end
 	end
-	return name
+
+	CUSTOM_CLASS_COLORS:RegisterCallback(populateColorMap)
+	populateColorMap()
+
+	local hooks = { }
+
+	local function recolorNames(self, message, ...)
+		if type(message) == "string" and message:match("|cff") then
+			for old, new in pairs(colorMap) do
+				message = message:replace(old, new)
+			end
+		end
+		return hooks[self](self, message, ...)
+	end
+
+	for i = 1, NUM_CHAT_WINDOWS do
+		local f = _G["ChatFrame" .. i]
+		if f and f ~= COMBATLOG then
+			hooks[f] = f.AddMessage
+			f.AddMessage = recolorNames
+		end
+	end
+
+	local orig = FCF_OpenTemporaryWindow
+	function FCF_OpenTemporaryWindow(...)
+		local f = orig(...)
+		if not hooks[f] then
+			hooks[f] = f.AddMessage
+			f.AddMessage = recolorNames
+		end
+		return f
+	end
 end
 
 -- CompactUnitFrame.lua
