@@ -36,9 +36,12 @@ do
 	local colorMap = { }
 
 	local function populateColorMap()
+		wipe(colorMap)
 		for class, c1 in pairs(RAID_CLASS_COLORS) do
 			local c2 = CUSTOM_CLASS_COLORS[class]
-			colorMap[("|cff%02x%02x%02x"):format(c1.r * 255, c1.g * 255, c1.b * 255)] = ("|cff%02x%02x%02x"):format(c2.r * 255, c2.g * 255, c2.b * 255)
+			if color then
+				colorMap[("|cff%02x%02x%02x"):format(c1.r * 255, c1.g * 255, c1.b * 255)] = ("|cff%02x%02x%02x"):format(c2.r * 255, c2.g * 255, c2.b * 255)
+			end
 		end
 	end
 
