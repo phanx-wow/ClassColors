@@ -1,32 +1,11 @@
-!ClassColors - a World of Warcraft user interface addon
+!ClassColors
+by Phanx < addons@phanx.net >
+http://www.wowinterface.com/downloads/info6330-AnkhUp.html
+http://wow.curse.com/downloads/wow-addons/details/ankhup.aspx
 
-Copyright © 2009–2010 A. Kinley, a.k.a. Phanx
+Copyright © 2009–2010 Phanx
 
-The contents of this software, excluding third-party resources, are 
-copyrighted to its author with all rights reserved, under United States 
-and international copyright law. Copyright law specifices certain rights 
-and restrictions persuant to your use of this software. In particular, 
-please note:
-
-1. You MAY download and run this software as a user interface addon 
-   inside the World of Warcraft game client.
-
-2. You MAY make modifications to this software for your own private use.
-
-3. You MAY distribute an unmodified copy of this software in an addon
-   compilation or premade interface package.
-
-4. You MAY NOT distribute this software in any other form, with or
-   without modifications, without prior written permission from its
-   author(s).
-
-Additionally, the author of this addon hereby grants you the following
-non-exclusive right:
-
-5. You MAY use source code from this software for any purpose, provided
-   that the names of this software and/or its author(s) are not used to
-   promote your project, and do not appear in the title, source code, or
-   file names of your project, outside of an optional credits notation.
-
-All rights not explicitly addressed in this license are reserved by the
-copyright holder.
+I, the copyright holder of this work, hereby release it into the public
+domain. This applies worldwide. In case this is not legally possible: I
+grant anyone the right to use this work for any purpose, without any
+conditions, unless such conditions are required by law.

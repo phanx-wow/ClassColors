@@ -2,10 +2,14 @@
 	!ClassColors
 	Provides a non-tainting method for changing raid class colors.
 	by Phanx < addons@phanx.net >
-	Copyright © 2009–2010 Phanx.
-	See accompanying README for license terms and API details.
 	http://www.wowinterface.com/downloads/info12513-ClassColors.html
 	http://wow.curse.com/downloads/wow-addons/details/classcolors.aspx
+
+	Copyright © 2009–2010 Phanx.
+	I, the copyright holder of this work, hereby release it into the public
+	domain. This applies worldwide. In case this is not legally possible: I
+	grant anyone the right to use this work for any purpose, without any
+	conditions, unless such conditions are required by law.
 ----------------------------------------------------------------------]]
 
 local L = setmetatable({ }, { __index = function(t, k)
