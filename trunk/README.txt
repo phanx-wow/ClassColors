@@ -41,18 +41,18 @@ and that such messages will be ignored.
 
 ## Information for Addon Authors
 
-Supporting the CUSTOM_CLASS_COLORS standard is simple. All you need to 
-do is check for the existence of a global CUSTOM_CLASS_COLORS table, and 
+Supporting the CUSTOM_CLASS_COLORS standard is simple. All you need to
+do is check for the existence of a global CUSTOM_CLASS_COLORS table, and
 read from it instead of RAID_CLASS_COLORS if it exists.
 
 If your addon keeps a local cache of class colors, you should also
 register for a callback when class colors are changed, and update your
 cache when the callback is fired.
 
-Also, if you build your cache before the PLAYER_LOGIN event, you should 
-also update it during or after that event. !ClassColors stores custom 
-class colors in saved variables, and may not have been loaded before 
-your addon. Because CUSTOM_CLASS_COLORS is a standard and can be 
+Also, if you build your cache before the PLAYER_LOGIN event, you should
+also update it during or after that event. !ClassColors stores custom
+class colors in saved variables, and may not have been loaded before
+your addon. Because CUSTOM_CLASS_COLORS is a standard and can be
 implemented by any addon, you should avoid listing !ClassColors as a
 dependency of any kind for your addon.
 
@@ -62,10 +62,9 @@ http://www.wowinterface.com/portal.php?&id=224&pageid=198
 
 ## License
 
-!ClassColors is free as in "free beer", not free as in "free software",
-and you may not include it in your compilation or redistribute it in any
-other way without first getting permission. The full license text under
-which !ClassColors is released can be found in the LICENSE text file
-inside the addon's folder. Show your appreciation for the time and 
-effort addon authors put into writing, updating, and supporting addons
-by respecting our legal rights. Thanks!
+Copyright © 2009–2010 Phanx
+
+I, the copyright holder of this work, hereby release it into the public
+domain. This applies worldwide. In case this is not legally possible: I
+grant anyone the right to use this work for any purpose, without any
+conditions, unless such conditions are required by law.
