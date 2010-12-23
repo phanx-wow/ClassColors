@@ -76,7 +76,7 @@ hooksecurefunc("WhoList_Update", function()
 	for i = 1, WHOS_TO_DISPLAY do
 		local _, _, _, _, _, _, class = GetWhoInfo(i + offset)
 		if class then
-			local color = CUSTOM_CLASS_COLORS[classFileName]
+			local color = CUSTOM_CLASS_COLORS[class]
 			if color then
 				_G["WhoFrameButton" .. i .. "Class"]:SetTextColor(color.r, color.g, color.b)
 			end
@@ -105,7 +105,7 @@ hooksecurefunc("LFRBrowseFrameListButton_SetData", function(button, i)
 	-- print("LFRBrowseFrameListButton_SetData")
 	local _, _, _, _, _, _, _, class = SearchLFGGetResults(i)
 	if class then
-		local color = CURSOR_CLASS_COLORS[class]
+		local color = CUSTOM_CLASS_COLORS[class]
 		if color then
 			button.class:SetTextColor(color.r, color.g, color.b)
 		end
