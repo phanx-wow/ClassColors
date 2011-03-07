@@ -19,7 +19,7 @@ L["Class Colors"] = GetAddOnMetadata("!ClassColors", "Title")
 L["Change class colors without breaking the Blizzard UI."] = GetAddOnMetadata("!ClassColors", "Notes")
 
 if GetLocale() == "esES" or GetLocale() == "esMX" then
-	L["Note that not all addons support this, and you may need to reload the UI before your changes are recognized."] = "Observe que no todos los addons apoyar esto, y es posible que tengas que volver a cargar la interfaz de usuario para que los cambios son reconocidos."
+	L["Note that not all addons support this, and you may need to reload the UI before your changes are recognized."] = "Observe que no todos los accesorios son compatibles con este sistema, y es posible que tengas que volver a cargar la interfaz de usuario para que los cambios son reconocidos."
 end
 
 ------------------------------------------------------------------------
