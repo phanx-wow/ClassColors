@@ -8,19 +8,18 @@
 	http://wow.curse.com/downloads/wow-addons/details/classcolors.aspx
 ----------------------------------------------------------------------]]
 
-local L = setmetatable({ }, { __index = function(t, k)
-	t[k] = k
-	return k
-end })
-
-FillLocalizedClassList(L, false)
-
-L["Class Colors"] = GetAddOnMetadata("!ClassColors", "Title")
-L["Change class colors without breaking the Blizzard UI."] = GetAddOnMetadata("!ClassColors", "Notes")
+local L = {
+	TITLE = GetAddOnMetadata("!ClassColors", "Title"),
+	NOTES = GetAddOnMetadata("!ClassColors", "Notes"),
+}
 
 if GetLocale() == "esES" or GetLocale() == "esMX" then
-	L["Note that not all addons support this, and you may need to reload the UI before your changes are recognized."] = "Observe que no todos los accesorios son compatibles con este sistema, y es posible que tengas que volver a cargar la interfaz de usuario para que los cambios son reconocidos."
+	L.NOTES_EXTENDED = "Observe que no todos los accesorios son compatibles con este sistema, y es posible que tengas que volver a cargar la interfaz de usuario para que los cambios son reconocidos."
+else
+	L.NOTE_EXTENDED = "Note that not all addons support this, and you may need to reload the UI before your changes are recognized."
 end
+
+FillLocalizedClassList(L, false)
 
 ------------------------------------------------------------------------
 
@@ -164,12 +163,12 @@ f:SetScript("OnEvent", function(self, event, addon)
 	local cache = { }
 	local pickers = { }
 
-	self.name = L["Class Colors"]
+	self.name = L.TITLE
 	self:Hide()
 
 	local title = self:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
 	title:SetPoint("TOPLEFT", 16, -16)
-	title:SetText(L["Class Colors"])
+	title:SetText(L.TITLE)
 
 	local notes = self:CreateFontString(nil, "ARTWORK", "GameFontHighlightSmall")
 	notes:SetPoint("TOPLEFT", title, "BOTTOMLEFT", 0, -8)
@@ -178,7 +177,7 @@ f:SetScript("OnEvent", function(self, event, addon)
 	notes:SetJustifyH("LEFT")
 	notes:SetJustifyV("TOP")
 	notes:SetNonSpaceWrap(true)
-	notes:SetText(L["Change class colors without breaking the Blizzard UI."] .. " " .. L["Note that not all addons support this, and you may need to reload the UI before your changes are recognized."])
+	notes:SetText(L.NOTES .. " " .. L.NOTES_EXTENDED)
 
 	for i, class in ipairs(classes) do
 		local color = db[class]
