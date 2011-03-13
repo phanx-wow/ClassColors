@@ -1,6 +1,6 @@
 --[[--------------------------------------------------------------------
 	!ClassColors
-	Change class colors without tainting the Blizzard UI.
+	Change class colors without breaking the Blizzard UI.
 	Written by Phanx <addons@phanx.net>
 	Maintained by Akkorian <akkorian@hotmail.com>
 	Copyright © 2009–2011 Phanx. Some rights reserved. See LICENSE.txt for details.

@@ -1,9 +1,10 @@
 !ClassColors
-by Phanx <addons@phanx.net>
+Written by Phanx <addons@phanx.net>
+Maintained by Akkorian <akkorian@hotmail.com>
 http://www.wowinterface.com/downloads/info12513-ClassColors.html
 http://wow.curse.com/downloads/wow-addons/details/classcolors.aspx
 
-Copyright © 2009–2011 Phanx
+Copyright © 2009–2011 Phanx <addons@phanx.net>
 
 The contents of this software, excluding third-party resources, are
 copyrighted to its author(s) with all rights reserved, under United States
