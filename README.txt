@@ -23,11 +23,11 @@ Options are available in the Interface Options window. You can type
 Localization
 ------------
 
-!ClassColors is compatible with English, Deutsch, Español, Français,
-Русский, 한국어, 简体中文, and 正體中文 clients.
+Compatible with English, Deutsch, Español, Français, Русский, 한국어,
+简体中文, and 正體中文 clients.
 
-!ClassColors is translated into English. If you can provide translations
-for any locale, please send me a PM on either download site.
+Translated into English and Español. If you can provide translations for
+any locale, please send me a PM on either download site.
 
 
 Feedback
@@ -38,7 +38,7 @@ request features. Use the comment system only for general questions
 or comments.
 
 If you need to contact me privately, you may do by private message
-on either download site, or by email at <addons@phanx.net>.
+on either download site, or by email at <akkorian@hotmail.com>.
 
 
 Information for Addon Authors
@@ -56,7 +56,7 @@ Also, if you build your cache before the PLAYER_LOGIN event, you should
 also update it during or after that event. !ClassColors stores custom
 class colors in saved variables, and may not have been loaded before
 your addon. Because CUSTOM_CLASS_COLORS is a standard and can be
-implemented by any addon, you should avoid listing “!ClassColors” as a
+implemented by any addon, you should avoid listing !ClassColors as a
 dependency (optional or otherwise) for your addon.
 
 Detailed API documentation can be found here:

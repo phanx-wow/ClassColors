@@ -1,6 +1,6 @@
 --[[--------------------------------------------------------------------
 	!ClassColors
-	Change class colors without tainting the Blizzard UI.
+	Change class colors without breaking the Blizzard UI.
 	Written by Phanx <addons@phanx.net>
 	Maintained by Akkorian <akkorian@hotmail.com>
 	Copyright © 2009–2011 Phanx. Some rights reserved. See LICENSE.txt for details.
@@ -11,30 +11,34 @@
 local L = {
 	TITLE = GetAddOnMetadata("!ClassColors", "Title"),
 	NOTES = GetAddOnMetadata("!ClassColors", "Notes"),
+	NOTES_DESC = "Note that not all addons support this, and you may need to reload the UI before your changes are recognized by all compatible addons.",
+	RESET = RESET,
+	RESET_DESC = "Reset all class colors to their Blizzard defaults.",
 }
-
-if GetLocale() == "esES" or GetLocale() == "esMX" then
-	L.NOTES_EXTENDED = "Observe que no todos los accesorios son compatibles con este sistema, y es posible que tengas que volver a cargar la interfaz de usuario para que los cambios son reconocidos."
-else
-	L.NOTE_EXTENDED = "Note that not all addons support this, and you may need to reload the UI before your changes are recognized."
+do
+	local GAME_LOCALE = GetLocale()
+	if GAME_LOCALE == "deDE" then
+		L.RESET_DESC = "Klassenfarben auf Standard zurücksetzen."
+	elseif GetLocale() == "esES" or GetLocale() == "esMX" then
+		L.NOTES_DESC = "Observe que no todos los accesorios son compatibles con este sistema, y es posible que tengas a volver a cargar la interfaz para que los cambios a ser reconocidos por todos accesorios compatibles."
+		L.RESET_DESC = "Restaurar los colores de clase por defecto."
+	elseif GAME_LOCALE == "frFR" then
+		L.RESET_DESC = "Réinitialisez la couleur des classes par défaut."
+	elseif GAME_LOCALE == "ruRU" then
+		L.RESET_DESC = "Сбросить окраску классов на значение по умолчанию."
+	elseif GAME_LOCALE == "koKR" then
+		L.RESET_DESC = "직업 색상을 기본값으로 되돌립니다."
+	elseif GAME_LOCALE == "zhCN" then
+		L.RESET_DESC = "重置职业颜色为默认"
+	elseif GAME_LOCALE == "zhTW" then
+		L.RESET_DESC = "重置職業顔色為默認"
+	end
 end
-
 FillLocalizedClassList(L, false)
 
 ------------------------------------------------------------------------
 
 CUSTOM_CLASS_COLORS = { }
-
-------------------------------------------------------------------------
-
-local function iter(t, key)
-	local nextkey = next(RAID_CLASS_COLORS, key)
-	return nextkey, t[nextkey]
-end
-
-local function IterateClasses(self)
-	return iter, self
-end
 
 ------------------------------------------------------------------------
 
@@ -121,7 +125,6 @@ end
 
 setmetatable(CUSTOM_CLASS_COLORS, { __index = function(t, k)
 	if k == "GetClassToken" then return GetClassToken end
-	if k == "IterateClasses" then return IterateClasses end
 	if k == "RegisterCallback" then return RegisterCallback end
 	if k == "UnregisterCallback" then return UnregisterCallback end
 end })
@@ -168,16 +171,18 @@ f:SetScript("OnEvent", function(self, event, addon)
 
 	local title = self:CreateFontString(nil, "ARTWORK", "GameFontNormalLarge")
 	title:SetPoint("TOPLEFT", 16, -16)
+	title:SetPoint("TOPRIGHT", -16, -16)
+	title:SetJustifyH("LEFT")
 	title:SetText(L.TITLE)
 
 	local notes = self:CreateFontString(nil, "ARTWORK", "GameFontHighlightSmall")
 	notes:SetPoint("TOPLEFT", title, "BOTTOMLEFT", 0, -8)
-	notes:SetPoint("RIGHT", self, -32, 0)
-	notes:SetHeight(48)
+	notes:SetPoint("TOPRIGHT", title, "BOTTOMRIGHT", 0, -8)
+	notes:SetHeight(28)
 	notes:SetJustifyH("LEFT")
 	notes:SetJustifyV("TOP")
 	notes:SetNonSpaceWrap(true)
-	notes:SetText(L.NOTES .. " " .. L.NOTES_EXTENDED)
+	notes:SetText(L.NOTES)
 
 	for i, class in ipairs(classes) do
 		local color = db[class]
@@ -211,9 +216,9 @@ f:SetScript("OnEvent", function(self, event, addon)
 		pickers[i].label:SetTextColor(color.r, color.g, color.b)
 
 		if i == 1 then
-			pickers[i]:SetPoint("TOPLEFT", notes, "BOTTOMLEFT", 8, -16)
+			pickers[i]:SetPoint("TOPLEFT", notes, "BOTTOMLEFT", 0, -16)
 		elseif i == 2 then
-			pickers[i]:SetPoint("TOPLEFT", notes, "BOTTOM", 8, -16)
+			pickers[i]:SetPoint("TOPLEFT", notes, "BOTTOMLEFT", 150, -16)
 		else
 			pickers[i]:SetPoint("TOPLEFT", pickers[i-2], "BOTTOMLEFT", 0, -8)
 		end
@@ -314,12 +319,12 @@ f:SetScript("OnEvent", function(self, event, addon)
 	--------------------------------------------------------------------
 
 	local reset = CreateFrame("Button", nil, self)
-	reset:SetPoint("BOTTOMRIGHT", self, -16, 16)
-	reset:SetWidth(80)
-	reset:SetHeight(24)
-	reset:SetNormalFontObject(GameFontNormalSmall)
+	reset:SetPoint("BOTTOMLEFT", self, 16, 16)
+	reset:SetWidth(96)
+	reset:SetHeight(22)
+	reset:SetNormalFontObject(GameFontNormal)
+	reset:SetHighlightFontObject(GameFontHighlight)
 	reset:SetDisabledFontObject(GameFontDisable)
-	reset:SetHighlightFontObject(GameFontHighlightSmall)
 	reset:SetNormalTexture("Interface\\Buttons\\UI-Panel-Button-Up")
 	reset:SetPushedTexture("Interface\\Buttons\\UI-Panel-Button-Down")
 	reset:SetHighlightTexture("Interface\\Buttons\\UI-Panel-Button-Highlight")
@@ -339,9 +344,21 @@ f:SetScript("OnEvent", function(self, event, addon)
 		GameTooltip:Hide()
 	end)
 
-	reset:SetText(L["Reset"])
-	reset.hint = L["Reset all class colors to their Blizzard defaults."]
+	reset:SetText(L.RESET)
+	reset.hint = L.RESET_DESC
 	reset:SetScript("OnClick", self.defaults)
+
+	--------------------------------------------------------------------
+
+	local help = self:CreateFontString(nil, "ARTWORK", "GameFontHighlightSmall")
+	help:SetPoint("TOP", pickers[#pickers], "BOTTOM", 0, -32)
+	help:SetPoint("BOTTOMLEFT", 16, 54)
+	help:SetPoint("BOTTOMRIGHT", -16, 54)
+	help:SetHeight(84)
+	help:SetJustifyH("LEFT")
+	help:SetJustifyV("TOP")
+	help:SetNonSpaceWrap(true)
+	help:SetText(L.NOTES_DESC)
 
 	--------------------------------------------------------------------
 
