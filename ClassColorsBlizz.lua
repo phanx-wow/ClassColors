@@ -10,8 +10,8 @@
 
 local addonFuncs = { }
 
-local PLAYER_LEVEL = PLAYER_LEVEL:gsub( "|c%%s", "|cff%02x%02x%02x" )
-local PLAYER_LEVEL_NO_SPEC = PLAYER_LEVEL_NO_SPEC:gsub( "|c%%s", "|cff%02x%02x%02x" )
+local PLAYER_LEVEL = PLAYER_LEVEL:gsub( "|c%%s", "|cff%%02x%%02x%%02x", 1 )
+local PLAYER_LEVEL_NO_SPEC = PLAYER_LEVEL_NO_SPEC:gsub( "|c%%s", "|cff%%02x%%02x%%02x" )
 
 -- ChatConfigFrame.xml
 
