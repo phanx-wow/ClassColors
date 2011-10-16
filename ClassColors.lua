@@ -24,6 +24,9 @@ do
 		L.RESET_DESC = "Restaurar los colores de clase por defecto."
 	elseif GAME_LOCALE == "frFR" then
 		L.RESET_DESC = "Réinitialisez la couleur des classes par défaut."
+	elseif GAME_LOCALE == "ptBR" then
+		L.NOTES_DESC = "Observe que nem todos os addons são compatíveis com este sistema, e você pode ter que recarregar a interface antes de suas alterações são reconhecidos por todos os addons compatíveis."
+		L.RESET_DESC = "Redefinir todas as cores classe para seus valores padrão."
 	elseif GAME_LOCALE == "ruRU" then
 		L.RESET_DESC = "Сбросить окраску классов на значение по умолчанию."
 	elseif GAME_LOCALE == "koKR" then

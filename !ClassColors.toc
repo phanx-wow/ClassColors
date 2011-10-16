@@ -9,8 +9,8 @@
 ## X-Email: akkorian@hotmail.com
 ## X-Copyright: Copyright © 2009–2011 Phanx
 ## X-License: Some rights reserved. See LICENSE.txt for details.
-## X-CompatibleLocales: enUS, deDE, esES, esMX, frFR, koKR, ruRU, zhCN, zhTW
-## X-Localizations: enUS, esES, esMX
+## X-CompatibleLocales: enUS, deDE, esES, esMX, frFR, koKR, ptBR, ruRU, zhCN, zhTW
+## X-Localizations: enUS, esES, esMX, ptBR
 ## X-Website: http://www.wowinterface.com/downloads/info12513-ClassColors.html
 ## X-Curse-Project-ID: classcolors
 ## X-WoWI-ID: 12513
