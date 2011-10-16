@@ -2,7 +2,6 @@
 ============
 
 * Written by Phanx <addons@phanx.net>
-* Maintained by Akkorian <akkorian@hotmail.com>
 * http://www.wowinterface.com/downloads/info12513-ClassColors.html
 * http://wow.curse.com/downloads/wow-addons/details/classcolors.aspx
 
@@ -23,11 +22,11 @@ Options are available in the Interface Options window. You can type
 Localization
 ------------
 
-Compatible with English, Deutsch, Español, Français, Русский, 한국어,
-简体中文, and 正體中文 clients.
+Compatible with English, Deutsch, Español, Français, Português, Русский,
+한국어, 简体中文, and 正體中文 clients.
 
-Translated into English and Español. If you can provide translations for
-any locale, please send me a PM on either download site.
+Translated into English, Español, and Português. If you can provide
+translations for any locale, send me a PM on either download site.
 
 
 Feedback
