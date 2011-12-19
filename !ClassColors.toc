@@ -1,12 +1,13 @@
-## Interface: 40200
-## Version: 4.2.0.wowi:revision
+## Interface: 40300
+## Version: 4.3.0.wowi:revision
 
 ## Title: Class Colors
 ## Notes: Change class colors without breaking the Blizzard UI.
-## Notes-esES: Cambiar los colores de clase sin rompar cualquier partes de la interfaz de usario.
-## Notes-esMX: Cambiar los colores de clase sin rompar cualquier partes de la interfaz de usario.
-## Author: Phanx, Akkorian
-## X-Email: akkorian@hotmail.com
+## Notes-esES: Cambiar los colores de clase sin rompar partes de la interfaz de usario de Blizzard.
+## Notes-esMX: Cambiar los colores de clase sin rompar partes de la interfaz de usario de Blizzard.
+## Notes-ptBR: Alterar as cores de classes sem quebrar partes da interface do usuário da Blizzard.
+## Author: Phanx
+## X-Email: addons@phanx.net
 ## X-Copyright: Copyright © 2009–2011 Phanx
 ## X-License: Some rights reserved. See LICENSE.txt for details.
 ## X-CompatibleLocales: enUS, deDE, esES, esMX, frFR, koKR, ptBR, ruRU, zhCN, zhTW

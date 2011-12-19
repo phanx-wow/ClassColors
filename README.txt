@@ -3,7 +3,7 @@
 
 * Written by Phanx <addons@phanx.net>
 * http://www.wowinterface.com/downloads/info12513-ClassColors.html
-* http://wow.curse.com/downloads/wow-addons/details/classcolors.aspx
+* http://www.curse.com/addons/wow/classcolors
 
 
 Description
