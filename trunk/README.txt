@@ -2,6 +2,7 @@
 ============
 
 * Written by Phanx <addons@phanx.net>
+* Copyright © 2009–2012 Phanx. Some rights reserved. See LICENSE.txt for details.
 * http://www.wowinterface.com/downloads/info12513-ClassColors.html
 * http://www.curse.com/addons/wow/classcolors
 
