@@ -8,7 +8,7 @@
 ## Notes-ptBR: Alterar as cores de classes sem quebrar partes da interface do usuário da Blizzard.
 ## Author: Phanx
 ## X-Email: addons@phanx.net
-## X-Copyright: Copyright © 2009–2011 Phanx
+## X-Copyright: Copyright © 2009–2012 Phanx
 ## X-License: Some rights reserved. See LICENSE.txt for details.
 ## X-CompatibleLocales: enUS, deDE, esES, esMX, frFR, koKR, ptBR, ruRU, zhCN, zhTW
 ## X-Localizations: enUS, esES, esMX, ptBR

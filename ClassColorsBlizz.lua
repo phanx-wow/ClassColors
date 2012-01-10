@@ -132,6 +132,37 @@ hooksecurefunc( "PaperDollFrame_SetLevel", function( )
 	end
 end )
 
+-- WorldMapFrame.lua
+do
+	local noop = function() end
+	for i = 1, MAX_PARTY_MEMBERS do
+	--	_G["WorldMapParty" .. i].icon:SetTexture("Interface\\AddOns\\!ClassColors\\PartyRaidBlips")
+		_G["WorldMapParty" .. i].icon:SetTexCoord(0.5, 0.625, 0, 0.25)
+		_G["WorldMapParty" .. i].icon.SetTexCoord = noop
+	end
+	for i = 1, MAX_RAID_MEMBERS do
+	--	_G["WorldMapRaid" .. i].icon:SetTexture("Interface\\AddOns\\!ClassColors\\PartyRaidBlips")
+		_G["WorldMapRaid" .. i].icon:SetTexCoord(0.5, 0.625, 0, 0.25)
+		_G["WorldMapRaid" .. i].icon.SetTexCoord = noop
+	end
+end
+hooksecurefunc("WorldMapUnit_Update", function(self)
+	local unit = self.unit or self.name
+	if not unit then return end
+
+	local _, class = UnitClass(unit)
+	if not class then return end
+
+	local color = CUSTOM_CLASS_COLORS[class]
+	if not color then return end
+
+	if PlayerIsPVPInactive(unit) then
+		self.icon:SetVertexColor(color.r * 0.5, color.g * 0.2, color.b * 0.8)
+	else
+		self.icon:SetVertexColor(color.r, color.g, color.b)
+	end
+end)
+
 ------------------------------------------------------------------------
 
 addonFuncs.Blizzard_Calendar = function( )
