@@ -1,8 +1,8 @@
 --[[--------------------------------------------------------------------
 	!ClassColors
 	Change class colors without breaking the Blizzard UI.
-	Written by Phanx <addons@phanx.net>
-	Copyright © 2009–2012 Phanx. Some rights reserved. See LICENSE.txt for details.
+	Copyright (c) 2009–2012 Phanx <addons@phanx.net>.
+	All rights reserved. See LICENSE.txt for details.
 	http://www.wowinterface.com/downloads/info12513-ClassColors.html
 	http://www.curse.com/addons/wow/classcolors
 ----------------------------------------------------------------------]]
@@ -239,9 +239,9 @@ f:SetScript("OnEvent", function(self, event, addon)
 		pickers[i].label:SetTextColor(color.r, color.g, color.b)
 
 		if i == 1 then
-			pickers[i]:SetPoint("TOPLEFT", notes, "BOTTOMLEFT", 0, -16)
+			pickers[i]:SetPoint("TOPLEFT", notes, "BOTTOMLEFT", 0, -12)
 		elseif i == 2 then
-			pickers[i]:SetPoint("TOPLEFT", notes, "BOTTOMLEFT", 150, -16)
+			pickers[i]:SetPoint("TOPLEFT", notes, "BOTTOMLEFT", 200, -16)
 		else
 			pickers[i]:SetPoint("TOPLEFT", pickers[i-2], "BOTTOMLEFT", 0, -8)
 		end
@@ -384,7 +384,7 @@ f:SetScript("OnEvent", function(self, event, addon)
 	--------------------------------------------------------------------
 
 	local help = self:CreateFontString(nil, "ARTWORK", "GameFontHighlightSmall")
-	help:SetPoint("TOP", pickers[#pickers], "BOTTOM", 0, -32)
+	help:SetPoint("TOP", pickers[#pickers], "BOTTOM", 0, -16)
 	help:SetPoint("BOTTOMLEFT", 16, 54)
 	help:SetPoint("BOTTOMRIGHT", -16, 54)
 	help:SetHeight(84)
@@ -456,27 +456,36 @@ do
 		end
 	end
 
+	local function SetSize(f, x, y)
+		f:SetHeight(y or x)
+		f.swatch:SetWidth(y or x)
+	end
+
 	function f:CreateColorPicker(name)
 		local frame = CreateFrame("Button", nil, self)
 		frame:SetHeight(19)
 		frame:SetWidth(100)
 
+		frame.SetSize = SetSize
+
 		local swatch = frame:CreateTexture(nil, "OVERLAY")
 		swatch:SetTexture("Interface\\ChatFrame\\ChatFrameColorSwatch")
-		swatch:SetPoint("LEFT")
+		swatch:SetPoint("TOPLEFT")
+		swatch:SetPoint("BOTTOMLEFT")
 		swatch:SetWidth(19)
-		swatch:SetHeight(19)
+		frame.swatch = swatch
 
 		local bg = frame:CreateTexture(nil, "BACKGROUND")
 		bg:SetTexture(1, 1, 1)
-		bg:SetPoint("CENTER", swatch)
-		bg:SetWidth(16)
-		bg:SetHeight(16)
+		bg:SetPoint("TOPLEFT", swatch, 1, -1)
+		bg:SetPoint("BOTTOMRIGHT", swatch, -1, 1)
+		frame.bg = bg
 
 		local label = frame:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
-		label:SetPoint("LEFT", swatch, "RIGHT", 4, 1)
-		label:SetHeight(19)
+		label:SetPoint("TOPLEFT", swatch, "TOPRIGHT", 4, 1)
+		label:SetPoint("BOTTOMLEFT", swatch, "BOTTOMRIGHT", 4, 1)
 		label:SetText(name)
+		frame.label = label
 
 		frame.SetColor = SetColor
 		frame.swatchFunc = function() frame:SetColor(ColorPickerFrame:GetColorRGB()) end
@@ -490,10 +499,6 @@ do
 		if width > 100 then
 			frame:SetWidth(width)
 		end
-
-		frame.swatch = swatch
-		frame.bg = bg
-		frame.label = label
 
 		return frame
 	end
