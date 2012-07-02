@@ -151,14 +151,33 @@ f:SetScript("OnEvent", function(self, event, addon)
 
 	for i, class in ipairs(classes) do
 		local color = RAID_CLASS_COLORS[class]
+		local r, g, b = color.r, color.g, color.b
+		local hex = ("ff%02x%02x%02x"):format(r * 255, g * 255, b * 255)
 
-		defaults[class] = { r = color.r, g = color.g, b = color.b }
+		defaults[class] = {
+			r = r,
+			g = g,
+			b = b,
+			colorStr = hex,
+		}
 
 		if not db[class] or not db[class].r or not db[class].g or not db[class].b then
-			db[class] = { r = color.r, g = color.g, b = color.b }
+			db[class] = {
+				r = r,
+				g = g,
+				b = b,
+				colorStr = hex,
+			}
+		elseif not db[class].hex then
+			db[class].hex = ("ff%02x%02x%02x"):format(db[class].r * 255, db[class].g * 255, db[class].b * 255)
 		end
 
-		CUSTOM_CLASS_COLORS[class] = { r = db[class].r, g = db[class].g, b = db[class].b }
+		CUSTOM_CLASS_COLORS[class] = {
+			r = db[class].r,
+			g = db[class].g,
+			b = db[class].b,
+			colorStr = db[class].hex,
+		}
 	end
 
 	--------------------------------------------------------------------
@@ -204,10 +223,12 @@ f:SetScript("OnEvent", function(self, event, addon)
 			color.r = r
 			color.g = g
 			color.b = b
+			color.colorStr = ("ff%02x%02x%02x"):format(r * 255, g * 255, b * 255)
 
 			CUSTOM_CLASS_COLORS[class].r = r
 			CUSTOM_CLASS_COLORS[class].g = g
 			CUSTOM_CLASS_COLORS[class].b = b
+			CUSTOM_CLASS_COLORS[class].colorStr = ("ff%02x%02x%02x"):format(r * 255, g * 255, b * 255)
 
 			if cache[i].r ~= r or cache[i].g ~= g or cache[i].b ~= b then
 				DispatchCallbacks()
@@ -266,13 +287,18 @@ f:SetScript("OnEvent", function(self, event, addon)
 
 				picker:SetColor(cache[class].r, cache[class].g, cache[class].b)
 
-				db[class].r = cache[i].r
-				db[class].g = cache[i].g
-				db[class].b = cache[i].b
+				local r, g, b = cache[i].r, cache[i].g, cache[i].b
+				local hex = ("ff%02x%02x%02x"):format(r * 255, g * 255, b * 255)
 
-				CUSTOM_CLASS_COLORS[class].r = cache[i].r
-				CUSTOM_CLASS_COLORS[class].g = cache[i].g
-				CUSTOM_CLASS_COLORS[class].b = cache[i].b
+				db[class].r = r
+				db[class].g = r
+				db[class].b = g
+				db[class].colorStr = hex
+
+				CUSTOM_CLASS_COLORS[class].r = r
+				CUSTOM_CLASS_COLORS[class].g = g
+				CUSTOM_CLASS_COLORS[class].b = b
+				CUSTOM_CLASS_COLORS[class].colorStr = hex
 			end
 
 			wipe(cache[i])
@@ -297,19 +323,24 @@ f:SetScript("OnEvent", function(self, event, addon)
 			if db[class].r ~= color.r or db[class].g ~= color.g or db[class].b ~= color.b then
 				changed = true
 
-				picker:SetColor(color.r, color.g, color.b)
+				local r, g, b = color.r, color.g, color.b
+				local hex = ("ff%02x%02x%02x"):format(r * 255, g * 255, b * 255)
 
-				cache[i].r = color.r
-				cache[i].g = color.g
-				cache[i].b = color.b
+				picker:SetColor(r, g, b)
 
-				db[class].r = color.r
-				db[class].g = color.g
-				db[class].b = color.b
+				cache[i].r = r
+				cache[i].g = g
+				cache[i].b = b
 
-				CUSTOM_CLASS_COLORS[class].r = color.r
-				CUSTOM_CLASS_COLORS[class].g = color.g
-				CUSTOM_CLASS_COLORS[class].b = color.b
+				db[class].r = r
+				db[class].g = g
+				db[class].b = b
+				db[class].colorStr = hex
+
+				CUSTOM_CLASS_COLORS[class].r = r
+				CUSTOM_CLASS_COLORS[class].g = g
+				CUSTOM_CLASS_COLORS[class].b = b
+				CUSTOM_CLASS_COLORS[class].colorStr = hex
 			end
 		end
 
