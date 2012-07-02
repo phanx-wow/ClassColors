@@ -1,7 +1,7 @@
-Custom Class Colors
-===================
+Class Colors
+============
 
-Custom Class Colors lets you to change class colors without breaking
+Class Colors lets you to change class colors without breaking
 parts of the Blizzard UI.
 
 It is supported by many pouplar addons, and also applies your custom
@@ -14,11 +14,13 @@ Class Colors panel in the Interface Options window.
 Localization
 ------------
 
-Compatible with English, Deutsch, Español, Français, Português, Русский,
-한국어, 简体中文, and 正體中文 clients.
+Class Colors is compatible with English, Deutsch, Español, Français,
+Italiano, Português, Русский, 한국어, 简体中文, and 正體中文 clients.
 
-Translated into English, Español, and Português. If you can provide
-translations for any locale, please contact me (see below).
+Class Colors is translated into English, Español, and Português.
+
+If you can provide new or updated translations for any language, please
+contact me (see below).
 
 
 Feedback
