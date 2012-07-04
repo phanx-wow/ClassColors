@@ -14,7 +14,7 @@ Class Colors panel in the Interface Options window.
 Localization
 ------------
 
-Class Colors is compatible with English, Deutsch, Español, Français,
+Compatible with English, Deutsch, Español (EU), Español (AL), Français,
 Italiano, Português, Русский, 한국어, 简体中文, and 正體中文 clients.
 
 Class Colors is translated into English, Español, and Português.
@@ -27,10 +27,10 @@ Feedback
 --------
 
 Bugs, errors, or other problems:
-	Please use the ticket system on either download page.
+	Submit a bug report ticket on either download page.
 
 Feature requests or other suggestions:
-	Please use the ticket system on either download page.
+	Submit a feature request ticket on either download page.
 
 General questions or comments:
 	Post a comment on either download page.
