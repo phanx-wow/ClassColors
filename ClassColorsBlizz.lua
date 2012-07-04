@@ -1,8 +1,8 @@
 --[[--------------------------------------------------------------------
 	CustomClassColors
 	Change class colors without breaking parts of the Blizzard UI.
-	Copyright (c) 2009–2012 Phanx <addons@phanx.net>.
-	All rights reserved. See LICENSE.txt for details.
+	Copyright (c) 2009–2012 Phanx <addons@phanx.net>. All rights reserved.
+	See the accompanying README and LICENSE files for more information.
 	http://www.wowinterface.com/downloads/info12513
 	http://www.curse.com/addons/wow/classcolors
 ----------------------------------------------------------------------]]
