@@ -1,4 +1,4 @@
-Copyright (c) 2009-2012 Phanx <addons@phanx.net>
+Copyright (c) 2009-2012 Phanx <addons@phanx.net>. All rights reserved.
 
 This software and associated documentation files (the "Software") are
 provided free of charge, and its source code is unobfuscated and freely
