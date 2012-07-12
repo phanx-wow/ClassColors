@@ -1,76 +1,28 @@
-Copyright (c) 2009-2012 Phanx <addons@phanx.net>. All rights reserved.
+Copyright (c) 2009-2012 Phanx <addons@phanx.net>
 
-This software and associated documentation files (the "Software") are
-provided free of charge, and its source code is unobfuscated and freely
-viewable, but it is not open source or free software. The Software is
-copyrighted to its authors and is protected by the copyright laws of the
-United States, international conventions and treaties, and other laws.
+All rights reserved.
 
-Copyright law guarantees certain exclusive rights to the creators of a
-work, including the rights to copy, modify, and distribute the work.
-This license describes the terms under which you are allowed to copy,
-modify, or distribute the Software.
+Permission is granted for anyone to use, read, or otherwise interpret
+this software for any purpose, without any restrictions.
 
-Your right to use, read, or otherwise interpret the Software is not
-restricted. However, you do so at your own risk, because the Software
-is provided "as is" with NO WARRANTY of any kind (see #5 below).
+Permission is granted for anyone to modify this software or sample from
+it, and to distribute such modified versions or derivative works as long
+as neither the names of this software nor its authors are used in the
+name or title of the work or in any other way that may cause it to be
+confused with this software.
 
-By using, copying, modifying, or distributing the Software, you agree to
-this license. If you do not agree, do not use, copy, modify, or
-distribute the Software unless you have obtained prior written approval
-of alternate licensing arrangements from the copyright holders.
+Permission is granted for anyone to distribute this software as part of
+a collective work or compilation as long as the software is not modified
+in any way, including by modifying or removing any files.
 
-(1) Permission is granted for anyone to incorporate the Software into a
-    compilation or aggregate the Software with other works, creating a
-    "Collective Work", and to distribute the Collective Work provided
-    the following conditions are met:
+The names of this software and/or its authors may not be used to promote
+endorse works derived from or including this software without specific
+prior written permission from the authors of this software.
 
-    (a) The Software must not be modified in any way, including, but not
-        limited to, by adding, removing, renaming, moving, or otherwise
-        modifying any files, including this notice.
-
-    (b) The names of the Software or its authors or copyright holders
-        must not be used to promote the Collective Work, or in any way
-        that might imply they endorse or approve of the Collective Work.
-
-    (c) The Collective Work must include a human readable notice with a
-        hyperlink or other description of the location where the
-        Software may be obtained. Any Internet web page where the
-        Collective Work may be obtained must include such a notice.
-
-(2) Permission is granted for anyone to modify the Software or sample
-    from it, creating a "Derivative Work", and to distribute the
-    Derivative Work provided the following conditions are met:
-
-    (a) The names of the Software or its authors must not be used in
-        the name of the Derivative Work, or in any other way that might
-        cause it to be confused with the Software.
-
-    (b) The names of the Software of its authors must not be used to
-        promote the Derivative Work, or in any way that might imply
-        they endorse or approve of the derivative work.
-
-    (c) If the Derivative Work is licensed under terms that do not allow
-        its source code to be sampled or reused, then it must include a
-        human readable notice explaining that it includes source code or
-        other materials from the Software, with attribution to the
-        authors and a hyperlink or other description of the location
-        where the Software may be obtained.
-
-(3) All rights not explicitly addressed above are reserved by the
-    authors of the Software.
-
-(4) The permissions granted in this license do not grant any license to
-    the copyright held by the authors of the Software. In particular,
-    NO LICENSE is granted for anyone to distribute the Software in any
-	manner other than those explicitly described in this license without
-	prior written permission from the copyright holders.
-
-(5) THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-    EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
-    OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-    NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
-    HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
-    WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-    FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
-    OTHER DEALINGS IN THE SOFTWARE.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+OTHER DEALINGS IN THE SOFTWARE.
