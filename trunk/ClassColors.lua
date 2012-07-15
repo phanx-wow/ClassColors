@@ -20,27 +20,35 @@ do
 	if GAME_LOCALE == "deDE" then
 	--	L.NOTES_DESC = ""
 		L.RESET_DESC = "Klassenfarben auf Standard zurücksetzen."
+
 	elseif GetLocale() == "esES" or GetLocale() == "esMX" then
 		L.NOTES_DESC = "Observe que no todos los accesorios son compatibles con este sistema, y es posible que tengas a volver a cargar la interfaz para que los cambios a ser reconocidos por todos accesorios compatibles."
 		L.RESET_DESC = "Restaurar los colores de clase por defecto."
+
 	elseif GAME_LOCALE == "frFR" then
 	--	L.NOTES_DESC = ""
 		L.RESET_DESC = "Réinitialisez la couleur des classes par défaut."
+
 	elseif GAME_LOCALE == "itIT" then
 	--	L.NOTES_DESC = ""
 	--	L.RESET_DEST = ""
+
 	elseif GAME_LOCALE == "ptBR" then
 		L.NOTES_DESC = "Observe que nem todos os addons são compatíveis com este sistema, e você pode ter que recarregar a interface antes de suas alterações são reconhecidos por todos os addons compatíveis."
 		L.RESET_DESC = "Redefinir todas as cores classe para seus valores padrão."
+
 	elseif GAME_LOCALE == "ruRU" then
 	--	L.NOTES_DESC = ""
 		L.RESET_DESC = "Сбросить окраску классов на значение по умолчанию."
+
 	elseif GAME_LOCALE == "koKR" then
 	--	L.NOTES_DESC = ""
 		L.RESET_DESC = "직업 색상을 기본값으로 되돌립니다."
+
 	elseif GAME_LOCALE == "zhCN" then
 	--	L.NOTES_DESC = ""
 		L.RESET_DESC = "重置职业颜色为默认"
+
 	elseif GAME_LOCALE == "zhTW" then
 	--	L.NOTES_DESC = ""
 		L.RESET_DESC = "重置職業顔色為默認"
