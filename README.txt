@@ -24,7 +24,7 @@ Localization
 ------------
 
 Compatible with English, Deutsch, Español (EU), Español (AL), Français,
-Italiano, Português, Русский, 한국어, 简体中文, and 正體中文 clients.
+Italiano, Português, Русский, 한국어, 简体中文, and 繁體中文 clients.
 
 Class Colors is translated into English, Español, and Português.
 
