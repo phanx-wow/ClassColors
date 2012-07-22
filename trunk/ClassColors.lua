@@ -7,6 +7,14 @@
 	http://www.curse.com/addons/wow/classcolors
 ----------------------------------------------------------------------]]
 
+local _, ns = ...
+if CUSTOM_CLASS_COLORS then
+	ns.alreadyLoaded = true
+	return
+end
+
+------------------------------------------------------------------------
+
 local L = {
 	TITLE = GetAddOnMetadata("!ClassColors", "Title"),
 	NOTES = GetAddOnMetadata("!ClassColors", "Notes"),
