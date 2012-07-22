@@ -7,6 +7,13 @@
 	http://www.curse.com/addons/wow/classcolors
 ----------------------------------------------------------------------]]
 
+local _, ns = ...
+if ns.alreadyLoaded then
+	return
+end
+
+------------------------------------------------------------------------
+
 local addonFuncs = { }
 
 local blizzHexColors = { }
