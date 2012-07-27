@@ -177,7 +177,7 @@ hooksecurefunc("LootHistoryFrame_UpdatePlayerFrame", function(self, playerFrame)
 	if name then
 		local color = CUSTOM_CLASS_COLORS[class]
 		if color then
-			playerFrame.playerName:SetVertexColor(color.r, color.g, color.b)
+			playerFrame.PlayerName:SetVertexColor(color.r, color.g, color.b)
 		end
 	end
 end)
@@ -262,6 +262,204 @@ do
 		end
 		return AddMessage(frame, message, ...)
 	end
+end
+
+------------------------------------------------------------------------
+--	Blizzard_Calendar.lua
+
+addonFuncs["Blizzard_Calendar"] = function()
+	local CalendarViewEventInviteListScrollFrame, CalendarCreateEventInviteListScrollFrame = CalendarViewEventInviteListScrollFrame, CalendarCreateEventInviteListScrollFrame
+	local HybridScrollFrame_GetOffset = HybridScrollFrame_GetOffset
+	local CalendarEventGetNumInvites, CalendarEventGetInvite = CalendarEventGetNumInvites, CalendarEventGetInvite
+
+	local viewNames = setmetatable({}, { __index = function(t, k)
+		local button
+	end })
+
+	hooksecurefunc("CalendarViewEventInviteListScrollFrame_Update", function()
+		local _, namesReady = CalendarEventGetNumInvites()
+		if not namesReady then return end
+
+		local buttons = CalendarViewEventInviteListScrollFrame.buttons
+		local offset = HybridScrollFrame_GetOffset(CalendarViewEventInviteListScrollFrame)
+		for i = 1, #buttons do
+			local _, _, _, class = CalendarEventGetInvite(i + offset)
+			if class then
+				local color = CUSTOM_CLASS_COLORS[class]
+				if color then
+					local buttonName = buttons[i]:GetName()
+					_G[buttonName.."Name"]:SetTextColor(color.r, color.g, color.b)
+					_G[buttonName.."Class"]:SetTextColor(color.r, color.g, color.b)
+				end
+			end
+		end
+	end)
+
+	hooksecurefunc("CalendarCreateEventInviteListScrollFrame_Update", function()
+		local _, namesReady = CalendarEventGetNumInvites()
+		if not namesReady then return end
+
+		local buttons = CalendarCreateEventInviteListScrollFrame.buttons
+		local offset = HybridScrollFrame_GetOffset(CalendarCreateEventInviteListScrollFrame)
+		for i = 1, #buttons do
+			local _, _, _, class = CalendarEventGetInvite(i + offset)
+			if class then
+				local color = CUSTOM_CLASS_COLORS[class]
+				if color then
+					local buttonName = buttons[i]:GetName()
+					_G[buttonName.."Name"]:SetTextColor(color.r, color.g, color.b)
+					_G[buttonName.."Class"]:SetTextColor(color.r, color.g, color.b)
+				end
+			end
+		end
+	end)
+end
+
+------------------------------------------------------------------------
+--	Blizzard_ChallengesUI.lua
+
+addonFuncs["Blizzard_ChallengesUI"] = function()
+	local F_PLAYER_CLASS = "%s - " .. PLAYER_CLASS
+	local F_PLAYER_CLASS_NO_SPEC = "%s - " .. PLAYER_CLASS_NO_SPEC
+
+	local ChallengesFrame = ChallengesFrame
+	local GetChallengeBestTimeInfo, GetChallengeBestTimeNum, GetSpecializationInfoByID = GetChallengeBestTimeInfo, GetChallengeBestTimeNum, GetSpecializationInfoByID
+
+	local gameTooltipTextLeft = setmetatable({}, { __index = function(t, i)
+		local obj = _G["GameTooltipTextLeft"..i]
+		if obj then
+			rawset(self, i, obj)
+		end
+		return obj
+	end })
+
+	hooksecurefunc("ChallengesFrameGuild_OnEnter", function(self)
+		local guildTime = ChallengesFrame.details.GuildTime
+		if not guildTime.hasTime then return end
+
+		for i = 1, GetChallengeBestTimeNum(guildTime.mapID, true) do
+			local name, className, class, specID = GetChallengeBestTimeInfo(guildTime.mapID, i, true)
+			if class then
+				local color = CUSTOM_CLASS_COLORS[class].colorStr
+				if color then
+					local _, specName = GetSpecializationInfoByID(specID)
+					if specName and specName ~= "" then
+						gameTooltipTextLeft[i+1]:SetFormattedText(F_PLAYER_CLASS, name, color, specName, className)
+					else
+						gameTooltipTextLeft[i+1]:SetFormattedText(F_PLAYER_CLASS_NO_SPEC, name, color, className)
+					end
+				end
+			end
+		end
+	end)
+
+	hooksecurefunc("ChallengesFrameRealm_OnEnter", function(self)
+		local realmTime = ChallengesFrame.details.RealmTime
+		if not realmTime.hasTime then return end
+
+		for i = 1, GetChallengeBestTimeNum(realmTime.mapID, false) do
+			local name, className, class, specID = GetChallengeBestTimeInfo(realmTime.mapID, i, false)
+			if class then
+				local color = CUSTOM_CLASS_COLORS[class].colorStr
+				if color then
+					local _, specName = GetSpecializationInfoByID(specID)
+					if specName and specName ~= "" then
+						gameTooltipTextLeft[i+1]:SetFormattedText(F_PLAYER_CLASS, name, color, specName, className)
+					else
+						gameTooltipTextLeft[i+1]:SetFormattedText(F_PLAYER_CLASS_NO_SPEC, name, color, className)
+					end
+				end
+			end
+		end
+	end)
+end
+
+------------------------------------------------------------------------
+--	Blizzard_GuildRoster.lua
+
+addonFuncs["Blizzard_GuildUI"] = function()
+	hooksecurefunc("GuildRosterButton_SetStringText", function(buttonString, text, isOnline, class)
+		if isOnline and class then
+			local color = CUSTOM_CLASS_COLORS[class]
+			if color then
+				buttonString:SetTextColor(color.r, color.g, color.b)
+			end
+		end
+	end)
+end
+
+------------------------------------------------------------------------
+--	InspectPaperDollFrame.lua
+
+addonFuncs["Blizzard_InspectUI"] = function()
+	local InspectFrame, InspectLevelText = InspectFrame, InspectLevelText
+	local GetSpecialization, GetSpecializationInfo, UnitClass, UnitLevel = GetSpecialization, GetSpecializationInfo, UnitClass, UnitLevel
+
+	hooksecurefunc("InspectPaperDollFrame_SetLevel", function()
+		local unit = InspectFrame.unit
+		if not unit then return end
+
+		local className, class = UnitClass(unit)
+		if class then
+			local color = CUSTOM_CLASS_COLORS[class]
+			if color then
+				local level = UnitLevel(unit)
+				if level == -1 then
+					level = "??"
+				end
+				local spec, specName, _ = GetSpecialization(true)
+				if spec then
+					_, specName = GetSpecializationInfo(spec, true)
+				end
+				if specName and specName ~= ") then
+					InspectLevelText:SetFormattedText(PLAYER_LEVEL, level, color.colorStr, specName, className)
+				else
+					InspectLevelText:SetFormattedText(PLAYER_LEVEL_NO_SPEC, level, color.colorStr, className)
+				end
+			end
+		end
+	end)
+end)
+
+------------------------------------------------------------------------
+--	Blizzard_RaidUI.lua
+
+addonFuncs["Blizzard_RaidUI"] = function()
+	local min = math.min
+	local GetNumGroupMembers, GetRaidRosterInfo, IsInRaid = GetNumGroupMembers, GetRaidRosterInfo, IsInRaid
+	local MAX_RAID_MEMBERS, MEMBERS_PER_RAID_GROUP = MAX_RAID_MEMBERS, MEMBERS_PER_RAID_GROUP
+
+	local raidGroup = setmetatable({}, { __index = function(t, i)
+		local obj = _G["RaidGroup"..i]
+		if obj then
+			rawset(self, i, obj)
+		end
+		return obj
+	end })
+	local raidGroupButton = setmetatable({}, { __index = function(t, i)
+		local obj = _G["RaidGroupButton"..i]
+		if obj then
+			rawset(self, i, obj)
+		end
+		return obj
+	end })
+
+	hooksecurefunc("RaidGroupFrame_Update", function()
+		local isRaid = IsInRaid()
+		if not isRaid then return end
+		for i = 1, min(GetNumGroupMembers(), MAX_RAID_MEMBERS) do
+			local name, _, subgroup, _, _, class, _, online, dead = GetRaidRosterInfo(i)
+			if class and online and not dead and raidGroup[subgroup].nextIndex <= MEMBERS_PER_RAID_GROUP then
+				local color = CUSTOM_CLASS_COLORS[class]
+				if color then
+					local button = raidGroupButtons[i]
+					button.subframes.name:SetTextColor(color.r, color.g, color.b)
+					button.subframes.class:SetTextColor(color.r, color.g, color.b)
+					button.subframes.level:SetTextColor(color.r, color.g, color.b)
+				end
+			end
+		end
+	end)
 end
 
 ------------------------------------------------------------------------
