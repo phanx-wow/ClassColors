@@ -22,6 +22,17 @@ for class, color in pairs(RAID_CLASS_COLORS) do
 end
 
 ------------------------------------------------------------------------
+-- ChatConfigFrame.xml
+
+ChatConfigChatSettingsClassColorLegend:HookScript("OnShow", function(self)
+	for i = 1, #self.classStrings do
+		local class = CLASS_SORT_ORDER[i]
+		local color = CUSTOM_CLASS_COLORS[class]
+		self.classStrings[i]:SetFormattedText("|c%s%s|r\n", color.colorStr, LOCALIZED_CLASS_NAMES_MALE[class])
+	end
+end)
+
+------------------------------------------------------------------------
 -- ChatFrame.lua
 
 function GetColoredName(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12)
@@ -272,10 +283,6 @@ addonFuncs["Blizzard_Calendar"] = function()
 	local HybridScrollFrame_GetOffset = HybridScrollFrame_GetOffset
 	local CalendarEventGetNumInvites, CalendarEventGetInvite = CalendarEventGetNumInvites, CalendarEventGetInvite
 
-	local viewNames = setmetatable({}, { __index = function(t, k)
-		local button
-	end })
-
 	hooksecurefunc("CalendarViewEventInviteListScrollFrame_Update", function()
 		local _, namesReady = CalendarEventGetNumInvites()
 		if not namesReady then return end
@@ -411,7 +418,7 @@ addonFuncs["Blizzard_InspectUI"] = function()
 				if spec then
 					_, specName = GetSpecializationInfo(spec, true)
 				end
-				if specName and specName ~= ") then
+				if specName and specName ~= "" then
 					InspectLevelText:SetFormattedText(PLAYER_LEVEL, level, color.colorStr, specName, className)
 				else
 					InspectLevelText:SetFormattedText(PLAYER_LEVEL_NO_SPEC, level, color.colorStr, className)
@@ -419,14 +426,14 @@ addonFuncs["Blizzard_InspectUI"] = function()
 			end
 		end
 	end)
-end)
+end
 
 ------------------------------------------------------------------------
 --	Blizzard_RaidUI.lua
 
 addonFuncs["Blizzard_RaidUI"] = function()
 	local min = math.min
-	local GetNumGroupMembers, GetRaidRosterInfo, IsInRaid = GetNumGroupMembers, GetRaidRosterInfo, IsInRaid
+	local GetNumGroupMembers, GetRaidRosterInfo, IsInRaid, UnitCanCooperate, UnitClass = GetNumGroupMembers, GetRaidRosterInfo, IsInRaid, UnitCanCooperate, UnitClass
 	local MAX_RAID_MEMBERS, MEMBERS_PER_RAID_GROUP = MAX_RAID_MEMBERS, MEMBERS_PER_RAID_GROUP
 
 	local raidGroup = setmetatable({}, { __index = function(t, i)
@@ -443,7 +450,6 @@ addonFuncs["Blizzard_RaidUI"] = function()
 		end
 		return obj
 	end })
-
 	hooksecurefunc("RaidGroupFrame_Update", function()
 		local isRaid = IsInRaid()
 		if not isRaid then return end
@@ -456,6 +462,96 @@ addonFuncs["Blizzard_RaidUI"] = function()
 					button.subframes.name:SetTextColor(color.r, color.g, color.b)
 					button.subframes.class:SetTextColor(color.r, color.g, color.b)
 					button.subframes.level:SetTextColor(color.r, color.g, color.b)
+				end
+			end
+		end
+	end)
+
+	local raidGroupButtonName = setmetatable({}, { __index = function(t, i)
+		local obj = _G["RaidGroupButton"..i.."Name"]
+		if obj then
+			rawset(self, i, obj)
+		end
+		return obj
+	end })
+	local raidGroupButtonName = setmetatable({}, { __index = function(t, i)
+		local obj = _G["RaidGroupButton"..i.."Class"]
+		if obj then
+			rawset(self, i, obj)
+		end
+		return obj
+	end })
+	local raidGroupButtonName = setmetatable({}, { __index = function(t, i)
+		local obj = _G["RaidGroupButton"..i.."Level"]
+		if obj then
+			rawset(self, i, obj)
+		end
+		return obj
+	end })
+	hooksecurefunc("RaidGroupFrame_UpdateHealth", function(id)
+		local _, _, _, _, _, class, _, online, dead = GetRaidRosterInfo(id)
+		if class and online and not dead then
+			local color = CUSTOM_CLASS_COLORS[class]
+			if color then
+				local r, g, b = color.r, color.g, color.b
+				raidGroupButtonName[id]:SetTextColor(r, g, b)
+				raidGroupButtonClass[id]:SetTextColor(r, g, b)
+				raidGroupButtonLevel[id]:SetTextColor(r, g, b)
+			end
+		end
+	end)
+
+	hooksecurefunc("RaidPullout_UpdateTarget", function(frame, button, unit, which)
+		if UnitCanCooperate("player", unit) then
+			frame = _G[frame]
+			if frame["show"..which] then
+				local _, class = UnitClass(unit)
+				if class then
+					local color = class and CUSTOM_CLASS_COLORS[class]
+					if color then
+						_G[button..which.."Name"]:SetTextColor(color.r, color.g, color.b)
+					end
+				end
+			end
+		end
+	end)
+
+	hooksecurefunc("RaidPulloutButton_UpdateDead", function(button, dead, class)
+		if not dead then
+			if class == "PETS" then
+				local _
+				_, class = UnitClass(button.unit:gsub("raidpet", "raid"))
+			end
+			if class then
+				local color = CUSTOM_CLASS_COLORS[class]
+				if color then
+					button.nameLabel:SetVertexColor(color.r, color.g, color.b)
+				end
+			end
+		end
+	end)
+end
+
+------------------------------------------------------------------------
+--	Blizzard_TradeSkillUI.lua
+
+addonFuncs["Blizzard_TradeSkillUI"] = function()
+	local TRADE_SKILL_GUILD_CRAFTERS_DISPLAYED = TRADE_SKILL_GUILD_CRAFTERS_DISPLAYED
+	local FauxScrollFrame_GetOffset, TradeSkillGuildCraftersFrame = FauxScrollFrame_GetOffset, TradeSkillGuildCraftersFrame
+	local GetGuildRecipeInfoPostQuery, GetGuildRecipeMember = GetGuildRecipeInfoPostQuery, GetGuildRecipeMember
+
+	hooksecurefunc("TradeSkillGuilCraftersFrame_Update", function()
+		local _, _, numMembers = GetGuildRecipeInfoPostQuery()
+		local offset = FauxScrollFrame_GetOffset(TradeSkillGuildCraftersFrame)
+		for i = 1, TRADE_SKILL_GUILD_CRAFTERS_DISPLAYED do
+			if i > numMembers then
+				break
+			end
+			local _, class, online = GetGuildRecipeMember(i + offset)
+			if class and online then
+				local color = CUSTOM_CLASS_COLORS[class]
+				if color then
+					_G["TradeSkillGuildCrafter"..i.."Text"]:SetTextColor(color.r, color.g, color.b)
 				end
 			end
 		end
