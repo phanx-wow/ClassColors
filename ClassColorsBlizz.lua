@@ -149,15 +149,15 @@ end)
 
 hooksecurefunc("MasterLooterFrame_UpdatePlayers", function()
 	-- TODO: Find a better way of doing this... Blizzard's way is frankly quite awful,
-	--		 creating multiple new local tables every time the function runs. :(
+	--       creating multiple new local tables every time the function runs. :(
 	for k, playerFrame in pairs(MasterLooterFrame) do
-		if k:match("^player%d+$") and type(playerFrame) == "table" and playerFrame.id and playerFrame.Name then
+		if type(k) == "string" and k:match("^player%d+$") and type(playerFrame) == "table" and playerFrame.id and playerFrame.Name then
 			local i = playerFrame.id
 			local _, class
 			if IsInRaid() then
 				_, class = UnitClass("raid"..i)
 			else
-				_, class = UnitClass("party"..i)
+				_, class = UnitClass(i > 1 and "party"..(i-1) or "player")
 			end
 			if class then
 				local color = CUSTOM_CLASS_COLORS[class]
@@ -188,11 +188,13 @@ hooksecurefunc("LootHistoryFrame_UpdateItemFrame", function(self, itemFrame)
 end)
 
 hooksecurefunc("LootHistoryFrame_UpdatePlayerFrame", function(self, playerFrame)
-	local name, class = C_LootHistory.GetPlayerInfo(playerFrame.itemIdx, playerFrame.playerIdx)
-	if name then
-		local color = CUSTOM_CLASS_COLORS[class]
-		if color then
-			playerFrame.PlayerName:SetVertexColor(color.r, color.g, color.b)
+	if playerFrame.playerIdx then
+		local name, class = C_LootHistory.GetPlayerInfo(playerFrame.itemIdx, playerFrame.playerIdx)
+		if name then
+			local color = CUSTOM_CLASS_COLORS[class]
+			if color then
+				playerFrame.PlayerName:SetVertexColor(color.r, color.g, color.b)
+			end
 		end
 	end
 end)
@@ -339,7 +341,7 @@ addonFuncs["Blizzard_ChallengesUI"] = function()
 	local gameTooltipTextLeft = setmetatable({}, { __index = function(t, i)
 		local obj = _G["GameTooltipTextLeft"..i]
 		if obj then
-			rawset(self, i, obj)
+			rawset(t, i, obj)
 		end
 		return obj
 	end })
@@ -443,14 +445,14 @@ addonFuncs["Blizzard_RaidUI"] = function()
 	local raidGroup = setmetatable({}, { __index = function(t, i)
 		local obj = _G["RaidGroup"..i]
 		if obj then
-			rawset(self, i, obj)
+			rawset(t, i, obj)
 		end
 		return obj
 	end })
 	local raidGroupButton = setmetatable({}, { __index = function(t, i)
 		local obj = _G["RaidGroupButton"..i]
 		if obj then
-			rawset(self, i, obj)
+			rawset(t, i, obj)
 		end
 		return obj
 	end })
@@ -462,7 +464,7 @@ addonFuncs["Blizzard_RaidUI"] = function()
 			if class and online and not dead and raidGroup[subgroup].nextIndex <= MEMBERS_PER_RAID_GROUP then
 				local color = CUSTOM_CLASS_COLORS[class]
 				if color then
-					local button = raidGroupButtons[i]
+					local button = raidGroupButton[i]
 					button.subframes.name:SetTextColor(color.r, color.g, color.b)
 					button.subframes.class:SetTextColor(color.r, color.g, color.b)
 					button.subframes.level:SetTextColor(color.r, color.g, color.b)
@@ -474,21 +476,21 @@ addonFuncs["Blizzard_RaidUI"] = function()
 	local raidGroupButtonName = setmetatable({}, { __index = function(t, i)
 		local obj = _G["RaidGroupButton"..i.."Name"]
 		if obj then
-			rawset(self, i, obj)
+			rawset(t, i, obj)
 		end
 		return obj
 	end })
-	local raidGroupButtonName = setmetatable({}, { __index = function(t, i)
+	local raidGroupButtonClass = setmetatable({}, { __index = function(t, i)
 		local obj = _G["RaidGroupButton"..i.."Class"]
 		if obj then
-			rawset(self, i, obj)
+			rawset(t, i, obj)
 		end
 		return obj
 	end })
-	local raidGroupButtonName = setmetatable({}, { __index = function(t, i)
+	local raidGroupButtonLevel = setmetatable({}, { __index = function(t, i)
 		local obj = _G["RaidGroupButton"..i.."Level"]
 		if obj then
-			rawset(self, i, obj)
+			rawset(t, i, obj)
 		end
 		return obj
 	end })
