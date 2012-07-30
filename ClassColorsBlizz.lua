@@ -24,13 +24,17 @@ end
 ------------------------------------------------------------------------
 -- ChatConfigFrame.xml
 
-ChatConfigChatSettingsClassColorLegend:HookScript("OnShow", function(self)
-	for i = 1, #self.classStrings do
-		local class = CLASS_SORT_ORDER[i]
-		local color = CUSTOM_CLASS_COLORS[class]
-		self.classStrings[i]:SetFormattedText("|c%s%s|r\n", color.colorStr, LOCALIZED_CLASS_NAMES_MALE[class])
+do
+	local function ColorLegend(self)
+		for i = 1, #self.classStrings do
+			local class = CLASS_SORT_ORDER[i]
+			local color = CUSTOM_CLASS_COLORS[class]
+			self.classStrings[i]:SetFormattedText("|c%s%s|r\n", color.colorStr, LOCALIZED_CLASS_NAMES_MALE[class])
+		end
 	end
-end)
+	ChatConfigChatSettingsClassColorLegend:HookScript("OnShow", ColorLegend)
+	ChatConfigChannelSettingsClassColorLegend:HookScript("OnShow", ColorLegend)
+end
 
 ------------------------------------------------------------------------
 -- ChatFrame.lua
