@@ -99,13 +99,12 @@ do
 				if color then
 					local r, g, b = color.r, color.g, color.b
 					frame.healthBar:SetStatusBarColor(r, g, b)
-					frame.healthBar.r, frame.healthBar.g, frame.healthBar.g = r, g, b
+					--frame.healthBar.r, frame.healthBar.g, frame.healthBar.g = r, g, b
 				end
 			end
 		end
 	end)
 end
-
 ------------------------------------------------------------------------
 --	FriendsFrame.lua
 
@@ -445,35 +444,21 @@ end
 
 ------------------------------------------------------------------------
 --	Blizzard_RaidUI.lua
-
+--[[
 addonFuncs["Blizzard_RaidUI"] = function()
 	local min = math.min
 	local GetNumGroupMembers, GetRaidRosterInfo, IsInRaid, UnitCanCooperate, UnitClass = GetNumGroupMembers, GetRaidRosterInfo, IsInRaid, UnitCanCooperate, UnitClass
 	local MAX_RAID_MEMBERS, MEMBERS_PER_RAID_GROUP = MAX_RAID_MEMBERS, MEMBERS_PER_RAID_GROUP
 
-	local raidGroup = setmetatable({}, { __index = function(t, i)
-		local obj = _G["RaidGroup"..i]
-		if obj then
-			rawset(t, i, obj)
-		end
-		return obj
-	end })
-	local raidGroupButton = setmetatable({}, { __index = function(t, i)
-		local obj = _G["RaidGroupButton"..i]
-		if obj then
-			rawset(t, i, obj)
-		end
-		return obj
-	end })
 	hooksecurefunc("RaidGroupFrame_Update", function()
 		local isRaid = IsInRaid()
 		if not isRaid then return end
 		for i = 1, min(GetNumGroupMembers(), MAX_RAID_MEMBERS) do
 			local name, _, subgroup, _, _, class, _, online, dead = GetRaidRosterInfo(i)
-			if class and online and not dead and raidGroup[subgroup].nextIndex <= MEMBERS_PER_RAID_GROUP then
+			if class and online and not dead and _G["RaidGroup"..subgroup].nextIndex <= MEMBERS_PER_RAID_GROUP then
 				local color = CUSTOM_CLASS_COLORS[class]
 				if color then
-					local button = raidGroupButton[i]
+					local button = _G["RaidGroupButton"..i]
 					button.subframes.name:SetTextColor(color.r, color.g, color.b)
 					button.subframes.class:SetTextColor(color.r, color.g, color.b)
 					button.subframes.level:SetTextColor(color.r, color.g, color.b)
@@ -482,44 +467,22 @@ addonFuncs["Blizzard_RaidUI"] = function()
 		end
 	end)
 
-	local raidGroupButtonName = setmetatable({}, { __index = function(t, i)
-		local obj = _G["RaidGroupButton"..i.."Name"]
-		if obj then
-			rawset(t, i, obj)
-		end
-		return obj
-	end })
-	local raidGroupButtonClass = setmetatable({}, { __index = function(t, i)
-		local obj = _G["RaidGroupButton"..i.."Class"]
-		if obj then
-			rawset(t, i, obj)
-		end
-		return obj
-	end })
-	local raidGroupButtonLevel = setmetatable({}, { __index = function(t, i)
-		local obj = _G["RaidGroupButton"..i.."Level"]
-		if obj then
-			rawset(t, i, obj)
-		end
-		return obj
-	end })
-	hooksecurefunc("RaidGroupFrame_UpdateHealth", function(id)
-		local _, _, _, _, _, class, _, online, dead = GetRaidRosterInfo(id)
+	hooksecurefunc("RaidGroupFrame_UpdateHealth", function(i)
+		local _, _, _, _, _, class, _, online, dead = GetRaidRosterInfo(i)
 		if class and online and not dead then
 			local color = CUSTOM_CLASS_COLORS[class]
 			if color then
 				local r, g, b = color.r, color.g, color.b
-				raidGroupButtonName[id]:SetTextColor(r, g, b)
-				raidGroupButtonClass[id]:SetTextColor(r, g, b)
-				raidGroupButtonLevel[id]:SetTextColor(r, g, b)
+				_G["RaidGroupButton"..i.."Name"]:SetTextColor(r, g, b)
+				_G["RaidGroupButton"..i.."Class"]:SetTextColor(r, g, b)
+				_G["RaidGroupButton"..i.."Level"]:SetTextColor(r, g, b)
 			end
 		end
 	end)
 
 	hooksecurefunc("RaidPullout_UpdateTarget", function(frame, button, unit, which)
 		if UnitCanCooperate("player", unit) then
-			frame = _G[frame]
-			if frame["show"..which] then
+			if _G[frame]["show"..which] then
 				local _, class = UnitClass(unit)
 				if class then
 					local color = class and CUSTOM_CLASS_COLORS[class]
@@ -550,7 +513,7 @@ addonFuncs["Blizzard_RaidUI"] = function()
 		end
 	end)
 end
-
+]]
 ------------------------------------------------------------------------
 --	Blizzard_TradeSkillUI.lua
 
