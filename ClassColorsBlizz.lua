@@ -51,7 +51,7 @@ function GetColoredName(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, a
 	end
 
 	local info = ChatTypeInfo[chatType]
-	if info and info.colorNameByClass and arg12 ~= "" then
+	if info and info.colorNameByClass and arg12 and arg12 ~= "" then
 		local _, class = GetPlayerInfoByGUID(arg12)
 		if class then
 			local color = CUSTOM_CLASS_COLORS[class]
@@ -70,7 +70,7 @@ do
 	local AddMessage = {}
 
 	local function FixClassColors(frame, message, ...)
-		if find(message, "|cff") then
+		if type(message) == "string" and find(message, "|cff") then -- type check required for shitty addons that pass nil or non-string values
 			for hex, class in pairs(blizzHexColors) do
 				local color = CUSTOM_CLASS_COLORS[class]
 				message = gsub(message, hex, color.colorStr)
@@ -248,6 +248,8 @@ end)
 --	RaidFinder.lua
 
 hooksecurefunc("RaidFinderQueueFrameCooldownFrame_Update", function()
+	local _G = _G
+
 	local prefix, members
 	if IsInRaid() then
 		prefix, members = "raid", GetNumGroupMembers()
@@ -293,6 +295,7 @@ end
 --	Blizzard_Calendar.lua
 
 addonFuncs["Blizzard_Calendar"] = function()
+	local _G = _G
 	local CalendarViewEventInviteListScrollFrame, CalendarCreateEventInviteListScrollFrame = CalendarViewEventInviteListScrollFrame, CalendarCreateEventInviteListScrollFrame
 	local HybridScrollFrame_GetOffset = HybridScrollFrame_GetOffset
 	local CalendarEventGetNumInvites, CalendarEventGetInvite = CalendarEventGetNumInvites, CalendarEventGetInvite
@@ -343,6 +346,7 @@ addonFuncs["Blizzard_ChallengesUI"] = function()
 	local F_PLAYER_CLASS = "%s - " .. PLAYER_CLASS
 	local F_PLAYER_CLASS_NO_SPEC = "%s - " .. PLAYER_CLASS_NO_SPEC
 
+	local _G = _G
 	local ChallengesFrame = ChallengesFrame
 	local GetChallengeBestTimeInfo, GetChallengeBestTimeNum, GetSpecializationInfoByID = GetChallengeBestTimeInfo, GetChallengeBestTimeNum, GetSpecializationInfoByID
 
@@ -444,8 +448,9 @@ end
 
 ------------------------------------------------------------------------
 --	Blizzard_RaidUI.lua
---[[
+
 addonFuncs["Blizzard_RaidUI"] = function()
+	local _G = _G
 	local min = math.min
 	local GetNumGroupMembers, GetRaidRosterInfo, IsInRaid, UnitCanCooperate, UnitClass = GetNumGroupMembers, GetRaidRosterInfo, IsInRaid, UnitCanCooperate, UnitClass
 	local MAX_RAID_MEMBERS, MEMBERS_PER_RAID_GROUP = MAX_RAID_MEMBERS, MEMBERS_PER_RAID_GROUP
@@ -513,7 +518,7 @@ addonFuncs["Blizzard_RaidUI"] = function()
 		end
 	end)
 end
-]]
+
 ------------------------------------------------------------------------
 --	Blizzard_TradeSkillUI.lua
 
