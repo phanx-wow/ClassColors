@@ -12,7 +12,7 @@ if ns.alreadyLoaded then
 	return
 end
 
-local find, format, gsub, match, sub = string.find, string.format, string.gsub, string.match, string.sub
+local strfind, format, gsub, strmatch, strsub = string.find, string.format, string.gsub, string.match, string.sub
 local pairs, type = pairs, type
 
 ------------------------------------------------------------------------
@@ -43,10 +43,10 @@ end
 -- ChatFrame.lua
 
 function GetColoredName(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12)
-	local chatType = sub(event, 10)
-	if sub(chatType, 1, 7) == "WHISPER" then
+	local chatType = strsub(event, 10)
+	if strsub(chatType, 1, 7) == "WHISPER" then
 		chatType = "WHISPER"
-	elseif sub(chatType, 1, 7) == "CHANNEL" then
+	elseif strsub(chatType, 1, 7) == "CHANNEL" then
 		chatType = "CHANNEL"..arg8
 	end
 
@@ -70,7 +70,7 @@ do
 	local AddMessage = {}
 
 	local function FixClassColors(frame, message, ...)
-		if type(message) == "string" and find(message, "|cff") then -- type check required for shitty addons that pass nil or non-string values
+		if type(message) == "string" and strfind(message, "|cff") then -- type check required for shitty addons that pass nil or non-string values
 			for hex, class in pairs(blizzHexColors) do
 				local color = CUSTOM_CLASS_COLORS[class]
 				message = gsub(message, hex, color.colorStr)
@@ -157,7 +157,7 @@ hooksecurefunc("MasterLooterFrame_UpdatePlayers", function()
 	-- TODO: Find a better way of doing this... Blizzard's way is frankly quite awful,
 	--       creating multiple new local tables every time the function runs. :(
 	for k, playerFrame in pairs(MasterLooterFrame) do
-		if type(k) == "string" and match(k, "^player%d+$") and type(playerFrame) == "table" and playerFrame.id and playerFrame.Name then
+		if type(k) == "string" and strmatch(k, "^player%d+$") and type(playerFrame) == "table" and playerFrame.id and playerFrame.Name then
 			local i = playerFrame.id
 			local _, class
 			if IsInRaid() then
@@ -281,7 +281,7 @@ end)
 do
 	local AddMessage = RaidNotice_AddMessage
 	RaidNotice_AddMessage = function(frame, message, ...)
-		if find(message, "|cff") then
+		if strfind(message, "|cff") then
 			for hex, class in pairs(blizzHexColors) do
 				local color = CUSTOM_CLASS_COLORS[class]
 				message = gsub(message, hex, color.colorStr)
@@ -347,55 +347,55 @@ addonFuncs["Blizzard_ChallengesUI"] = function()
 	local F_PLAYER_CLASS_NO_SPEC = "%s - " .. PLAYER_CLASS_NO_SPEC
 
 	local _G = _G
-	local ChallengesFrame = ChallengesFrame
+	local ChallengesFrame, GameTooltip = ChallengesFrame, GameTooltip
 	local GetChallengeBestTimeInfo, GetChallengeBestTimeNum, GetSpecializationInfoByID = GetChallengeBestTimeInfo, GetChallengeBestTimeNum, GetSpecializationInfoByID
 
-	local gameTooltipTextLeft = setmetatable({}, { __index = function(t, i)
-		local obj = _G["GameTooltipTextLeft"..i]
-		if obj then
-			rawset(t, i, obj)
-		end
-		return obj
-	end })
+	local guildBest, realmBest = ChallengesFrameDetails:GetChildren()
 
-	hooksecurefunc("ChallengesFrameGuild_OnEnter", function(self)
+	guildBest:SetScript("OnEnter", function(self)
 		local guildTime = ChallengesFrame.details.GuildTime
-		if not guildTime.hasTime then return end
+		if not guildTime.hasTime or not guildTime.mapID then return end
+
+		GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+		GameTooltip:SetText(CHALLENGE_MODE_GUILD_BEST)
 
 		for i = 1, GetChallengeBestTimeNum(guildTime.mapID, true) do
 			local name, className, class, specID = GetChallengeBestTimeInfo(guildTime.mapID, i, true)
-			if class then
+			if name then
 				local color = CUSTOM_CLASS_COLORS[class].colorStr
-				if color then
-					local _, specName = GetSpecializationInfoByID(specID)
-					if specName and specName ~= "" then
-						gameTooltipTextLeft[i+1]:SetFormattedText(F_PLAYER_CLASS, name, color, specName, className)
-					else
-						gameTooltipTextLeft[i+1]:SetFormattedText(F_PLAYER_CLASS_NO_SPEC, name, color, className)
-					end
+				local _, specName = GetSpecializationInfoByID(specID)
+				if specName and specName ~= "" then
+					GameTooltip:AddLine(format(F_PLAYER_CLASS, name, color, specName, className))
+				else
+					GameTooltip:AddLine(format(F_PLAYER_CLASS_NO_SPEC, name, color, className))
 				end
 			end
 		end
+
+		GameTooltip:Show()
 	end)
 
-	hooksecurefunc("ChallengesFrameRealm_OnEnter", function(self)
+	realmBest:SetScript("OnEnter", function(self)
 		local realmTime = ChallengesFrame.details.RealmTime
-		if not realmTime.hasTime then return end
+		if not realmTime.hasTime or not realmTime.mapID then return end
+
+		GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+		GameTooltip:SetText(CHALLENGE_MODE_REALM_BEST)
 
 		for i = 1, GetChallengeBestTimeNum(realmTime.mapID, false) do
 			local name, className, class, specID = GetChallengeBestTimeInfo(realmTime.mapID, i, false)
-			if class then
+			if name then
 				local color = CUSTOM_CLASS_COLORS[class].colorStr
-				if color then
-					local _, specName = GetSpecializationInfoByID(specID)
-					if specName and specName ~= "" then
-						gameTooltipTextLeft[i+1]:SetFormattedText(F_PLAYER_CLASS, name, color, specName, className)
-					else
-						gameTooltipTextLeft[i+1]:SetFormattedText(F_PLAYER_CLASS_NO_SPEC, name, color, className)
-					end
+				local _, specName = GetSpecializationInfoByID(specID)
+				if specName and specName ~= "" then
+					GameTooltip:AddLine(format(F_PLAYER_CLASS, name, color, specName, className))
+				else
+					GameTooltip:AddLine(format(F_PLAYER_CLASS_NO_SPEC, name, color, className))
 				end
 			end
 		end
+
+		GameTooltip:Show()
 	end)
 end
 
