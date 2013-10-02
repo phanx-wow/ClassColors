@@ -274,8 +274,8 @@ hooksecurefunc("PaperDollFrame_SetLevel", function()
 	if color then
 		local spec = GetSpecialization()
 		if spec then
-			local _, spec = GetSpecializationInfo(spec)
-			if specName then
+			local _, specName = GetSpecializationInfo(spec)
+			if specName and specName ~= "" then
 				CharacterLevelText:SetFormattedText(PLAYER_LEVEL, UnitLevel("player"), color.colorStr, specName, className)
 			else
 				CharacterLevelText:SetFormattedText(PLAYER_LEVEL_NO_SPEC, UnitLevel("player"), color.colorStr, className)
