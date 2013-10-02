@@ -131,8 +131,48 @@ hooksecurefunc("LFDQueueFrameRandomCooldownFrame_Update", function()
 		if class then
 			local color = CUSTOM_CLASS_COLORS[class]
 			if color then
-				_G["LFDQueueFrameCooldownFrameName"..i]:SetFormattedText("|c%s%s|r", color.colorStr, UnitName("party"..i))
+				local name, server = UnitName("party"..i) -- skip call to GetUnitName wrapper func
+				if server and server ~= "" then
+					_G["LFDQueueFrameCooldownFrameName"..i]:SetFormattedText("|c%s%s-%s|r", color.colorStr, name, server)
+				else
+					_G["LFDQueueFrameCooldownFrameName"..i]:SetFormattedText("|c%s%s|r", color.colorStr, name)
+				end
 			end
+		end
+	end
+end)
+
+------------------------------------------------------------------------
+-- LFGFrame.lua
+
+hooksecurefunc("LFGCooldownCover_Update", function(self)
+	local nextIndex, numPlayers, prefix = 1
+	if IsInRaid() then
+		numPlayers = GetNumGroupMembers()
+		prefix = "raid"
+	else
+		numPlayers = GetNumSubgroupMembers()
+		prefix = "party"
+	end
+	for i = 1, numPlayers do
+		if nextIndex > #self.Names then
+			break
+		end
+		local unit = prefix..i
+		if self.showAll or (self.showCooldown and UnitHasLFGRandomCooldown(unit)) or UnitHasLFGDeserter(unit) then
+			local _, class = UnitName(unit)
+			if class then
+				local color = CUSTOM_CLASS_COLORS[class]
+				if class then
+					local name, server = UnitName("party"..i) -- skip call to GetUnitName wrapper func
+					if server and server ~= "" then
+						self.Names[nextIndex]:SetFormattedText("|c%s%s-%s|r", color.colorStr, name, server)
+					else
+						self.Names[nextIndex]:SetFormattedText("|c%s%s|r", color.colorStr, name)
+					end
+				end
+			end
+			nextIndex = nextIndex + 1
 		end
 	end
 end)
