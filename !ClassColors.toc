@@ -1,8 +1,9 @@
-## Interface: 50300
-## Version: 5.3.0.wowi:revision
+## Interface: 50400
+## Version: 5.4.0.wowi:revision
 
 ## Title: Class Colors
 ## Notes: Change class colors without breaking the Blizzard UI.
+## Notes-deDE: Können die Klassenfarben ändern, ohne Beeinträchtigung auf die Standard-UI.
 ## Notes-esES: Cambiar los colores de clase sin rompar partes de la interfaz de usario de Blizzard.
 ## Notes-esMX: Cambiar los colores de clase sin rompar partes de la interfaz de usario de Blizzard.
 ## Notes-ptBR: Alterar as cores de classes sem quebrar partes da interface do usuário da Blizzard.
@@ -12,7 +13,7 @@
 ## X-Copyright: Copyright (c) 2009-2013 Phanx, All rights reserved.
 ## X-License: See accompanying LICENSE file for details.
 ## X-CompatibleLocales: enUS, deDE, esES, esMX, frFR, itIT, koKR, ptBR, ruRU, zhCN, zhTW
-## X-Localizations: enUS, esES, esMX, ptBR
+## X-Localizations: enUS, deDE, esES, esMX, ptBR
 ## X-Website: http://www.wowinterface.com/downloads/info12513-ClassColors.html
 ## X-Curse-Project-ID: classcolors
 ## X-WoWI-ID: 12513

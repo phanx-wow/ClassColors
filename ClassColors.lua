@@ -26,8 +26,8 @@ local L = {
 do
 	local GAME_LOCALE = GetLocale()
 	if GAME_LOCALE == "deDE" then
-	--	L.NOTES_DESC = ""
-		L.RESET_DESC = "Klassenfarben auf Standard zurücksetzen."
+		L.NOTES_DESC = "Nicht jedes Addons dies unterstützt, und Sie müssen möglicherweise die UI neuladen, um die Änderungen auf alle kompatiblen Addons zu übernehmen."
+		L.RESET_DESC = "Die Klassenfarben auf die Standardverte zurücksetzen."
 
 	elseif strfind(GAME_LOCALE, "^es") then -- esES, esMX
 		L.NOTES_DESC = "Note que no todos los addons aprobar este, y es posible que tengas a volver a cargar la interfaz para que los cambios ser reconocidos por todos addons compatibles."
