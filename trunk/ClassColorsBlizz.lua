@@ -163,7 +163,7 @@ hooksecurefunc("LFGCooldownCover_Update", function(self)
 			local _, class = UnitName(unit)
 			if class then
 				local color = CUSTOM_CLASS_COLORS[class]
-				if class then
+				if color then
 					local name, server = UnitName("party"..i) -- skip call to GetUnitName wrapper func
 					if server and server ~= "" then
 						self.Names[nextIndex]:SetFormattedText("|c%s%s-%s|r", color.colorStr, name, server)
