@@ -567,7 +567,7 @@ addonFuncs["Blizzard_TradeSkillUI"] = function()
 	local FauxScrollFrame_GetOffset, TradeSkillGuildCraftersFrame = FauxScrollFrame_GetOffset, TradeSkillGuildCraftersFrame
 	local GetGuildRecipeInfoPostQuery, GetGuildRecipeMember = GetGuildRecipeInfoPostQuery, GetGuildRecipeMember
 
-	hooksecurefunc("TradeSkillGuilCraftersFrame_Update", function()
+	hooksecurefunc(TradeSkillGuilCraftersFrame_Update and "TradeSkillGuilCraftersFrame_Update" or "TradeSkillGuildCraftersFrame_Update", function()
 		local _, _, numMembers = GetGuildRecipeInfoPostQuery()
 		local offset = FauxScrollFrame_GetOffset(TradeSkillGuildCraftersFrame)
 		for i = 1, TRADE_SKILL_GUILD_CRAFTERS_DISPLAYED do
