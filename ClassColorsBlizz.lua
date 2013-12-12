@@ -458,7 +458,7 @@ end
 
 addonFuncs["Blizzard_InspectUI"] = function()
 	local InspectFrame, InspectLevelText = InspectFrame, InspectLevelText
-	local GetSpecialization, GetSpecializationInfo, UnitClass, UnitLevel = GetSpecialization, GetSpecializationInfo, UnitClass, UnitLevel
+	local GetInspectSpecialization, GetSpecializationInfoByID, UnitClass, UnitLevel = GetInspectSpecialization, GetSpecializationInfoByID, UnitClass, UnitLevel
 
 	hooksecurefunc("InspectPaperDollFrame_SetLevel", function()
 		local unit = InspectFrame.unit
@@ -472,9 +472,9 @@ addonFuncs["Blizzard_InspectUI"] = function()
 				if level == -1 then
 					level = "??"
 				end
-				local spec, specName, _ = GetSpecialization(true)
+				local spec, specName = GetInspectSpecialization(unit)
 				if spec then
-					_, specName = GetSpecializationInfo(spec, true)
+					spec, specName = GetSpecializationInfoByID(spec)
 				end
 				if specName and specName ~= "" then
 					InspectLevelText:SetFormattedText(PLAYER_LEVEL, level, color.colorStr, specName, className)
