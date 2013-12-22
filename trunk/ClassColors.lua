@@ -67,11 +67,11 @@ FillLocalizedClassList(L, false)
 
 ------------------------------------------------------------------------
 
-CUSTOM_CLASS_COLORS = { }
+CUSTOM_CLASS_COLORS = {}
 
 ------------------------------------------------------------------------
 
-local callbacks = { }
+local callbacks = {}
 local numCallbacks = 0
 
 local function RegisterCallback(self, method, handler)
@@ -111,16 +111,18 @@ end
 
 ------------------------------------------------------------------------
 
-local classes = { }
+local classes = {}
 for class in pairs(RAID_CLASS_COLORS) do
 	tinsert(classes, class)
 end
 sort(classes)
 
-local classTokens = { }
-for i = 1, #classes do
-	local class = classes[i]
-	classTokens[L[class]] = class
+local classTokens = {}
+for token, class in pairs(LOCALIZED_CLASS_NAMES_MALE) do
+	classTokens[class] = token
+end
+for token, class in pairs(LOCALIZED_CLASS_NAMES_FEMALE) do
+	classTokens[class] = token
 end
 
 local function GetClassToken(self, className)
@@ -174,11 +176,11 @@ f:SetScript("OnEvent", function(self, event, addon)
 	--------------------------------------------------------------------
 
 	local db
-	local defaults = { }
+	local defaults = {}
 
 	--------------------------------------------------------------------
 
-	if not ClassColorsDB then ClassColorsDB = { } end
+	if not ClassColorsDB then ClassColorsDB = {} end
 	db = ClassColorsDB
 
 	for i= 1, #classes do
@@ -217,8 +219,8 @@ f:SetScript("OnEvent", function(self, event, addon)
 
 	local fire
 	local shown
-	local cache = { }
-	local pickers = { }
+	local cache = {}
+	local pickers = {}
 
 	self.name = L.TITLE
 	self:Hide()
@@ -242,7 +244,7 @@ f:SetScript("OnEvent", function(self, event, addon)
 		local class = classes[i]
 		local color = db[class]
 
-		cache[i] = { }
+		cache[i] = {}
 
 		pickers[i] = self:CreateColorPicker(L[class])
 		pickers[i].class = class
