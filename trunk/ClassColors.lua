@@ -26,12 +26,12 @@ local L = {
 do
 	local GAME_LOCALE = GetLocale()
 	if GAME_LOCALE == "deDE" then
-		L.NOTES_DESC = "Beachten Sie, dass nicht alle Addons unterstützt dieses System, und Sie müssen möglicherweise die UI neuladen, um die Änderungen auf alle kompatiblen Addons zu übernehmen."
-		L.RESET_DESC = "Die Klassenfarben auf die Standardverte zurücksetzen."
+		L.NOTES_DESC = "Beachten Sie, dass nicht alle Addons dieses System unterstützen, und möglicherweise müssen Sie die UI neuladen, um die Änderungen zu alle kompatiblen Addons übernehmen."
+		L.RESET_DESC = "Alle Klassenfarben auf die Standardfarben zurücksetzen."
 
-	elseif strfind(GAME_LOCALE, "^es") then -- esES, esMX
+	elseif GAME_LOCALE == "esES" or GAME_LOCALE == "esMX" then
 		L.NOTES_DESC = "Note que no todos los addons aprobar este, y es posible que tengas a volver a cargar la interfaz para que los cambios ser reconocidos por todos addons compatibles."
-		L.RESET_DESC = "Restaurar los colores de las clases por el defecto."
+		L.RESET_DESC = "Restaurar todos los colores de las clases por el defecto."
 
 	elseif GAME_LOCALE == "frFR" then
 	--	L.NOTES_DESC = ""
@@ -39,9 +39,9 @@ do
 
 	elseif GAME_LOCALE == "itIT" then
 	--	L.NOTES_DESC = ""
-		L.RESET_DEST = "Ripristina i colori delle classi di default."
+		L.RESET_DESC = "Ripristina i colori delle classi di default."
 
-	elseif strfind(GAME_LOCALE, "^pt") then -- ptBR, ptPT
+	elseif GAME_LOCALE == "ptBR" then
 		L.NOTES_DESC = "Note que nem todos os addons aprovar isso, e você pode ter que recarregar a interface antes de suas alterações são reconhecidos por todos os addons compatíveis."
 		L.RESET_DESC = "Redefinir todas as cores de classes para o padrão."
 
@@ -100,7 +100,7 @@ end
 
 local function DispatchCallbacks()
 	if numCallbacks < 1 then return end
-	-- print("CUSTOM_CLASS_COLORS, DispatchCallbacks")
+	--print("CUSTOM_CLASS_COLORS: DispatchCallbacks")
 	for method, handler in pairs(callbacks) do
 		local ok, err = pcall(method, handler ~= true and handler or nil)
 		if not ok then
@@ -113,12 +113,13 @@ end
 
 local classes = { }
 for class in pairs(RAID_CLASS_COLORS) do
-	table.insert(classes, class)
+	tinsert(classes, class)
 end
-table.sort(classes)
+sort(classes)
 
 local classTokens = { }
-for i, class in ipairs(classes) do
+for i = 1, #classes do
+	local class = classes[i]
 	classTokens[L[class]] = class
 end
 
@@ -128,8 +129,36 @@ end
 
 ------------------------------------------------------------------------
 
+local function NotifyChanges(self)
+	--print("CUSTOM_CLASS_COLORS: NotifyChanges")
+	local changed
+
+	for i = 1, #classes do
+		local class = classes[i]
+		local color = CUSTOM_CLASS_COLORS[class]
+		local cache = ClassColorsDB[class]
+
+		if cache.r ~= color.r or cache.g ~= color.g or cache.b ~= color.b then
+			--print("Change found in", class)
+			cache.r = color.r
+			cache.g = color.g
+			cache.b = color.b
+			cache.colorStr = format("ff%02x%02x%02x", color.r * 255, color.g * 255, color.b * 255)
+
+			changed = true
+		end
+	end
+
+	if changed then
+		DispatchCallbacks()
+	end
+end
+
+------------------------------------------------------------------------
+
 setmetatable(CUSTOM_CLASS_COLORS, { __index = function(t, k)
 	if k == "GetClassToken" then return GetClassToken end
+	if k == "NotifyChanges" then return NotifyChanges end
 	if k == "RegisterCallback" then return RegisterCallback end
 	if k == "UnregisterCallback" then return UnregisterCallback end
 end })
@@ -140,7 +169,7 @@ local f = CreateFrame("Frame", nil, InterfaceOptionsFramePanelContainer)
 f:RegisterEvent("ADDON_LOADED")
 f:SetScript("OnEvent", function(self, event, addon)
 	if addon ~= "!ClassColors" then return end
-	-- print("ClassColors: ADDON_LOADED")
+	--print("ClassColors: ADDON_LOADED")
 
 	--------------------------------------------------------------------
 
@@ -152,7 +181,8 @@ f:SetScript("OnEvent", function(self, event, addon)
 	if not ClassColorsDB then ClassColorsDB = { } end
 	db = ClassColorsDB
 
-	for i, class in ipairs(classes) do
+	for i= 1, #classes do
+		local class = classes[i]
 		local color = RAID_CLASS_COLORS[class]
 		local r, g, b = color.r, color.g, color.b
 		local hex = format("ff%02x%02x%02x", r * 255, g * 255, b * 255)
@@ -171,15 +201,15 @@ f:SetScript("OnEvent", function(self, event, addon)
 				b = b,
 				colorStr = hex,
 			}
-		elseif not db[class].hex then
-			db[class].hex = format("ff%02x%02x%02x", db[class].r * 255, db[class].g * 255, db[class].b * 255)
+		elseif not db[class].colorStr then
+			db[class].colorStr = format("ff%02x%02x%02x", db[class].r * 255, db[class].g * 255, db[class].b * 255)
 		end
 
 		CUSTOM_CLASS_COLORS[class] = {
 			r = db[class].r,
 			g = db[class].g,
 			b = db[class].b,
-			colorStr = db[class].hex,
+			colorStr = db[class].colorStr,
 		}
 	end
 
@@ -208,7 +238,8 @@ f:SetScript("OnEvent", function(self, event, addon)
 	notes:SetNonSpaceWrap(true)
 	notes:SetText(L.NOTES)
 
-	for i, class in ipairs(classes) do
+	for i = 1, #classes do
+		local class = classes[i]
 		local color = db[class]
 
 		cache[i] = { }
@@ -231,7 +262,7 @@ f:SetScript("OnEvent", function(self, event, addon)
 			CUSTOM_CLASS_COLORS[class].r = r
 			CUSTOM_CLASS_COLORS[class].g = g
 			CUSTOM_CLASS_COLORS[class].b = b
-			CUSTOM_CLASS_COLORS[class].colorStr = format("ff%02x%02x%02x", r * 255, g * 255, b * 255)
+			CUSTOM_CLASS_COLORS[class].colorStr = color.colorStr
 
 			if cache[i].r ~= r or cache[i].g ~= g or cache[i].b ~= b then
 				DispatchCallbacks()
@@ -253,9 +284,13 @@ f:SetScript("OnEvent", function(self, event, addon)
 	--------------------------------------------------------------------
 
 	self:SetScript("OnShow", function(self)
-		-- print("ClassColors: OnShow")
+		if shown then
+			self.refresh()
+		end
 
-		for i, picker in ipairs(pickers) do
+		--print("ClassColors: OnShow")
+		for i = 1, #pickers do
+			local picker = pickers[i]
 			local r, g, b = picker:GetValue()
 			cache[i].r = r
 			cache[i].g = g
@@ -265,12 +300,21 @@ f:SetScript("OnEvent", function(self, event, addon)
 		shown = true
 	end)
 
+	self.refresh = function()
+		--print("ClassColors: refresh")
+		for i = 1, #pickers do
+			local picker = pickers[i]
+			local r, g, b = picker:GetValue()
+			picker.swatch:SetVertexColor(r, g, b)
+			picker.label:SetTextColor(r, g, b)
+		end
+	end
+
 	self.okay = function()
 		if not shown then return end
-		-- print("ClassColors: okay")
-
-		for i, t in ipairs(cache) do
-			wipe(t)
+		--print("ClassColors: okay")
+		for i = 1, #cache do
+			wipe(cache[i])
 		end
 
 		shown = false
@@ -278,11 +322,11 @@ f:SetScript("OnEvent", function(self, event, addon)
 
 	self.cancel = function()
 		if not shown then return end
-		-- print("ClassColors: cancel")
-
+		--print("ClassColors: cancel")
 		local changed
 
-		for i, picker in ipairs(pickers) do
+		for i = 1, #pickers do
+			local picker = pickers[i]
 			local class = picker.class
 
 			if db[class].r ~= cache[i].r or db[class].r ~= cache[i].r or db[class].r ~= cache[i].r then
@@ -315,11 +359,12 @@ f:SetScript("OnEvent", function(self, event, addon)
 	end
 
 	self.defaults = function()
-		-- print("ClassColors: defaults")
+		--print("ClassColors: defaults")
 
 		local changed
 
-		for i, picker in ipairs(pickers) do
+		for i = 1, #pickers do
+			local picker = pickers[i]
 			local class = picker.class
 			local color = RAID_CLASS_COLORS[class]
 
