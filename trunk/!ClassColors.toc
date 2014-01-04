@@ -1,12 +1,12 @@
-## Interface: 50400
+Ôªø## Interface: 50400
 ## Version: 5.4.2.wowi:revision
 
 ## Title: Class Colors
 ## Notes: Change class colors without breaking the Blizzard UI.
-## Notes-deDE: Klassenfarben ‰ndern, ohne die Blizzard-UI zu zerbrechen.
+## Notes-deDE: Erlaubt das √Ñndern der Klassenfarben ohne Interferenzen mit dem Blizzard UI.
 ## Notes-esES: Cambiar los colores de clase sin romper la interfaz de usario de Blizzard.
 ## Notes-esMX: Cambiar los colores de clase sin romper la interfaz de usario de Blizzard.
-## Notes-ptBR: Mudar as cores de classes sem quebrar a interface do usu·rio da Blizzard.
+## Notes-ptBR: Mudar as cores de classes sem quebrar a interface do usu√°rio da Blizzard.
 
 ## Author: Phanx
 ## X-Email: addons@phanx.net
