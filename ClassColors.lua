@@ -167,7 +167,7 @@ end })
 
 ------------------------------------------------------------------------
 
-local f = CreateFrame("Frame", nil, InterfaceOptionsFramePanelContainer)
+local f = CreateFrame("Frame", "ClassColorsOptions", InterfaceOptionsFramePanelContainer)
 f:RegisterEvent("ADDON_LOADED")
 f:SetScript("OnEvent", function(self, event, addon)
 	if addon ~= "!ClassColors" then return end
@@ -401,35 +401,19 @@ f:SetScript("OnEvent", function(self, event, addon)
 
 	--------------------------------------------------------------------
 
-	local reset = CreateFrame("Button", nil, self)
+	local reset = CreateFrame("Button", "$parentReset", self, "UIPanelButtonTemplate")
 	reset:SetPoint("BOTTOMLEFT", self, 16, 16)
-	reset:SetWidth(96)
-	reset:SetHeight(22)
-	reset:SetNormalFontObject(GameFontNormal)
-	reset:SetHighlightFontObject(GameFontHighlight)
-	reset:SetDisabledFontObject(GameFontDisable)
-	reset:SetNormalTexture("Interface\\Buttons\\UI-Panel-Button-Up")
-	reset:SetPushedTexture("Interface\\Buttons\\UI-Panel-Button-Down")
-	reset:SetHighlightTexture("Interface\\Buttons\\UI-Panel-Button-Highlight")
-	reset:SetDisabledTexture("Interface\\Buttons\\UI-Panel-Button-Disabled")
-	reset:GetNormalTexture():SetTexCoord(0, 0.625, 0, 0.6875)
-	reset:GetPushedTexture():SetTexCoord(0, 0.625, 0, 0.6875)
-	reset:GetHighlightTexture():SetTexCoord(0, 0.625, 0, 0.6875)
-	reset:GetDisabledTexture():SetTexCoord(0, 0.625, 0, 0.6875)
-	reset:GetHighlightTexture():SetBlendMode("ADD")
+	reset:SetSize(96, 22)
+	reset:SetText(L.RESET)
+	reset:SetScript("OnClick", self.defaults)
 	reset:SetScript("OnEnter", function(self)
-		if self.hint then
-			GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
-			GameTooltip:SetText(self.hint, nil, nil, nil, nil, true)
-		end
+		GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+		GameTooltip:SetText(L.RESET_DESC, nil, nil, nil, nil, true)
 	end)
 	reset:SetScript("OnLeave", function()
 		GameTooltip:Hide()
 	end)
 
-	reset:SetText(L.RESET)
-	reset.hint = L.RESET_DESC
-	reset:SetScript("OnClick", self.defaults)
 
 	--------------------------------------------------------------------
 
