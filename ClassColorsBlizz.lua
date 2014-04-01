@@ -44,10 +44,18 @@ end
 
 function GetColoredName(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12)
 	local chatType = strsub(event, 10)
-	if strsub(chatType, 1, 7) == "WHISPER" then
+	if strsub(chatType, 1, 17) == "WHISPER" then
 		chatType = "WHISPER"
-	elseif strsub(chatType, 1, 7) == "CHANNEL" then
+	elseif strsub(chatType, 1, 17) == "CHANNEL" then
 		chatType = "CHANNEL"..arg8
+	else
+		chatType = strsub(event, 10)
+	end
+
+	if chatType == "GUILD" then
+		arg2 = Ambiguate(arg2, "guild")
+	else
+		arg2 = Ambiguate(arg2, "none")
 	end
 
 	local info = ChatTypeInfo[chatType]
@@ -91,6 +99,7 @@ end
 
 do
 	local UnitClass, UnitIsConnected = UnitClass, UnitIsConnected
+
 	hooksecurefunc("CompactUnitFrame_UpdateHealthColor", function(frame)
 		if frame.optionTable.useClassColors and UnitIsConnected(frame.unit) then
 			local _, class = UnitClass(frame.unit)
@@ -164,7 +173,7 @@ hooksecurefunc("LFGCooldownCover_Update", function(self)
 			if class then
 				local color = CUSTOM_CLASS_COLORS[class]
 				if color then
-					local name, server = UnitName("party"..i) -- skip call to GetUnitName wrapper func
+					local name, server = UnitName(unit) -- skip call to GetUnitName wrapper func
 					if server and server ~= "" then
 						self.Names[nextIndex]:SetFormattedText("|c%s%s-%s|r", color.colorStr, name, server)
 					else
@@ -249,19 +258,19 @@ end)
 
 function LootHistoryDropDown_Initialize(self)
 	local info = UIDropDownMenu_CreateInfo()
-	info.isTitle = 1
 	info.text = MASTER_LOOTER
 	info.fontObject = GameFontNormalLeft
+	info.isTitle = 1
 	info.notCheckable = 1
 	UIDropDownMenu_AddButton(info)
 
-	info = UIDropDownMenu_CreateInfo()
-	info.notCheckable = 1
 	local name, class = C_LootHistory.GetPlayerInfo(self.itemIdx, self.playerIdx)
 	local color = CUSTOM_CLASS_COLORS[class]
+
+	info = UIDropDownMenu_CreateInfo()
 	info.text = format(MASTER_LOOTER_GIVE_TO, format("|c%s%s|r", color.colorStr, name))
 	info.func = LootHistoryDropDown_OnClick
-
+	info.notCheckable = 1
 	UIDropDownMenu_AddButton(info)
 end
 
@@ -288,8 +297,6 @@ end)
 --	RaidFinder.lua
 
 hooksecurefunc("RaidFinderQueueFrameCooldownFrame_Update", function()
-	local _G = _G
-
 	local prefix, members
 	if IsInRaid() then
 		prefix, members = "raid", GetNumGroupMembers()
@@ -390,9 +397,9 @@ addonFuncs["Blizzard_ChallengesUI"] = function()
 	local ChallengesFrame, GameTooltip = ChallengesFrame, GameTooltip
 	local GetChallengeBestTimeInfo, GetChallengeBestTimeNum, GetSpecializationInfoByID = GetChallengeBestTimeInfo, GetChallengeBestTimeNum, GetSpecializationInfoByID
 
-	local guildBest, realmBest = ChallengesFrameDetails:GetChildren()
+	local GuildBest, RealmBest = ChallengesFrameDetails:GetChildren()
 
-	guildBest:SetScript("OnEnter", function(self)
+	GuildBest:SetScript("OnEnter", function(self)
 		local guildTime = ChallengesFrame.details.GuildTime
 		if not guildTime.hasTime or not guildTime.mapID then return end
 
@@ -415,7 +422,7 @@ addonFuncs["Blizzard_ChallengesUI"] = function()
 		GameTooltip:Show()
 	end)
 
-	realmBest:SetScript("OnEnter", function(self)
+	RealmBest:SetScript("OnEnter", function(self)
 		local realmTime = ChallengesFrame.details.RealmTime
 		if not realmTime.hasTime or not realmTime.mapID then return end
 
