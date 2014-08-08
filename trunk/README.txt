@@ -73,4 +73,5 @@ License
 ----------
 
 Copyright (c) 2009-2014 Phanx <addons@phanx.net>. All rights reserved.
-See the accompanying LICENSE file for additional information.
+See the accompanying LICENSE file for information about the conditions
+under which redistribution and modification may be allowed.
