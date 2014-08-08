@@ -72,5 +72,5 @@ of any kind; post a comment or forum thread instead!
 License
 ----------
 
-Copyright (c) 2014 Phanx. All rights reserved. See the accompanying
-LICENSE file for additional information.
+Copyright (c) 2014 Phanx <addons@phanx.net>. All rights reserved.
+See the accompanying LICENSE file for additional information.
