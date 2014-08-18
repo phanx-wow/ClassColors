@@ -14,7 +14,7 @@
 ## X-Copyright: Copyright (c) 2009-2014 Phanx, All rights reserved.
 ## X-License: See accompanying LICENSE file for details.
 ## X-CompatibleLocales: enUS, deDE, esES, esMX, frFR, itIT, koKR, ptBR, ruRU, zhCN, zhTW
-## X-Localizations: enUS, deDE, esES, esMX, ptBR
+## X-Localizations: enUS, deDE, esES, esMX, ptBR, ruRU
 ## X-Website: http://www.wowinterface.com/downloads/info12513-ClassColors.html
 ## X-Curse-Project-ID: classcolors
 ## X-WoWI-ID: 12513
