@@ -20,13 +20,29 @@ Download
 Localization
 ---------------
 
-Compatible with English, Deutsch, Español, Français, Italiano, 
+Compatible with English, Deutsch, Español, Français, Italiano,
 Português, Русский, 한국어, 简体中文 and 繁體中文 clients.
 
-Class Colors is translated into English, Deutsch, Español and Português.
+Translated into English, Deutsch, Español, Русский and Português.
 
-If you can provide new or updated translations for any language, please
-contact me (see below).
+To add or update translations for any language, please see [the
+Localization tab on the CurseForge project page] [1].
+
+ [1]: http://wow.curseforge.com/addons/classcolors/localization/
+
+
+Feedback
+-----------
+
+Post a ticket on either download site, or a comment on WoWInterface.
+
+If you are reporting a bug, please include directions I can follow to
+reproduce the bug, whether it still happens when all other addons are
+disabled, and the exact text of the related error message (if any) from
+[BugSack](http://www.wowinterface.com/downloads/info5995-BugSack.html).
+
+If you need to contact me privately, you can send me a private message
+on either download site, or email me at <addons@phanx.net>.
 
 
 Information for addon authors
@@ -51,27 +67,13 @@ dependency -- but the CUSTOM_CLASS_COLORS format is meant to be a
 community standard and can be implemented by any addon, including an
 unpublished one the user has written for personal use!
 
-Get more details, including the callback API documentation, here:  
+Get more details, including the callback API documentation, here:
 <http://wow.curseforge.com/addons/classcolors/pages/api-documentation/>
-
-
-Feedback
------------
-
-Post a ticket on either download site, or a comment on WoWInterface.
-
-If you are reporting a bug, please include directions I can follow to
-reproduce the bug, whether it still happens when all other addons are
-disabled, and the exact text of the related error message (if any) from 
-[BugSack](http://www.wowinterface.com/downloads/info5995-BugSack.html).
-
-If you need to contact me privately, you can send me a private message
-on either download site, or email me at <addons@phanx.net>.
 
 
 License
 ----------
 
-Copyright (c) 2009-2014 Phanx <addons@phanx.net>. All rights reserved.
+Copyright (c) 2009-2014 Phanx. All rights reserved.
 See the accompanying LICENSE file for information about the conditions
 under which redistribution and modification may be allowed.
