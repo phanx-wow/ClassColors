@@ -45,8 +45,8 @@ do
 		L.NOTES_DESC = "Note que nem todos os addons aprovar isso, e você pode ter que recarregar a interface antes de suas alterações são reconhecidos por todos os addons compatíveis."
 		L.RESET_DESC = "Redefinir todas as cores de classes para o padrão."
 
-	elseif GAME_LOCALE == "ruRU" then
-	--	L.NOTES_DESC = ""
+	elseif GAME_LOCALE == "ruRU" then -- Last updated 2014-08-18 by Yafis
+		L.NOTES_DESC = "Обратите внимание, что не все аддоны поддерживают это, и возможно вам потребуется перезагрузить интерфейс, прежде чем изменения вступят в силу на всех совместимых аддонах. "
 		L.RESET_DESC = "Сбросить окраску классов на значение по умолчанию."
 
 	elseif GAME_LOCALE == "koKR" then
