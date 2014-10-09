@@ -400,7 +400,7 @@ f:SetScript("OnEvent", function(self, event, addon)
 	end
 
 	--------------------------------------------------------------------
-
+--[[
 	local reset = CreateFrame("Button", "$parentReset", self, "UIPanelButtonTemplate")
 	reset:SetPoint("BOTTOMLEFT", self, 16, 16)
 	reset:SetSize(96, 22)
@@ -413,8 +413,7 @@ f:SetScript("OnEvent", function(self, event, addon)
 	reset:SetScript("OnLeave", function()
 		GameTooltip:Hide()
 	end)
-
-
+]]
 	--------------------------------------------------------------------
 
 	local help = self:CreateFontString(nil, "ARTWORK", "GameFontHighlightSmall")
@@ -435,6 +434,7 @@ f:SetScript("OnEvent", function(self, event, addon)
 
 	SLASH_CLASSCOLORS1 = "/classcolors"
 	SlashCmdList.CLASSCOLORS = function()
+		InterfaceOptionsFrame_OpenToCategory(self)
 		InterfaceOptionsFrame_OpenToCategory(self)
 	end
 
