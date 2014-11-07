@@ -5,6 +5,13 @@
 	See the accompanying README and LICENSE files for more information.
 	http://www.wowinterface.com/downloads/info12513
 	http://www.curse.com/addons/wow/classcolors
+
+	Please DO NOT upload this addon to other websites, or post modified
+	versions of it. However, you are welcome to use any/all of its code
+	in your own addon, as long as you do not use my name or the name of
+	this addon ANYWHERE in your addon, including in its name, outside of
+	an optional attribution. You are also welcome to include this addon
+	WITHOUT CHANGES in compilations posted on Curse and/or WoWInterface.
 ----------------------------------------------------------------------]]
 
 local _, ns = ...
@@ -51,6 +58,7 @@ function GetColoredName(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, a
 	else
 		chatType = strsub(event, 10)
 	end
+	local info = ChatTypeInfo[chatType]
 
 	if chatType == "GUILD" then
 		arg2 = Ambiguate(arg2, "guild")
@@ -58,7 +66,6 @@ function GetColoredName(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, a
 		arg2 = Ambiguate(arg2, "none")
 	end
 
-	local info = ChatTypeInfo[chatType]
 	if info and info.colorNameByClass and arg12 and arg12 ~= "" then
 		local _, class = GetPlayerInfoByGUID(arg12)
 		if class then
@@ -108,7 +115,6 @@ do
 				if color then
 					local r, g, b = color.r, color.g, color.b
 					frame.healthBar:SetStatusBarColor(r, g, b)
-					--frame.healthBar.r, frame.healthBar.g, frame.healthBar.g = r, g, b
 				end
 			end
 		end
@@ -182,6 +188,62 @@ hooksecurefunc("LFGCooldownCover_Update", function(self)
 				end
 			end
 			nextIndex = nextIndex + 1
+		end
+	end
+end)
+
+------------------------------------------------------------------------
+-- LFGList.lua
+
+hooksecurefunc("LFGListApplicationViewer_UpdateApplicantMember", function(member, appID, memberIdx, status, pendingStatus)
+	if not pendingStatus and (status == "failed" or status == "cancelled" or status == "declined" or status == "invitedeclined" or status == "timedout") then
+		-- grayedOut
+		return
+	end
+	local _, class = C_LFGList.GetApplicantMemberInfo(appID, memberIdx)
+	if class then
+		local color = CUSTOM_CLASS_COLORS[class]
+		if color then
+			member.Name:SetTextColor(color.r, color.g, color.b)
+		end
+	end
+end)
+
+hooksecurefunc("LFGListApplicantMember_OnEnter", function(self)
+	local applicantID = self:GetParent().applicantID
+	local memberIdx = self.memberIdx
+	local _, class = C_LFGList.GetApplicantMemberInfo(applicantID, memberIdx)
+	if class then
+		local color = CUSTOM_CLASS_COLORS[class]
+		if color then
+			GameTooltipTextLeft1:SetTextColor(color.r, color.g, color.b)
+		end
+	end
+end)
+
+local LFG_LIST_TOOLTIP_MEMBERS_SIMPLE = gsub(LFG_LIST_TOOLTIP_MEMBERS_SIMPLE, "%%d", "%%d+")
+
+hooksecurefunc("LFGListSearchEntry_OnEnter", function(self)
+	local resultID = self.resultID
+	local _, activityID, _, _, _, _, _, _, _, _, _, _, numMembers = C_LFGList.GetSearchResultInfo(resultID)
+	local _, _, _, _, _, _, _, _, displayType = C_LFGList.GetActivityInfo(activityID)
+	if displayType ~= LE_LFG_LIST_DISPLAY_TYPE_CLASS_ENUMERATE then return end
+	local start
+	for i = 4, GameTooltip:NumLines() do
+		if strfind(_G["GameTooltipTextLeft"..i]:GetText(), LFG_LIST_TOOLTIP_MEMBERS_SIMPLE) then
+			start = i
+			break
+		end
+	end
+	if start then
+		for i = 1, numMembers do
+			local _, class = C_LFGList.GetSearchResultMemberInfo(resultID, i)
+			if class then
+				local color = CUSTOM_CLASS_COLORS[class]
+				if color then
+					_G["GameTooltipTextLeft"..(start+i)]:SetTextColor(color.r, color.g, color.b)
+				end
+			end
 		end
 	end
 end)
