@@ -1,5 +1,5 @@
 ﻿## Interface: 60000
-## Version: 6.0.3.wowi:revision
+## Version: 6.0.3.23
 
 ## Title: Class Colors
 ## Notes: Change class colors without breaking the Blizzard UI.
@@ -11,8 +11,8 @@
 
 ## Author: Phanx
 ## X-Email: addons@phanx.net
-## X-Copyright: Copyright (c) 2009-2014 Phanx, All rights reserved.
-## X-License: See accompanying LICENSE file for details.
+## X-Copyright: Copyright (c) 2009-2014 Phanx.
+## X-License: All rights reserved.
 ## X-CompatibleLocales: enUS, deDE, esES, esMX, frFR, itIT, koKR, ptBR, ruRU, zhCN, zhTW
 ## X-Localizations: enUS, deDE, esES, esMX, ptBR, ruRU
 ## X-Website: http://www.wowinterface.com/downloads/info12513-ClassColors.html
