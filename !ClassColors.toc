@@ -2,22 +2,19 @@
 ## Version: 6.0.3.23
 
 ## Title: Class Colors
-## Notes: Change class colors without breaking the Blizzard UI.
-## Notes-deDE: Erlaubt das Ändern der Klassenfarben ohne Interferenzen mit dem Blizzard UI.
-## Notes-esES: Cambiar los colores de clase sin romper la interfaz de usario de Blizzard.
-## Notes-esMX: Cambiar los colores de clase sin romper la interfaz de usario de Blizzard.
-## Notes-ptBR: Mudar as cores de classes sem quebrar a interface do usuário da Blizzard.
-## Notes-ruRU: Изменение цветов класса не вмешиваясь в Blizzard UI.
+## Notes: Change class colors without breaking parts of the default UI.
+## Notes-deDE: Ändert die Klassenfarben ohne Interferenzen mit dem Standard-UI.
+## Notes-esES: Cambiar los colores de clases, sin interferir con la interfaz estandár.
+## Notes-esMX: Cambiar los colores de clases, sin interferir con la interfaz estandár.
+## Notes-ptBR: Alterar as cores das classes, sem interferir com a interface padrão.
+## Notes-ruRU: Изменение цветов класса не вмешиваясь в стандартном интерфейсе.
 
 ## Author: Phanx
 ## X-Email: addons@phanx.net
-## X-Copyright: Copyright (c) 2009-2014 Phanx.
-## X-License: All rights reserved.
+## X-Copyright: Copyright (c) 2009-2014 Phanx. All rights reserved.
 ## X-CompatibleLocales: enUS, deDE, esES, esMX, frFR, itIT, koKR, ptBR, ruRU, zhCN, zhTW
 ## X-Localizations: enUS, deDE, esES, esMX, ptBR, ruRU
-## X-Website: http://www.wowinterface.com/downloads/info12513-ClassColors.html
-## X-Curse-Project-ID: classcolors
-## X-WoWI-ID: 12513
+## X-Website: https://github.com/Phanx/ClassColors
 
 ## SavedVariables: ClassColorsDB
 
