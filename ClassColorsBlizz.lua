@@ -80,7 +80,7 @@ do
 		if type(message) == "string" and strfind(message, "|cff") then -- type check required for shitty addons that pass nil or non-string values
 			for hex, class in pairs(blizzHexColors) do
 				local color = CUSTOM_CLASS_COLORS[class]
-				message = gsub(message, hex, color.colorStr)
+				message = color and gsub(message, hex, color.colorStr) or message -- color check required for Warmup, maybe others
 			end
 		end
 		return AddMessage[frame](frame, message, ...)
