@@ -16,9 +16,9 @@ local pairs, type = pairs, type
 
 ------------------------------------------------------------------------
 
-local addonFuncs = { }
+local addonFuncs = {}
 
-local blizzHexColors = { }
+local blizzHexColors = {}
 for class, color in pairs(RAID_CLASS_COLORS) do
 	blizzHexColors[color.colorStr] = class
 end
@@ -58,7 +58,7 @@ function GetColoredName(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, a
 		arg2 = Ambiguate(arg2, "none")
 	end
 
-	if info and info.colorNameByClass and arg12 and arg12 ~= "" then
+	if info and info.colorNameByClass and arg12 and arg12 ~= "" and arg12 ~= 0 then
 		local _, class = GetPlayerInfoByGUID(arg12)
 		if class then
 			local color = CUSTOM_CLASS_COLORS[class]

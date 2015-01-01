@@ -1,3 +1,7 @@
+### Version 6.0.3.24
+
+* Added a workaround for some addons passing invalid GUIDs to GetColoredName
+
 ### Version 6.0.3.23
 
 * Updated for Warlords of Draenor
