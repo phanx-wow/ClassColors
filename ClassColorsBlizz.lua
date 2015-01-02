@@ -333,17 +333,15 @@ end
 
 hooksecurefunc("PaperDollFrame_SetLevel", function()
 	local className, class = UnitClass("player")
-	local color = CUSTOM_CLASS_COLORS[class]
-	if color then
-		local spec = GetSpecialization()
-		if spec then
-			local _, specName = GetSpecializationInfo(spec)
-			if specName and specName ~= "" then
-				CharacterLevelText:SetFormattedText(PLAYER_LEVEL, UnitLevel("player"), color.colorStr, specName, className)
-			else
-				CharacterLevelText:SetFormattedText(PLAYER_LEVEL_NO_SPEC, UnitLevel("player"), color.colorStr, className)
-			end
-		end
+	local color = CUSTOM_CLASS_COLORS[class].colorStr
+	local spec, specName, _ = GetSpecialization()
+	if spec then
+		_, specName = GetSpecializationInfo(spec)
+	end
+	if specName and specName ~= "" then
+		CharacterLevelText:SetFormattedText(PLAYER_LEVEL, UnitLevel("player"), color, specName, className)
+	else
+		CharacterLevelText:SetFormattedText(PLAYER_LEVEL_NO_SPEC, UnitLevel("player"), color, className)
 	end
 end)
 

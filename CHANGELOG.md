@@ -1,5 +1,6 @@
 ### Version 6.0.3.24
 
+* Fixed coloring on the character frame level text
 * Added a workaround for some addons passing invalid GUIDs to GetColoredName
 
 ### Version 6.0.3.23
