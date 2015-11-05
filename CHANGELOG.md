@@ -1,3 +1,9 @@
+### Version 6.2.2.0
+
+* Updated for WoW 6.2.2
+* Added coloring for heirloom journal class filter dropdown
+* Added coloring for loot recipients in the boss banner frame
+
 ### Version 6.0.3.24
 
 * Fixed coloring on the character frame level text
