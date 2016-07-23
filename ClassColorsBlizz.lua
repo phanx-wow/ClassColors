@@ -1,7 +1,7 @@
 --[[--------------------------------------------------------------------
 	!ClassColors
 	Change class colors without breaking the Blizzard UI.
-	Copyright (c) 2009-2015 Phanx <addons@phanx.net>. All rights reserved.
+	Copyright (c) 2009-2016 Phanx <addons@phanx.net>. All rights reserved.
 	http://www.wowinterface.com/downloads/info12513-ClassColors.html
 	http://www.curse.com/addons/wow/classcolors
 ----------------------------------------------------------------------]]
@@ -656,22 +656,22 @@ end
 --	Blizzard_TradeSkillUI.lua
 
 addonFuncs["Blizzard_TradeSkillUI"] = function()
-	local TRADE_SKILL_GUILD_CRAFTERS_DISPLAYED = TRADE_SKILL_GUILD_CRAFTERS_DISPLAYED
-	local FauxScrollFrame_GetOffset, TradeSkillGuildCraftersFrame = FauxScrollFrame_GetOffset, TradeSkillGuildCraftersFrame
-	local GetGuildRecipeInfoPostQuery, GetGuildRecipeMember = GetGuildRecipeInfoPostQuery, GetGuildRecipeMember
+	hooksecurefunc(TradeSkillFrame.DetailsFrame.GuildFrame, "Refresh", function(self)
+		if self.waitingOnData then return end
 
-	hooksecurefunc(TradeSkillGuilCraftersFrame_Update and "TradeSkillGuilCraftersFrame_Update" or "TradeSkillGuildCraftersFrame_Update", function()
 		local _, _, numMembers = GetGuildRecipeInfoPostQuery()
-		local offset = FauxScrollFrame_GetOffset(TradeSkillGuildCraftersFrame)
-		for i = 1, TRADE_SKILL_GUILD_CRAFTERS_DISPLAYED do
-			if i > numMembers then
+		local offset = FauxScrollFrame_GetOffset(self.Container.ScrollFrame)
+		for i, craftersButton in ipairs(self.Container.ScrollFrame.buttons) do
+			local dataIndex = offset + i
+			if dataIndex > numMembers then
 				break
 			end
-			local _, class, online = GetGuildRecipeMember(i + offset)
+
+			local _, _, class, online = GetGuildRecipeMember(i + offset)
 			if class and online then
 				local color = CUSTOM_CLASS_COLORS[class]
 				if color then
-					_G["TradeSkillGuildCrafter"..i.."Text"]:SetTextColor(color.r, color.g, color.b)
+					craftersButton.Text:SetTextColor(color.r, color.g, color.b)
 				end
 			end
 		end

@@ -1,4 +1,4 @@
-﻿## Interface: 60200
+﻿## Interface: 70000
 ## Version: @project-version@
 
 ## Title: Class Colors
@@ -11,7 +11,7 @@
 
 ## Author: Phanx
 ## X-Email: addons@phanx.net
-## X-Copyright: Copyright (c) 2009-2015 Phanx. All rights reserved.
+## X-Copyright: Copyright (c) 2009-2016 Phanx. All rights reserved.
 ## X-CompatibleLocales: enUS, deDE, esES, esMX, frFR, itIT, koKR, ptBR, ruRU, zhCN, zhTW
 ## X-Localizations: enUS, deDE, esES, esMX, ptBR, ruRU
 ## X-Website: https://github.com/Phanx/ClassColors
