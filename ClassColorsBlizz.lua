@@ -508,21 +508,25 @@ end
 -- Blizzard_HeirloomCollection.lua
 
 addonFuncs["Blizzard_Collections"] = function()
+	local NO_CLASS_FILTER = 0
+	local NO_SPEC_FILTER = 0
+
 	function HeirloomsJournal:UpdateClassFilterDropDownText()
-        local text
-        if self.classFilter == 0 then -- NO_CLASS_FILTER
-            text = ALL_CLASSES
-        else
-            local className, classTag = GetClassInfoByID(self.classFilter)
-            local classColorStr = CUSTOM_CLASS_COLORS[classTag].colorStr -- CHANGED
-            if self.specFilter == 0 then -- NO_SPEC_FILTER
-                text = HEIRLOOMS_CLASS_FILTER_FORMAT:format(classColorStr, className)
-            else
-                local specName = GetSpecializationNameForSpecID(self.specFilter)
-                text = HEIRLOOMS_CLASS_SPEC_FILTER_FORMAT:format(classColorStr, className, specName)
-            end
-        end
-        UIDropDownMenu_SetText(self.classDropDown, text)
+		local text;
+		local classFilter, specFilter = C_Heirloom.GetClassAndSpecFilters()
+		if classFilter == NO_CLASS_FILTER then
+			text = ALL_CLASSES
+		else
+			local className, classTag = GetClassInfoByID(classFilter)
+			local classColorStr = CUSTOM_CLASS_COLORS[classTag].colorStr
+			if specFilter == NO_SPEC_FILTER then
+				text = HEIRLOOMS_CLASS_FILTER_FORMAT:format(classColorStr, className)
+			else
+				local specName = GetSpecializationNameForSpecID(specFilter)
+				text = HEIRLOOMS_CLASS_SPEC_FILTER_FORMAT:format(classColorStr, className, specName)
+			end
+		end
+		UIDropDownMenu_SetText(self.classDropDown, text)
     end
 end
 
