@@ -440,35 +440,32 @@ do
 		end
 	end
 
-	local function SetSize(f, x, y)
-		f:SetHeight(y or x)
-		f.swatch:SetWidth(y or x)
-	end
-
 	function f:CreateColorPicker(name)
 		local frame = CreateFrame("Button", nil, self)
-		frame:SetHeight(19)
-		frame:SetWidth(100)
-
-		frame.SetSize = SetSize
-
-		local swatch = frame:CreateTexture(nil, "OVERLAY")
-		swatch:SetTexture("Interface\\ChatFrame\\ChatFrameColorSwatch")
-		swatch:SetPoint("TOPLEFT")
-		swatch:SetPoint("BOTTOMLEFT")
-		swatch:SetWidth(19)
-		frame.swatch = swatch
+		frame:SetSize(26, 26)
 
 		local bg = frame:CreateTexture(nil, "BACKGROUND")
-		bg:SetTexture(1, 1, 1)
-		bg:SetPoint("TOPLEFT", swatch, 1, -1)
-		bg:SetPoint("BOTTOMRIGHT", swatch, -1, 1)
+		bg:SetTexture("Interface\\BUTTONS\\WHITE8X8")
+		bg:SetVertexColor(HIGHLIGHT_FONT_COLOR.r, HIGHLIGHT_FONT_COLOR.g, HIGHLIGHT_FONT_COLOR.b)
+		bg:SetPoint("LEFT", 5, 1)
+		bg:SetSize(16, 16)
 		frame.bg = bg
 
+		local bgi = frame:CreateTexture(nil, "BORDER")
+		bgi:SetTexture("Interface\\BUTTONS\\WHITE8X8")
+		bgi:SetVertexColor(0, 0, 0)
+		bgi:SetPoint("BOTTOMLEFT", bg, 1, 1)
+		bgi:SetPoint("TOPRIGHT", bg, -1, -1)
+		frame.bgInner = bgi
+
+		local swatch = frame:CreateTexture(nil, "OVERLAY")
+		swatch:SetTexture("Interface\\BUTTONS\\WHITE8X8")
+		swatch:SetPoint("BOTTOMLEFT", bgi, 1, 1)
+		swatch:SetPoint("TOPRIGHT", bgi, -1, -1)
+		frame.swatch = swatch
+
 		local label = frame:CreateFontString(nil, "ARTWORK", "GameFontHighlight")
-		label:SetPoint("TOPLEFT", swatch, "TOPRIGHT", 4, 1)
-		label:SetPoint("BOTTOMLEFT", swatch, "BOTTOMRIGHT", 4, 1)
-		label:SetText(name)
+		label:SetPoint("LEFT", swatch, "RIGHT", 10, 0)
 		frame.label = label
 
 		frame.SetColor = SetColor
@@ -479,10 +476,8 @@ do
 		frame:SetScript("OnEnter", OnEnter)
 		frame:SetScript("OnLeave", OnLeave)
 
-		local width = 19 + 4 + label:GetStringWidth()
-		if width > 100 then
-			frame:SetWidth(width)
-		end
+		label:SetText(name)
+		frame:SetHitRectInsets(0,  -1 * max(100, label:GetStringWidth() + 4), 0, 0)
 
 		return frame
 	end

@@ -1,3 +1,7 @@
+### Version 7.0.3.2
+
+- Fixed the appearance of the color swatches in the options panel
+
 ### Version 7.0.3.1
 
 - Fixed an error when opening or changing the class filter in the heirloom journal
