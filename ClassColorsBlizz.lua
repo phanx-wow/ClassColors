@@ -103,8 +103,7 @@ do
 			if class then
 				local color = CUSTOM_CLASS_COLORS[class]
 				if color then
-					local r, g, b = color.r, color.g, color.b
-					frame.healthBar:SetStatusBarColor(r, g, b)
+					frame.healthBar:SetStatusBarColor(color.r, color.g, color.b)
 				end
 			end
 		end
