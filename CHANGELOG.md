@@ -1,6 +1,7 @@
 ### Version 7.0.3.3
 
 - Fixed an error when opening the Mythic Dungeons window
+- Fixed enemy NPC nameplates using the warrior class color
 
 ### Version 7.0.3.2
 

@@ -95,20 +95,22 @@ end
 --	CompactUnitFrame.lua
 
 do
-	local UnitClass, UnitIsConnected = UnitClass, UnitIsConnected
+	local UnitClass, UnitIsConnected, UnitIsPlayer = UnitClass, UnitIsConnected, UnitIsPlayer
 
 	hooksecurefunc("CompactUnitFrame_UpdateHealthColor", function(frame)
-		if frame.optionTable.useClassColors and UnitIsConnected(frame.unit) then
+		if UnitIsConnected(frame.unit) and UnitIsPlayer(frame.unit) and frame.optionTable.useClassColors then
 			local _, class = UnitClass(frame.unit)
-			if class then
-				local color = CUSTOM_CLASS_COLORS[class]
-				if color then
-					frame.healthBar:SetStatusBarColor(color.r, color.g, color.b)
+			local color = CUSTOM_CLASS_COLORS[class]
+			if color then
+				frame.healthBar:SetStatusBarColor(color.r, color.g, color.b)
+				if frame.optionTable.colorHealthWithExtendedColors then
+					frame.selectionHighlight:SetStatusBarColor(color.r, color.g, color.b)
 				end
 			end
 		end
 	end)
 end
+
 ------------------------------------------------------------------------
 --	FriendsFrame.lua
 
