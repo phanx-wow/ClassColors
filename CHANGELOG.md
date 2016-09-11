@@ -1,3 +1,7 @@
+### Version 7.0.3.3
+
+- Fixed an error when opening the Mythic Dungeons window
+
 ### Version 7.0.3.2
 
 - Fixed the appearance of the color swatches in the options panel

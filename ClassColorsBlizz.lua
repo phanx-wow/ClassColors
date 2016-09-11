@@ -447,59 +447,48 @@ end
 --	Blizzard_ChallengesUI.lua
 
 addonFuncs["Blizzard_ChallengesUI"] = function()
-	local F_PLAYER_CLASS = "%s - " .. PLAYER_CLASS
-	local F_PLAYER_CLASS_NO_SPEC = "%s - " .. PLAYER_CLASS_NO_SPEC
-
-	local _G = _G
-	local ChallengesFrame, GameTooltip = ChallengesFrame, GameTooltip
-	local GetChallengeBestTimeInfo, GetChallengeBestTimeNum, GetSpecializationInfoByID = GetChallengeBestTimeInfo, GetChallengeBestTimeNum, GetSpecializationInfoByID
-
-	local GuildBest, RealmBest = ChallengesFrameDetails:GetChildren()
-
-	GuildBest:SetScript("OnEnter", function(self)
-		local guildTime = ChallengesFrame.details.GuildTime
-		if not guildTime.hasTime or not guildTime.mapID then return end
-
+	local function GuildChallengesGuildBestMixin_SetUp(self, leaderInfo)
+		self.CharacterName:SetFormattedText(leaderInfo.isYou and CHALLENGE_MODE_GUILD_BEST_LINE_YOU or CHALLENGE_MODE_GUILD_BEST_LINE,
+			CUSTOM_CLASS_COLORS[leaderInfo.class].colorStr,
+			leaderInfo.name)
+	end
+	
+	local function GuildChallengesGuildBestMixin_OnEnter(self)
+		local leaderInfo = self.leaderInfo
+		
 		GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
-		GameTooltip:SetText(CHALLENGE_MODE_GUILD_BEST)
+		local name = C_ChallengeMode.GetMapInfo(leaderInfo.mapid)
+		GameTooltip:SetText(name, 1, 1, 1)
+		GameTooltip:AddLine(CHALLENGE_MODE_POWER_LEVEL:format(leaderInfo.level))
+		for i = 1, #leaderInfo.members do
+			local classColorStr = CUSTOM_CLASS_COLORS[leaderInfo.members[i].class].colorStr
+			GameTooltip:AddLine(CHALLENGE_MODE_GUILD_BEST_LINE:format(classColorStr, leaderInfo.members[i].name))
+		end
+		GameTooltip:Show()
+	end
 
-		for i = 1, GetChallengeBestTimeNum(guildTime.mapID, true) do
-			local name, className, class, specID = GetChallengeBestTimeInfo(guildTime.mapID, i, true)
-			if name then
-				local color = CUSTOM_CLASS_COLORS[class].colorStr
-				local _, specName = GetSpecializationInfoByID(specID)
-				if specName and specName ~= "" then
-					GameTooltip:AddLine(format(F_PLAYER_CLASS, name, color, specName, className))
-				else
-					GameTooltip:AddLine(format(F_PLAYER_CLASS_NO_SPEC, name, color, className))
+	hooksecurefunc(ChallengesFrame_Update, function(self)
+		if self.leadersAvailable then
+			local leaders = C_ChallengeMode.GetGuildLeaders()
+			if leaders and #leaders > 0 then
+				for i = 1, #leaders do
+					local frame = self.GuildBest.GuildBests[i]
+					GuildChallengesGuildBestMixin_SetUp(frame, leaders[i])
+					frame:SetScript("OnEnter", GuildChallengesGuildBestMixin_OnEnter)
 				end
 			end
 		end
-
-		GameTooltip:Show()
 	end)
 
-	RealmBest:SetScript("OnEnter", function(self)
-		local realmTime = ChallengesFrame.details.RealmTime
-		if not realmTime.hasTime or not realmTime.mapID then return end
-
-		GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
-		GameTooltip:SetText(CHALLENGE_MODE_REALM_BEST)
-
-		for i = 1, GetChallengeBestTimeNum(realmTime.mapID, false) do
-			local name, className, class, specID = GetChallengeBestTimeInfo(realmTime.mapID, i, false)
-			if name then
-				local color = CUSTOM_CLASS_COLORS[class].colorStr
-				local _, specName = GetSpecializationInfoByID(specID)
-				if specName and specName ~= "" then
-					GameTooltip:AddLine(format(F_PLAYER_CLASS, name, color, specName, className))
-				else
-					GameTooltip:AddLine(format(F_PLAYER_CLASS_NO_SPEC, name, color, className))
-				end
-			end
+	hooksecurefunc(ChallengeModeCompleteBanner, "PlayBanner", function(self, data)
+		local sortedUnitTokens = self:GetSortedPartyMembers()
+		for i = 1, #sortedUnitTokens do
+			local unitToken = sortedUnitTokens[i]
+			local name = UnitName(unitToken)
+			local _, classFileName = UnitClass(unitToken)
+			local classColorStr = CUSTOM_CLASS_COLORS[classFileName].colorStr
+			self.PartyMembers[i].Name:SetFormattedText("|c%s%s|r", classColorStr, name)
 		end
-
-		GameTooltip:Show()
 	end)
 end
 
