@@ -42,8 +42,8 @@ if CURRENT_LOCALE == "enUS" then return end
 if CURRENT_LOCALE == "deDE" then
 
 L.NOTES = "Klassenfarben ändern, ohne die Blizzard-UI zu zerbrechen."
-L.NOTES_DESC = "Beachten Sie, dass nicht alle Addons unterstützt dieses System, und Sie müssen möglicherweise die UI neuladen, um die Änderungen auf alle kompatiblen Addons zu übernehmen."
-L.RESET_DESC = "Die Klassenfarben auf die Standardverte zurücksetzen."
+L.NOTES_DESC = "Beachten Sie, dass nicht alle Addons dieses System unterstützen, und Sie müssen möglicherweise die UI neuladen, um die Änderungen auf alle kompatiblen Addons zu übernehmen."
+L.RESET_DESC = "Die Klassenfarben auf die Standardwerte zurücksetzen."
 
 return end
 
@@ -147,6 +147,8 @@ return end
 
 if CURRENT_LOCALE == "zhTW" then
 
+L.NOTES = "改變職業顏色而不需破壞暴雪UI。"
+L.NOTES_DESC = "注意不是所有插件都支援，並且在變更是所有相容插件認可之前你可能需要重載UI。"
 L.RESET_DESC = "重置職業顔色為默認"
 
 return end
