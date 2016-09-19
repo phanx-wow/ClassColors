@@ -1,3 +1,7 @@
+### Version 7.0.3.4
+
+- Fixed an error when opening the Mythic Dungeons window
+
 ### Version 7.0.3.3
 
 - Fixed an error when opening the Mythic Dungeons window

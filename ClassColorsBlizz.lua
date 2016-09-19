@@ -449,12 +449,12 @@ end
 --	Blizzard_ChallengesUI.lua
 
 addonFuncs["Blizzard_ChallengesUI"] = function()
-	local function GuildChallengesGuildBestMixin_SetUp(self, leaderInfo)
+	local function PostSetUp(self, leaderInfo)
 		self.CharacterName:SetFormattedText(leaderInfo.isYou and CHALLENGE_MODE_GUILD_BEST_LINE_YOU or CHALLENGE_MODE_GUILD_BEST_LINE,
 			CUSTOM_CLASS_COLORS[leaderInfo.class].colorStr,
 			leaderInfo.name)
 	end
-	
+
 	local function GuildChallengesGuildBestMixin_OnEnter(self)
 		local leaderInfo = self.leaderInfo
 		
@@ -469,14 +469,14 @@ addonFuncs["Blizzard_ChallengesUI"] = function()
 		GameTooltip:Show()
 	end
 
-	hooksecurefunc(ChallengesFrame_Update, function(self)
+	hooksecurefunc("ChallengesFrame_Update", function(self)
 		if self.leadersAvailable then
 			local leaders = C_ChallengeMode.GetGuildLeaders()
 			if leaders and #leaders > 0 then
 				for i = 1, #leaders do
 					local frame = self.GuildBest.GuildBests[i]
-					GuildChallengesGuildBestMixin_SetUp(frame, leaders[i])
 					frame:SetScript("OnEnter", GuildChallengesGuildBestMixin_OnEnter)
+					PostSetUp(frame, leaders[i])
 				end
 			end
 		end
