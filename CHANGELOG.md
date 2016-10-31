@@ -1,3 +1,7 @@
+### Version 7.1.0.0
+
+* Updated for WoW 7.1
+
 ### Version 7.0.3.4
 
 - Fixed an error when opening the Mythic Dungeons window
