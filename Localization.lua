@@ -1,9 +1,10 @@
 --[[--------------------------------------------------------------------
 	!ClassColors
 	Change class colors without breaking the Blizzard UI.
-	Copyright (c) 2009-2016 Phanx <addons@phanx.net>. All rights reserved.
-	http://www.wowinterface.com/downloads/info12513-ClassColors.html
-	https://mods.curse.com/addons/wow/classcolors
+	Copyright 2009-2018 Phanx <addons@phanx.net>. All rights reserved.
+	https://github.com/phanx-wow/ClassColors
+	https://www.curseforge.com/wow/addons/classcolors
+	https://www.wowinterface.com/downloads/info12513-ClassColors.html
 ----------------------------------------------------------------------]]
 
 local ADDON, ns = ...

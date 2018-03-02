@@ -1,9 +1,10 @@
 --[[--------------------------------------------------------------------
 	!ClassColors
 	Change class colors without breaking the Blizzard UI.
-	Copyright (c) 2009-2016 Phanx <addons@phanx.net>. All rights reserved.
-	http://www.wowinterface.com/downloads/info12513-ClassColors.html
-	https://mods.curse.com/addons/wow/classcolors
+	Copyright 2009-2018 Phanx <addons@phanx.net>. All rights reserved.
+	https://github.com/phanx-wow/ClassColors
+	https://www.curseforge.com/wow/addons/classcolors
+	https://www.wowinterface.com/downloads/info12513-ClassColors.html
 ----------------------------------------------------------------------]]
 
 local _, ns = ...
@@ -21,10 +22,11 @@ L.TITLE = GetAddOnMetadata("!ClassColors", "Title")
 
 ------------------------------------------------------------------------
 
+local meta = {}
 local callbacks = {}
 local numCallbacks = 0
 
-local function RegisterCallback(self, method, handler)
+function meta:RegisterCallback(method, handler)
 	assert(type(method) == "string" or type(method) == "function", "Bad argument #1 to :RegisterCallback (string or function expected)")
 	if type(method) == "string" then
 		assert(type(handler) == "table", "Bad argument #2 to :RegisterCallback (table expected)")
@@ -36,7 +38,7 @@ local function RegisterCallback(self, method, handler)
 	numCallbacks = numCallbacks + 1
 end
 
-local function UnregisterCallback(self, method, handler)
+function meta:UnregisterCallback(method, handler)
 	assert(type(method) == "string" or type(method) == "function", "Bad argument #1 to :UnregisterCallback (string or function expected)")
 	if type(method) == "string" then
 		assert(type(handler) == "table", "Bad argument #2 to :UnregisterCallback (table expected)")
@@ -75,13 +77,13 @@ for token, class in pairs(LOCALIZED_CLASS_NAMES_FEMALE) do
 	classTokens[class] = token
 end
 
-local function GetClassToken(self, className)
+function meta:GetClassToken(className)
 	return className and classTokens[className]
 end
 
 ------------------------------------------------------------------------
 
-local function NotifyChanges(self)
+function meta:NotifyChanges()
 	--print("CUSTOM_CLASS_COLORS: NotifyChanges")
 	local changed
 
@@ -108,12 +110,7 @@ end
 
 ------------------------------------------------------------------------
 
-setmetatable(CUSTOM_CLASS_COLORS, { __index = function(t, k)
-	if k == "GetClassToken" then return GetClassToken end
-	if k == "NotifyChanges" then return NotifyChanges end
-	if k == "RegisterCallback" then return RegisterCallback end
-	if k == "UnregisterCallback" then return UnregisterCallback end
-end })
+setmetatable(CUSTOM_CLASS_COLORS, { __index = meta })
 
 ------------------------------------------------------------------------
 

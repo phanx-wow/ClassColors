@@ -1,5 +1,5 @@
 ClassColors
-==============
+===========
 
 **EN** — Change class colors without breaking parts of the default UI.  
 **DE** — Ändert die Klassenfarben ohne Interferenzen mit dem Standard-UI.  
@@ -12,6 +12,14 @@ ClassColors
 **CN** — 改变职业颜色不会破坏暴雪的界面.  
 **TW** — 改變職業顏色而不需破壞暴雪UI。
 
-* [Download on Curse](https://mods.curse.com/addons/wow/classcolors/)
-* [Download on WoWInterface](http://www.wowinterface.com/downloads/info12513-ClassColors.html)
-* [API documentation for addon authors](https://github.com/Phanx/ClassColors/wiki)
+* [Download on Curse](https://www.curseforge.com/wow/addons/classcolors)
+* [Download on WoWInterface](https://www.wowinterface.com/downloads/info12513-ClassColors.html)
+* [API documentation for addon authors](https://github.com/phanx-wow/ClassColors/wiki)
+
+
+Details
+-------
+
+It is supported by many popular addons, and also applies your custom colors to all parts of the Blizzard UI that are normally class-colored. If you want to colorize more parts of the Blizzard UI, check out [yClassColors](https://www.wowinterface.com/downloads/info15352-yClassColor.html) by yleaf.
+
+Type `/classcolors` for options, or open the Class Colors addon panel in the standard Interface Options window.

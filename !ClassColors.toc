@@ -1,4 +1,4 @@
-﻿## Interface: 70100
+﻿## Interface: 70300
 ## Version: @project-version@
 
 ## Title: Class Colors
@@ -14,15 +14,18 @@
 
 ## Author: Phanx
 ## X-Email: addons@phanx.net
-## X-Copyright: Copyright (c) 2009-2016 Phanx. All rights reserved.
+## X-License: All Rights Reserved
 ## X-CompatibleLocales: enUS, deDE, esES, esMX, frFR, itIT, koKR, ptBR, ruRU, zhCN, zhTW
 ## X-Localizations: enUS, deDE, esES, esMX, koKR, ptBR, ruRU, zhCN, zhTW
-## X-Website: https://github.com/Phanx/ClassColors
-## X-Curse-Project-ID: classcolors
+## X-Website: https://github.com/phanx-wow/ClassColors
+## X-Curse-Project-ID: 17635
 ## X-WoWI-ID: 12513
 
 ## SavedVariables: ClassColorsDB
 
 Localization.lua
 ClassColors.lua
-ClassColorsBlizz.lua
+
+#@do-not-package@
+!ClassColorsBlizz\ClassColorsBlizz.lua
+#@end-do-not-package@
