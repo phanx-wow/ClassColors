@@ -781,21 +781,6 @@ end)
 --         --> self:GetMap():SetPinTemplateType("GroupMembersPinTemplate", "UnitPositionFrame")
 --     --> WorldMapUnitPositionFrame (FrameXML/WorldMapFrame.xml)
 
-local function UnitPositionFrameMixin_AddUnitInternal(self, timeNow, unit, appearanceData, callAtlasAPI)
-	--if unit ~= "player" then
-		ChatFrame3:AddMessage(string.join(tostringall(" ", "AddUnitInternal", self:GetName():gsub("UnitPositionFrame", ""),
-			unit, appearanceData.shouldShow, appearanceData.useClassColor)))
-	--end
-	local isValid, r, g, b = self:GetUnitColor(timeNow, unit, appearanceData);
-	if isValid then
-		if callAtlasAPI then
-			self:AddUnitAtlas(unit, appearanceData.texture, appearanceData.size, appearanceData.size, r, g, b, 1);
-		else
-			self:AddUnit(unit, appearanceData.texture, appearanceData.size, appearanceData.size, r, g, b, 1, appearanceData.sublevel, appearanceData.showRotation);
-		end
-	end
-end
-
 local function UnitPositionFrameMixin_GetUnitColor(self, timeNow, unit, appearanceData)
 	if appearanceData.shouldShow then
 		local r, g, b  = 1, 1, 1
@@ -805,7 +790,7 @@ local function UnitPositionFrameMixin_GetUnitColor(self, timeNow, unit, appearan
 			local color = class and CUSTOM_CLASS_COLORS[class]
 			if color then
 				r, g, b = color.r, color.g, color.b
-				ChatFrame3:AddMessage(string.join(' ', tostringall('GetUnitColor', unit, class)))
+				--ChatFrame3:AddMessage(string.join(' ', tostringall('GetUnitColor', unit, class)))
 			end
 		end
 
@@ -816,11 +801,9 @@ local function UnitPositionFrameMixin_GetUnitColor(self, timeNow, unit, appearan
 end
 
 addonFuncs["Blizzard_BattlefieldMinimap"] = function()
-	--BattlefieldMinimapUnitPositionFrame.AddUnitInternal = UnitPositionFrameMixin_AddUnitInternal
 	BattlefieldMinimapUnitPositionFrame.GetUnitColor = UnitPositionFrameMixin_GetUnitColor
 end
 
---WorldMapUnitPositionFrame.AddUnitInternal = UnitPositionFrameMixin_AddUnitInternal
 WorldMapUnitPositionFrame.GetUnitColor = UnitPositionFrameMixin_GetUnitColor
 
 ------------------------------------------------------------------------
