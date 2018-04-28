@@ -1,4 +1,4 @@
-﻿## Interface: 70300
+## Interface: 70300
 ## Version: @project-version@
 
 ## Title: Class Colors: Blizzard
