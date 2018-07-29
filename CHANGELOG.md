@@ -1,3 +1,11 @@
+### Version 8.0.0.1
+
+* Updated default UI coloring module to remove code for parts of the UI removed in BFA.
+
+### Version 7.3.5.1
+
+* Removed debug messages
+
 ### Version 7.3.5.0
 
 * Fixed an error when showing nameplates on enemy players

@@ -340,23 +340,6 @@ addonFuncs["Blizzard_TradeSkillUI"] = function()
 end
 
 ------------------------------------------------------------------------
--- FrameXML/ChatConfigFrame.xml
--- 7.3.0.25021
--- 134
-
-do
-	local function ColorLegend(self)
-		for i = 1, #self.classStrings do
-			local class = CLASS_SORT_ORDER[i]
-			local color = CUSTOM_CLASS_COLORS[class]
-			self.classStrings[i]:SetFormattedText("|c%s%s|r\n", color.colorStr, LOCALIZED_CLASS_NAMES_MALE[class])
-		end
-	end
-	ChatConfigChatSettingsClassColorLegend:HookScript("OnShow", ColorLegend)
-	ChatConfigChannelSettingsClassColorLegend:HookScript("OnShow", ColorLegend)
-end
-
-------------------------------------------------------------------------
 -- FrameXML/ChatFrame.lua
 -- 7.3.0.25021
 -- 2962, 3289
@@ -766,45 +749,6 @@ hooksecurefunc("StaticPopup_OnUpdate", function(self, elapsed)
 		GameTooltipTextLeft1:SetFormattedText("|c%s%s|r", color.colorStr, name)
 	end
 end)
-
-------------------------------------------------------------------------
--- FrameXML/UnitPositionFrameTemplates.lua (via GetClassColor)
--- 7.3.0.25021
--- 185
--- 7.2.0.23835
--- 200
-
--- UnitPositionFrameMixin
--- --> UnitPositionFrameTemplate
---     --> GroupMembersPinTemplate (Blizzard_SharedMapDataProviders/GroupMembersDataProvider.xml)
---     --> BattlefieldMinimapUnitPositionFrame (Blizzard_BattlefieldMinimap/Blizzard_BattlefieldMinimap.xml)
---         --> self:GetMap():SetPinTemplateType("GroupMembersPinTemplate", "UnitPositionFrame")
---     --> WorldMapUnitPositionFrame (FrameXML/WorldMapFrame.xml)
-
-local function UnitPositionFrameMixin_GetUnitColor(self, timeNow, unit, appearanceData)
-	if appearanceData.shouldShow then
-		local r, g, b  = 1, 1, 1
-
-		if appearanceData.useClassColor then
-			local _, class = UnitClass(unit)
-			local color = class and CUSTOM_CLASS_COLORS[class]
-			if color then
-				r, g, b = color.r, color.g, color.b
-				--ChatFrame3:AddMessage(string.join(' ', tostringall('GetUnitColor', unit, class)))
-			end
-		end
-
-		return true, CheckColorOverrideForPVPInactive(unit, timeNow, r, g, b)
-	end
-
-	return false
-end
-
-addonFuncs["Blizzard_BattlefieldMinimap"] = function()
-	BattlefieldMinimapUnitPositionFrame.GetUnitColor = UnitPositionFrameMixin_GetUnitColor
-end
-
-WorldMapUnitPositionFrame.GetUnitColor = UnitPositionFrameMixin_GetUnitColor
 
 ------------------------------------------------------------------------
 
