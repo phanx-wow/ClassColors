@@ -12,4 +12,6 @@
 ## X-License: All Rights Reserved
 ## X-Website: https://github.com/phanx-wow/ClassColors
 
+## Dependencies: !ClassColors
+
 ClassColorsBlizz.lua
