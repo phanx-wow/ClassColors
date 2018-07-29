@@ -1,4 +1,4 @@
-### Version 8.0.0.1
+### Version 8.0.0.0
 
 * Updated default UI coloring module to remove code for parts of the UI removed in BFA.
 
