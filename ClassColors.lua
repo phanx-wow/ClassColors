@@ -154,12 +154,8 @@ f:SetScript("OnEvent", function(self, event, addon)
 			db[class].colorStr = format("ff%02x%02x%02x", db[class].r * 255, db[class].g * 255, db[class].b * 255)
 		end
 
-		CUSTOM_CLASS_COLORS[class] = {
-			r = db[class].r,
-			g = db[class].g,
-			b = db[class].b,
-			colorStr = db[class].colorStr,
-		}
+		CUSTOM_CLASS_COLORS[class] = CreateColor(db[class].r, db[class].g, db[class].b)
+		CUSTOM_CLASS_COLORS[class].colorStr = db[class].colorStr
 	end
 
 	--------------------------------------------------------------------
